@@ -23,6 +23,7 @@ from ai_hongloumeng.utils import FileManager
 from ai_hongloumeng.prompts import PromptTemplates
 from data_processing import HongLouMengDataPipeline
 from knowledge_enhancement import EnhancedPrompter, TaixuProphecyExtractor, FateConsistencyChecker
+from rag_retrieval import RAGPipeline, create_rag_pipeline
 
 # 初始化控制台
 console = Console()
@@ -940,6 +941,223 @@ def fate_check(text, characters, detailed, save_report, guidance):
     except Exception as e:
         console.print(f"[red]命运一致性检验失败: {e}[/red]")
         logger.error(f"命运一致性检验失败: {e}")
+
+
+# ============================================================================
+# RAG智能检索系统命令
+# ============================================================================
+
+@cli.group()
+def rag():
+    """RAG智能检索系统 - 基于Qwen3向量化的语义检索"""
+    pass
+
+
+@rag.command()
+@click.option('--reset', is_flag=True, help='重置现有向量数据库')
+@click.option('--api-key', help='DashScope API密钥')
+@click.option('--chunk-strategy', default='semantic', 
+              type=click.Choice(['semantic', 'paragraph', 'chapter', 'hybrid']),
+              help='文本分块策略')
+@click.option('--chunk-size', default=512, help='分块大小')
+@click.option('--batch-size', default=32, help='批处理大小')
+def build(reset, api_key, chunk_strategy, chunk_size, batch_size):
+    """构建RAG知识库 - 处理章节文本并创建向量索引"""
+    try:
+        console.print(Panel.fit("🚀 RAG知识库构建", style="bold green"))
+        
+        if api_key:
+            import os
+            os.environ['DASHSCOPE_API_KEY'] = api_key
+            console.print("✅ API密钥已设置")
+        
+        # 创建RAG管道
+        pipeline = create_rag_pipeline(
+            chunk_strategy=chunk_strategy,
+            chunk_config={'chunk_size': chunk_size},
+            embedding_config={'batch_size': batch_size}
+        )
+        
+        console.print(f"📋 配置信息:")
+        console.print(f"  分块策略: {chunk_strategy}")
+        console.print(f"  分块大小: {chunk_size}")
+        console.print(f"  批处理大小: {batch_size}")
+        
+        # 构建知识库
+        console.print(f"\n🔨 开始构建知识库...")
+        stats = pipeline.build_knowledge_base(reset_existing=reset)
+        
+        # 显示构建结果
+        console.print(f"\n✅ 知识库构建完成!")
+        console.print(f"📊 构建统计:")
+        console.print(f"  处理文档: {stats['documents_processed']} 个")
+        console.print(f"  文本块数: {stats['chunks_created']} 个")
+        console.print(f"  向量数量: {stats['embeddings_generated']} 个")
+        console.print(f"  处理时间: {stats['processing_time']:.2f} 秒")
+        
+        if stats.get('errors'):
+            console.print(f"⚠️ 错误数量: {len(stats['errors'])}")
+        
+        # 显示数据库统计
+        db_stats = stats['database_stats']
+        console.print(f"\n📈 数据库统计:")
+        console.print(f"  总文档数: {db_stats['total_documents']}")
+        console.print(f"  存储路径: {db_stats['db_path']}")
+        
+    except Exception as e:
+        console.print(f"[red]知识库构建失败: {e}[/red]")
+        logger.error(f"知识库构建失败: {e}")
+
+
+@rag.command()
+@click.option('--query', '-q', required=True, help='检索查询文本')
+@click.option('--type', 'search_type', default='hybrid',
+              type=click.Choice(['semantic', 'text', 'hybrid', 'auto']),
+              help='检索类型')
+@click.option('--results', '-n', default=5, help='返回结果数量')
+@click.option('--characters', '-c', help='人物过滤（逗号分隔）')
+@click.option('--semantic-weight', default=0.7, help='语义检索权重（hybrid模式）')
+@click.option('--text-weight', default=0.3, help='文本检索权重（hybrid模式）')
+@click.option('--threshold', default=0.7, help='相似度阈值')
+def search(query, search_type, results, characters, semantic_weight, text_weight, threshold):
+    """RAG智能检索 - 语义/文本/混合检索"""
+    try:
+        console.print(Panel.fit(f"🔍 RAG智能检索: {search_type.upper()}", style="bold blue"))
+        
+        # 创建RAG管道
+        pipeline = create_rag_pipeline()
+        
+        # 处理人物过滤
+        character_filter = None
+        if characters:
+            character_filter = [c.strip() for c in characters.split(',')]
+            console.print(f"👥 人物过滤: {character_filter}")
+        
+        console.print(f"🔎 查询: {query}")
+        console.print(f"📊 参数: 类型={search_type}, 数量={results}, 阈值={threshold}")
+        
+        # 执行检索
+        search_results = pipeline.search(
+            query=query,
+            search_type=search_type,
+            n_results=results,
+            character_filter=character_filter,
+            semantic_weight=semantic_weight,
+            text_weight=text_weight
+        )
+        
+        # 显示结果
+        console.print(f"\n📋 检索结果 ({len(search_results['documents'])} 个):")
+        
+        for i, (doc, sim, meta) in enumerate(zip(
+            search_results['documents'],
+            search_results['similarities'], 
+            search_results['metadatas']
+        )):
+            console.print(f"\n📄 结果 {i+1}:")
+            console.print(f"  📊 相似度: {sim:.3f}")
+            
+            if meta.get('characters'):
+                console.print(f"  👥 人物: {', '.join(meta['characters'])}")
+            
+            if meta.get('source_id'):
+                console.print(f"  📖 来源: {meta['source_id']}")
+            
+            # 文本预览
+            preview = doc[:200] + "..." if len(doc) > 200 else doc
+            console.print(f"  📝 内容: {preview}")
+            
+            # 混合检索显示详细分数
+            if search_type == 'hybrid' and 'semantic_scores' in search_results:
+                sem_score = search_results['semantic_scores'][i]
+                text_score = search_results['text_scores'][i]
+                console.print(f"    🔍 语义: {sem_score:.3f} | 📝 文本: {text_score:.3f}")
+        
+        if not search_results['documents']:
+            console.print("❌ 未找到匹配的结果，建议：")
+            console.print("  - 降低相似度阈值")
+            console.print("  - 尝试不同的检索类型")
+            console.print("  - 检查查询内容是否准确")
+            
+    except Exception as e:
+        console.print(f"[red]检索失败: {e}[/red]")
+        logger.error(f"检索失败: {e}")
+
+
+@rag.command()
+@click.option('--query', default='宝玉和黛玉的关系', help='测试查询')
+def test(query):
+    """快速测试RAG系统"""
+    try:
+        console.print(Panel.fit("🧪 RAG系统快速测试", style="bold magenta"))
+        
+        # 创建RAG管道
+        pipeline = create_rag_pipeline()
+        
+        # 执行快速测试
+        pipeline.quick_test(query)
+        
+    except Exception as e:
+        console.print(f"[red]测试失败: {e}[/red]")
+        logger.error(f"测试失败: {e}")
+
+
+@rag.command()
+@click.option('--output-dir', default='exports/rag_export', help='导出目录')
+def export(output_dir):
+    """导出RAG知识库"""
+    try:
+        console.print(Panel.fit("📦 导出RAG知识库", style="bold cyan"))
+        
+        # 创建RAG管道
+        pipeline = create_rag_pipeline()
+        
+        # 导出知识库
+        pipeline.export_knowledge_base(output_dir)
+        
+        console.print(f"✅ 知识库已导出到: {output_dir}")
+        
+    except Exception as e:
+        console.print(f"[red]导出失败: {e}[/red]")
+        logger.error(f"导出失败: {e}")
+
+
+@rag.command()
+def status():
+    """查看RAG系统状态"""
+    try:
+        console.print(Panel.fit("📊 RAG系统状态", style="bold yellow"))
+        
+        # 创建RAG管道
+        pipeline = create_rag_pipeline()
+        
+        # 获取系统状态
+        status_info = pipeline.get_system_status()
+        
+        console.print("🔧 管道配置:")
+        pipeline_config = status_info['pipeline_config']
+        console.print(f"  向量模型: {pipeline_config['embedding_model']}")
+        console.print(f"  分块策略: {pipeline_config['chunk_strategy']}")
+        console.print(f"  分块大小: {pipeline_config['chunk_size']}")
+        console.print(f"  数据库路径: {pipeline_config['db_path']}")
+        
+        console.print("\n📈 数据库统计:")
+        db_stats = status_info['database_stats']
+        console.print(f"  总文档数: {db_stats['total_documents']}")
+        console.print(f"  距离度量: {db_stats['distance_metric']}")
+        
+        if db_stats.get('top_characters'):
+            console.print("\n👥 主要人物分布:")
+            for char, count in db_stats['top_characters'][:5]:
+                console.print(f"  {char}: {count} 个文本块")
+        
+        console.print(f"\n📝 文本块统计:")
+        console.print(f"  对话块: {db_stats.get('dialogue_chunks', 0)}")
+        console.print(f"  章节头: {db_stats.get('chapter_chunks', 0)}")
+        
+    except Exception as e:
+        console.print(f"[red]状态查询失败: {e}[/red]")
+        logger.error(f"状态查询失败: {e}")
 
 
 if __name__ == "__main__":
