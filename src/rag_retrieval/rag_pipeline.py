@@ -2,7 +2,7 @@
 RAG智能检索管道
 ~~~~~~~~~~~~~~~
 
-整合文本分块、向量化、存储和检索的完整RAG系统，
+基于LangChain Chroma的智能检索系统，
 专为红楼梦古典文学文本优化。
 """
 
@@ -18,37 +18,28 @@ from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TimeEl
 from rich.console import Console
 
 from .qwen_embeddings import QwenEmbeddings, EmbeddingConfig
+from .langchain_qwen_embedding import LangChainQwenEmbeddings
 from .text_chunker import TextChunker, ChunkConfig, ChunkStrategy, TextChunk
-from .vector_database import VectorDatabase, VectorDBConfig
+from .langchain_vector_database import LangChainVectorDatabase, LangChainVectorDBConfig
 
 
 @dataclass
 class RAGConfig:
     """RAG管道配置"""
-    # 向量化配置
     embedding_config: EmbeddingConfig = None
-    
-    # 分块配置  
     chunk_config: ChunkConfig = None
-    
-    # 向量数据库配置
-    vectordb_config: VectorDBConfig = None
-    
-    # 管道配置
-    batch_process_size: int = 50       # 批量处理大小
-    auto_save_interval: int = 100      # 自动保存间隔
-    enable_progress: bool = True       # 启用进度显示
-    
+    vectordb_config: LangChainVectorDBConfig = None
+    batch_process_size: int = 50
+    auto_save_interval: int = 100
+    enable_progress: bool = True
+
     def __post_init__(self):
-        """初始化默认配置"""
         if self.embedding_config is None:
             self.embedding_config = EmbeddingConfig()
-        
         if self.chunk_config is None:
             self.chunk_config = ChunkConfig()
-        
         if self.vectordb_config is None:
-            self.vectordb_config = VectorDBConfig()
+            self.vectordb_config = LangChainVectorDBConfig()
 
 
 class RAGPipeline:
@@ -74,14 +65,24 @@ class RAGPipeline:
         
     def _init_components(self) -> None:
         """初始化核心组件"""
-        # 向量化模型
-        self.embeddings = QwenEmbeddings(self.config.embedding_config)
         
-        # 文本分块器
+        # 初始化文本分块器
         self.chunker = TextChunker(self.config.chunk_config)
         
-        # 向量数据库（传递embeddings实例以启用优化的搜索）
-        self.vectordb = VectorDatabase(self.config.vectordb_config, self.embeddings)
+        # 使用LangChain实现
+        logger.info("使用LangChain Chroma实现")
+        
+        # LangChain embedding
+        self.langchain_embeddings = LangChainQwenEmbeddings(self.config.embedding_config)
+        
+        # LangChain向量数据库
+        self.vectordb = LangChainVectorDatabase(
+            self.config.vectordb_config, 
+            self.langchain_embeddings
+        )
+        
+        # 保持向后兼容性
+        self.embeddings = self.langchain_embeddings.qwen_embeddings
         
         logger.info("RAG核心组件初始化完成")
     
@@ -172,18 +173,16 @@ class RAGPipeline:
             logger.warning(f"文档 {source_id} 未产生任何文本块")
             return {'chunks_created': 0, 'embeddings_generated': 0}
         
-        # 2. 批量向量化
-        texts = [chunk.text for chunk in chunks]
-        embeddings = self.embeddings.embed_batch(texts)
-        
-        # 3. 存储到向量数据库
-        self.vectordb.add_chunks(chunks, embeddings)
+        # 2. 根据实现类型处理向量化和存储
+        # LangChain实现：自动处理向量化
+        self.vectordb.add_chunks(chunks)
+        embeddings_count = len(chunks)  # LangChain自动向量化
         
         logger.debug(f"文档 {source_id} 处理完成: {len(chunks)} 个块")
         
         return {
             'chunks_created': len(chunks),
-            'embeddings_generated': len(embeddings)
+            'embeddings_generated': embeddings_count
         }
     
     def process_text_files(self, file_paths: List[str]) -> Dict[str, Any]:
@@ -272,10 +271,9 @@ class RAGPipeline:
         
         # 根据检索类型执行搜索
         if search_type == "semantic":
-            # 语义检索
-            query_embedding = self.embeddings.embed_single(query)
+            # 语义检索（LangChain自动处理embedding）
             results = self.vectordb.search_similar(
-                query_embedding,
+                query,
                 n_results=n_results,
                 metadata_filter=metadata_filter
             )
@@ -289,14 +287,10 @@ class RAGPipeline:
             )
             
         else:  # hybrid
-            # 混合检索
-            query_embedding = self.embeddings.embed_single(query)
+            # 混合检索（LangChain自动处理embedding）
             results = self.vectordb.hybrid_search(
-                query_embedding,
                 query,
                 n_results=n_results,
-                semantic_weight=kwargs.get('semantic_weight', 0.7),
-                text_weight=kwargs.get('text_weight', 0.3),
                 metadata_filter=metadata_filter
             )
         
@@ -361,10 +355,18 @@ class RAGPipeline:
             构建结果统计
         """
         logger.info("开始构建红楼梦知识库")
+        if test_single:
+            logger.info("测试模式：只处理 001.md 文件")
         
         if reset_existing:
             logger.warning("重置现有向量数据库")
-            self.vectordb.reset_collection()
+            # Note: LangChain Chroma may not have reset_collection method
+            # We'll handle this gracefully
+            try:
+                if hasattr(self.vectordb, 'reset_collection'):
+                    self.vectordb.reset_collection()
+            except Exception as e:
+                logger.warning(f"重置数据库失败: {e}")
         
         # 处理章节文件
         stats = self.process_chapter_files(test_single=test_single)
@@ -382,9 +384,18 @@ class RAGPipeline:
         logger.info("知识库构建完成")
         return build_stats
     
-    def get_system_status(self) -> Dict[str, Any]:
-        """获取系统状态"""
-        return {
+    def export_knowledge_base(self, output_dir: str) -> None:
+        """导出知识库"""
+        output_path = Path(output_dir)
+        output_path.mkdir(parents=True, exist_ok=True)
+        
+        # TODO: 向量数据库导出功能暂未实现
+        # db_export_path = output_path / "vectordb_export.json"
+        # self.vectordb.export_data(str(db_export_path))
+        
+        # 导出系统配置
+        config_path = output_path / "system_config.json"
+        system_config = {
             'pipeline_config': {
                 'embedding_model': self.config.embedding_config.model_name,
                 'chunk_strategy': self.config.chunk_config.strategy.value,
@@ -399,22 +410,11 @@ class RAGPipeline:
                 'overlap': self.config.chunk_config.chunk_overlap
             }
         }
-    
-    def export_knowledge_base(self, output_dir: str) -> None:
-        """导出知识库"""
-        output_path = Path(output_dir)
-        output_path.mkdir(parents=True, exist_ok=True)
         
-        # 导出向量数据库
-        db_export_path = output_path / "vectordb_export.json"
-        self.vectordb.export_data(str(db_export_path))
-        
-        # 导出系统配置
-        config_path = output_path / "system_config.json"
         with open(config_path, 'w', encoding='utf-8') as f:
-            json.dump(self.get_system_status(), f, ensure_ascii=False, indent=2)
+            json.dump(system_config, f, ensure_ascii=False, indent=2)
         
-        logger.info(f"知识库已导出到: {output_dir}")
+        logger.info(f"知识库配置已导出到: {output_dir}")
     
     def quick_test(self, query: str = "宝玉和黛玉的关系") -> None:
         """快速测试RAG系统"""
@@ -476,7 +476,7 @@ def create_rag_pipeline(api_key: Optional[str] = None,
             strategy=ChunkStrategy(chunk_strategy),
             **config_kwargs.get('chunk_config', {})
         ),
-        vectordb_config=VectorDBConfig(
+        vectordb_config=LangChainVectorDBConfig(
             db_path=db_path,
             **config_kwargs.get('vectordb_config', {})
         )

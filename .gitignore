@@ -67,3 +67,4 @@ htmlcov/
 dmypy.json
 
 *.bin
+*.sqlite3

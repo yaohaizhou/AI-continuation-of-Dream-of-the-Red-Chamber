@@ -1126,43 +1126,5 @@ def export(output_dir):
         logger.error(f"导出失败: {e}")
 
 
-@rag.command()
-def status():
-    """查看RAG系统状态"""
-    try:
-        console.print(Panel.fit("📊 RAG系统状态", style="bold yellow"))
-        
-        # 创建RAG管道
-        pipeline = create_rag_pipeline()
-        
-        # 获取系统状态
-        status_info = pipeline.get_system_status()
-        
-        console.print("🔧 管道配置:")
-        pipeline_config = status_info['pipeline_config']
-        console.print(f"  向量模型: {pipeline_config['embedding_model']}")
-        console.print(f"  分块策略: {pipeline_config['chunk_strategy']}")
-        console.print(f"  分块大小: {pipeline_config['chunk_size']}")
-        console.print(f"  数据库路径: {pipeline_config['db_path']}")
-        
-        console.print("\n📈 数据库统计:")
-        db_stats = status_info['database_stats']
-        console.print(f"  总文档数: {db_stats['total_documents']}")
-        console.print(f"  距离度量: {db_stats['distance_metric']}")
-        
-        if db_stats.get('top_characters'):
-            console.print("\n👥 主要人物分布:")
-            for char, count in db_stats['top_characters'][:5]:
-                console.print(f"  {char}: {count} 个文本块")
-        
-        console.print(f"\n📝 文本块统计:")
-        console.print(f"  对话块: {db_stats.get('dialogue_chunks', 0)}")
-        console.print(f"  章节头: {db_stats.get('chapter_chunks', 0)}")
-        
-    except Exception as e:
-        console.print(f"[red]状态查询失败: {e}[/red]")
-        logger.error(f"状态查询失败: {e}")
-
-
 if __name__ == "__main__":
     cli()

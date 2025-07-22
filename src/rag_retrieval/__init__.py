@@ -2,24 +2,18 @@
 RAG智能检索系统
 ~~~~~~~~~~~~~~
 
-基于向量相似度的语义检索系统，支持混合检索策略，
-专为红楼梦古典文学文本优化。
-
-核心组件:
-- QwenEmbeddings: Qwen3 text-embedding-v4模型封装
+基于LangChain Chroma的红楼梦智能检索系统，提供：
+- QwenEmbeddings: Qwen3文本向量化
+- LangChainQwenEmbeddings: LangChain兼容的Qwen embedding
 - TextChunker: 智能文本分块器
-- VectorDatabase: ChromaDB向量数据库
-- SemanticSearcher: 语义检索引擎
-- HybridRetriever: 混合检索器
-- RAGPipeline: 完整RAG管道
+- LangChainVectorDatabase: LangChain Chroma向量数据库
+- RAGPipeline: 完整的RAG检索管道
 """
 
 from .qwen_embeddings import QwenEmbeddings
-from .chroma_qwen_embedding import ChromaQwenEmbedding
+from .langchain_qwen_embedding import LangChainQwenEmbeddings
 from .text_chunker import TextChunker, ChunkStrategy
-from .vector_database import VectorDatabase
-from .semantic_search import SemanticSearcher
-from .hybrid_retriever import HybridRetriever
+from .langchain_vector_database import LangChainVectorDatabase, LangChainVectorDBConfig
 from .rag_pipeline import RAGPipeline, create_rag_pipeline
 
 __version__ = "1.0.0"
@@ -27,12 +21,11 @@ __author__ = "AI-HongLouMeng Team"
 
 __all__ = [
     'QwenEmbeddings',
-    'ChromaQwenEmbedding',
+    'LangChainQwenEmbeddings',
     'TextChunker',
     'ChunkStrategy', 
-    'VectorDatabase',
-    'SemanticSearcher',
-    'HybridRetriever',
+    'LangChainVectorDatabase',
+    'LangChainVectorDBConfig',
     'RAGPipeline',
     'create_rag_pipeline'
 ] 
