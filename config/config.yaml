@@ -2,7 +2,7 @@
 
 # 模型配置
 model:
-  model_name: "gpt-4"  # 可选: gpt-4, gpt-3.5-turbo, gpt-4-turbo-preview
+  model_name: "claude_sonnet4"  # 可选: gpt-4, gpt-3.5-turbo, gpt-4-turbo-preview
   temperature: 0.8     # 控制创造性，0.0-1.0，越高越有创造性
   max_tokens: 2000     # 单次生成的最大token数
   top_p: 0.9          # 核采样参数
