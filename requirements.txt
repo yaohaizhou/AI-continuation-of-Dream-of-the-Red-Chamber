@@ -35,11 +35,4 @@ flake8==6.1.0
 
 # RAG System Dependencies - LangChain Integration
 langchain-chroma==0.1.0
-chromadb==1.0.15
 dashscope==1.23.9
-sentence-transformers==5.0.0
-
-# Optional: For advanced features
-# transformers==4.36.2  # If you want to use local models
-# torch==2.1.2  # For local model support
-# faiss-cpu==1.7.4  # For vector search if needed
