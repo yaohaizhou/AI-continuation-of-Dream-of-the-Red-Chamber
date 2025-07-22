@@ -9,6 +9,7 @@ from .relationship_retriever import RelationshipRetriever
 from .vocabulary_suggester import VocabularySuggester
 from .enhanced_prompter import EnhancedPrompter
 from .taixu_prophecy_extractor import TaixuProphecyExtractor
+from .fate_consistency_checker import FateConsistencyChecker
 
 __all__ = [
     'KnowledgeRetriever',
@@ -16,5 +17,6 @@ __all__ = [
     'RelationshipRetriever',
     'VocabularySuggester',
     'EnhancedPrompter',
-    'TaixuProphecyExtractor'
+    'TaixuProphecyExtractor',
+    'FateConsistencyChecker'
 ] 

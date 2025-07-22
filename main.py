@@ -22,7 +22,7 @@ from ai_hongloumeng import HongLouMengContinuation, Config
 from ai_hongloumeng.utils import FileManager
 from ai_hongloumeng.prompts import PromptTemplates
 from data_processing import HongLouMengDataPipeline
-from knowledge_enhancement import EnhancedPrompter, TaixuProphecyExtractor
+from knowledge_enhancement import EnhancedPrompter, TaixuProphecyExtractor, FateConsistencyChecker
 
 # 初始化控制台
 console = Console()
@@ -783,6 +783,163 @@ def taixu_prophecy(extract, character, report, save_report):
     except Exception as e:
         console.print(f"[red]太虚幻境分析失败: {e}[/red]")
         logger.error(f"太虚幻境分析失败: {e}")
+
+
+@cli.command()
+@click.option('--text', '-t', required=True, help='要检验的续写文本')
+@click.option('--characters', '-c', help='指定检查的角色（逗号分隔）')
+@click.option('--detailed', is_flag=True, help='生成详细报告')
+@click.option('--save-report', help='保存报告到指定文件')
+@click.option('--guidance', is_flag=True, help='显示命运指导建议')
+def fate_check(text, characters, detailed, save_report, guidance):
+    """命运一致性检验 - 基于太虚幻境判词验证续写内容"""
+    console.print(Panel.fit(
+        f"[bold cyan]命运一致性检验系统[/bold cyan]\n"
+        f"基于太虚幻境判词验证续写内容的一致性\n"
+        f"检测违背原著设定的内容并提供指导建议",
+        title="🎭 命运检验"
+    ))
+    
+    try:
+        # 初始化检验器
+        checker = FateConsistencyChecker()
+        
+        # 解析角色参数
+        character_list = None
+        if characters:
+            character_list = [char.strip() for char in characters.split(',')]
+            console.print(f"[yellow]指定检查角色: {', '.join(character_list)}[/yellow]")
+        
+        console.print(f"\n📝 检验文本:")
+        console.print(Panel(
+            text[:200] + "..." if len(text) > 200 else text,
+            title="续写内容",
+            expand=False
+        ))
+        
+        # 进行一致性检验
+        console.print("\n🔍 正在进行命运一致性检验...")
+        
+        with Progress(
+            SpinnerColumn(),
+            TextColumn("[progress.description]{task.description}"),
+            console=console
+        ) as progress:
+            task = progress.add_task("分析中...", total=None)
+            
+            # 执行检验
+            score = checker.check_consistency(text, character_list)
+            progress.update(task, description="检验完成!")
+        
+        # 显示评分结果
+        score_emoji = "🎉" if score.overall_score >= 90 else "✅" if score.overall_score >= 70 else "⚠️" if score.overall_score >= 50 else "❌"
+        console.print(f"\n📊 总体评分: {score_emoji} [bold]{score.overall_score}/100[/bold]")
+        
+        # 显示角色评分
+        if score.character_scores:
+            console.print("\n👥 角色一致性评分:")
+            for character, char_score in score.character_scores.items():
+                char_emoji = "✅" if char_score >= 80 else "⚠️" if char_score >= 60 else "❌"
+                console.print(f"  {char_emoji} {character}: [bold]{char_score}/100[/bold]")
+        
+        # 显示方面评分
+        if score.aspect_scores:
+            console.print("\n📈 各方面评分:")
+            for aspect, aspect_score in score.aspect_scores.items():
+                aspect_emoji = "✅" if aspect_score >= 80 else "⚠️" if aspect_score >= 60 else "❌"
+                console.print(f"  {aspect_emoji} {aspect}: {aspect_score}/100")
+        
+        # 显示检测到的问题
+        if score.violations:
+            console.print("\n🚨 检测到的问题:")
+            
+            critical_violations = [v for v in score.violations if v.severity == "critical"]
+            warning_violations = [v for v in score.violations if v.severity == "warning"]
+            suggestion_violations = [v for v in score.violations if v.severity == "suggestion"]
+            
+            if critical_violations:
+                console.print("\n  ❌ [bold red]严重问题[/bold red]:")
+                for violation in critical_violations:
+                    console.print(f"    • {violation.character}: {violation.description}")
+            
+            if warning_violations:
+                console.print("\n  ⚠️ [bold yellow]警告事项[/bold yellow]:")
+                for violation in warning_violations:
+                    console.print(f"    • {violation.character}: {violation.description}")
+            
+            if suggestion_violations:
+                console.print("\n  💡 [bold blue]优化建议[/bold blue]:")
+                for violation in suggestion_violations:
+                    console.print(f"    • {violation.character}: {violation.description}")
+        else:
+            console.print("\n✨ [green]未发现明显问题，续写内容与判词预言基本一致！[/green]")
+        
+        # 显示改进建议
+        if score.recommendations:
+            console.print("\n📋 改进建议:")
+            for i, recommendation in enumerate(score.recommendations, 1):
+                console.print(f"  {i}. {recommendation}")
+        
+        # 显示命运指导
+        if guidance and score.character_scores:
+            console.print("\n🔮 命运指导建议:")
+            for character in score.character_scores.keys():
+                fate_guidance = checker.get_fate_guidance(character, text)
+                if fate_guidance:
+                    console.print(Panel(
+                        f"**判词暗示**: {fate_guidance.prophecy_hint}\n"
+                        f"**建议发展**: {fate_guidance.suggested_development}\n"
+                        f"**象征元素**: {', '.join(fate_guidance.symbolic_elements[:3])}\n"
+                        f"**情感基调**: {fate_guidance.emotional_tone}",
+                        title=f"🎭 {character}的命运指导",
+                        expand=False
+                    ))
+        
+        # 保存详细报告
+        if save_report or detailed:
+            report_content = checker.generate_consistency_report(score, detailed=True)
+            
+            if save_report:
+                report_path = Path(save_report)
+                report_path.parent.mkdir(parents=True, exist_ok=True)
+                
+                with open(report_path, 'w', encoding='utf-8') as f:
+                    f.write(report_content)
+                
+                console.print(f"\n[green]详细报告已保存到: {report_path}[/green]")
+            
+            if detailed:
+                console.print("\n📄 详细报告:")
+                console.print(Panel(
+                    report_content[:1500] + "..." if len(report_content) > 1500 else report_content,
+                    title="命运一致性检验详细报告",
+                    expand=False
+                ))
+        
+        # 评分等级说明
+        console.print("\n📚 评分等级说明:")
+        console.print("  🎉 90-100分: 完全符合判词预言")
+        console.print("  ✅ 70-89分: 基本符合，轻微不一致")
+        console.print("  ⚠️ 50-69分: 部分符合，存在问题")
+        console.print("  ❌ 50分以下: 严重违背判词预言")
+        
+        # 使用建议
+        if not guidance and not detailed and not save_report:
+            console.print("\n💡 使用建议:")
+            console.print("  查看命运指导: [bold]python main.py fate-check -t '文本' --guidance[/bold]")
+            console.print("  生成详细报告: [bold]python main.py fate-check -t '文本' --detailed[/bold]")
+            console.print("  保存分析报告: [bold]python main.py fate-check -t '文本' --save-report reports/fate.md[/bold]")
+            console.print("  指定检查角色: [bold]python main.py fate-check -t '文本' -c '林黛玉,薛宝钗'[/bold]")
+        
+        console.print(f"\n🎭 命运一致性检验完成！")
+        
+    except FileNotFoundError as e:
+        console.print(f"[red]文件未找到: {e}[/red]")
+        console.print("请确保已运行 python main.py taixu-prophecy --extract 提取判词数据")
+        logger.error(f"文件未找到: {e}")
+    except Exception as e:
+        console.print(f"[red]命运一致性检验失败: {e}[/red]")
+        logger.error(f"命运一致性检验失败: {e}")
 
 
 if __name__ == "__main__":
