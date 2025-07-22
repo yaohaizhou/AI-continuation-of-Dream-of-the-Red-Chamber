@@ -1,0 +1,33 @@
+# AI续写红楼梦 - 主配置文件
+
+# 模型配置
+model:
+  model_name: "gpt-4"  # 可选: gpt-4, gpt-3.5-turbo, gpt-4-turbo-preview
+  temperature: 0.8     # 控制创造性，0.0-1.0，越高越有创造性
+  max_tokens: 2000     # 单次生成的最大token数
+  top_p: 0.9          # 核采样参数
+
+# 写作配置
+writing:
+  max_continuation_length: 1000    # 续写最大字数
+  style_consistency: true          # 保持文体一致性
+  character_consistency: true      # 保持人物一致性
+  enable_chapter_structure: true   # 启用章节结构
+
+# 路径配置
+paths:
+  data_dir: "data"           # 数据文件目录
+  output_dir: "output"       # 输出文件目录
+  
+# 高级配置
+advanced:
+  enable_memory: false       # 启用上下文记忆(未来功能)
+  use_vector_search: false   # 使用向量搜索(未来功能)
+  batch_size: 5             # 批量处理大小
+  
+# 日志配置  
+logging:
+  level: "INFO"             # DEBUG, INFO, WARNING, ERROR
+  save_to_file: true        # 是否保存到文件
+  max_file_size: "10 MB"    # 日志文件最大大小
+  backup_count: 7           # 保留的日志文件数量
