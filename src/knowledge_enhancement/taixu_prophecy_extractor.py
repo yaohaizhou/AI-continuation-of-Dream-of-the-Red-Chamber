@@ -165,15 +165,22 @@ class TaixuProphecyExtractor:
         """提取正册判词"""
         prophecies = []
         
-        # 定位正册部分
-        main_pattern = r"金陵十二钗正册.*?(?=后面又画着几缕飞云|宝玉还欲看时)"
+        # 定位正册部分 - 扩大匹配范围
+        main_pattern = r"金陵十二钗正册.*?(?=宝玉还欲看时|一言未了)"
         main_match = re.search(main_pattern, taixu_content, re.DOTALL)
         
         if not main_match:
             logger.warning("未找到正册判词部分")
+            # 如果正规匹配失败，尝试使用更宽泛的模式
+            main_pattern_backup = r"金陵十二钗正册.*"
+            main_match = re.search(main_pattern_backup, taixu_content, re.DOTALL)
+            
+        if not main_match:
+            logger.error("完全未找到正册判词部分")
             return prophecies
         
         main_content = main_match.group()
+        logger.info(f"正册内容长度: {len(main_content)} 字符")
         
         # 1. 林黛玉&薛宝钗合册
         daiyu_baochai = self._extract_daiyu_baochai_prophecy(main_content)
@@ -352,10 +359,21 @@ class TaixuProphecyExtractor:
     
     def _extract_xiangyun_prophecy(self, content: str) -> Optional[Dict[str, Any]]:
         """提取史湘云判词"""
-        pattern = r"几缕飞云,一湾逝水.*?富贵又何为.*?湘江水逝楚云飞"
-        match = re.search(pattern, content, re.DOTALL)
+        # 更加宽泛的匹配模式
+        patterns = [
+            r"几缕飞云,一湾逝水.*?富贵又何为.*?湘江水逝楚云飞",
+            r"富贵又何为.*?襁褓之间父母违.*?湘江水逝楚云飞",
+            r"富贵又何为\?襁褓之间父母违\.展眼吊斜辉,湘江水逝楚云飞"
+        ]
+        
+        match = None
+        for pattern in patterns:
+            match = re.search(pattern, content, re.DOTALL)
+            if match:
+                break
         
         if not match:
+            logger.warning("未能匹配史湘云判词")
             return None
         
         prophecy = TaixuProphecy(
@@ -389,10 +407,20 @@ class TaixuProphecyExtractor:
     
     def _extract_miaoyu_prophecy(self, content: str) -> Optional[Dict[str, Any]]:
         """提取妙玉判词"""
-        pattern = r"一块美玉,落在泥污之中.*?欲洁何曾洁.*?终陷淖泥中"
-        match = re.search(pattern, content, re.DOTALL)
+        patterns = [
+            r"一块美玉,落在泥污之中.*?欲洁何曾洁.*?终陷淖泥中",
+            r"欲洁何曾洁.*?云空未必空.*?终陷淖泥中",
+            r"欲洁何曾洁\?云空未必空\.可怜金玉质,终陷淖泥中"
+        ]
+        
+        match = None
+        for pattern in patterns:
+            match = re.search(pattern, content, re.DOTALL)
+            if match:
+                break
         
         if not match:
+            logger.warning("未能匹配妙玉判词")
             return None
         
         prophecy = TaixuProphecy(
@@ -426,84 +454,111 @@ class TaixuProphecyExtractor:
     
     def _extract_yingchun_prophecy(self, content: str) -> Optional[Dict[str, Any]]:
         """提取贾迎春判词"""
-        pattern = r"一恶狼,追扑一美女.*?子系中山狼.*?一载赴黄粱"
-        match = re.search(pattern, content, re.DOTALL)
+        patterns = [
+            r"一恶狼,追扑一美女.*?子系中山狼.*?一载赴黄粱",
+            r"子系中山狼,得志便猖狂.*?金闺花柳质,一载赴黄粱"
+        ]
+        
+        match = None
+        for pattern in patterns:
+            match = re.search(pattern, content, re.DOTALL)
+            if match:
+                break
         
         if not match:
+            logger.warning("未能匹配贾迎春判词")
             return None
         
         prophecy = TaixuProphecy(
-            册_type="正册", 
+            册_type="正册",
             characters=["贾迎春"],
             image=ProphecyImage(
                 description="一恶狼，追扑一美女，欲啖之意",
                 symbolic_elements=["恶狼", "美女"],
-                visual_metaphors=["邪恶势力", "柔弱无助"]
+                visual_metaphors=["凶恶势力", "善良受害"]
             ),
             poem=ProphecyPoem(
                 lines=["子系中山狼", "得志便猖狂", "金闺花柳质", "一载赴黄粱"],
-                literary_devices=["典故引用", "性格揭示", "身份对比", "时间限制"],
+                literary_devices=["比喻", "对比", "讽刺"],
                 rhyme_scheme="AABB",
-                emotional_tone="愤慨悲愤"
+                emotional_tone="愤慨"
             ),
             fate_interpretations=[
                 FateInterpretation(
                     character="贾迎春",
-                    fate_summary="嫁给恶人，仅一年就死去",
-                    key_events=["被迫婚嫁", "遭受虐待", "一年后死亡"],
-                    symbolic_meaning="恶狼代表其夫中山狼，美女象征迎春的善良柔弱，预示其悲惨结局",
-                    timeline_hints=["一载时间", "得志猖狂"]
+                    fate_summary="嫁给恶人，一年后死亡",
+                    key_events=["被迫嫁给孙绍祖", "遭受虐待", "早死"],
+                    symbolic_meaning="中山狼比喻忘恩负义的恶人，金闺女子嫁给此人必然悲惨",
+                    timeline_hints=["一载", "得志时期"]
                 )
             ],
-            literary_significance="通过动物隐喻揭露封建婚姻的残酷和女性的悲惨命运",
-            cross_references=["与孙绍祖的婚姻", "贾府政治联姻"]
+            literary_significance="揭露封建社会中女性在政治联姻中的悲惨命运",
+            cross_references=["孙绍祖人物", "贾府经济困难"]
         )
         
         return asdict(prophecy)
     
     def _extract_xichun_prophecy(self, content: str) -> Optional[Dict[str, Any]]:
         """提取贾惜春判词"""
-        pattern = r"一所古庙,里面有一美人在内看经独坐.*?勘破三春景不长.*?独卧青灯古佛旁"
-        match = re.search(pattern, content, re.DOTALL)
+        patterns = [
+            r"一所古庙,里面有一美人在内看经独坐.*?勘破三春景不长.*?独卧青灯古佛旁",
+            r"勘破三春景不长,缁衣顿改昔年妆.*?独卧青灯古佛旁"
+        ]
+        
+        match = None
+        for pattern in patterns:
+            match = re.search(pattern, content, re.DOTALL)
+            if match:
+                break
         
         if not match:
+            logger.warning("未能匹配贾惜春判词")
             return None
         
         prophecy = TaixuProphecy(
-            册_type="正册",
+            册_type="正册", 
             characters=["贾惜春"],
             image=ProphecyImage(
                 description="一所古庙，里面有一美人在内看经独坐",
-                symbolic_elements=["古庙", "美人", "看经"],
-                visual_metaphors=["宗教修行", "青春美貌", "独修苦行"]
+                symbolic_elements=["古庙", "美人看经"],
+                visual_metaphors=["出家修行", "孤独清净"]
             ),
             poem=ProphecyPoem(
                 lines=["勘破三春景不长", "缁衣顿改昔年妆", "可怜绣户侯门女", "独卧青灯古佛旁"],
-                literary_devices=["数字暗示", "对比手法", "身份强调", "环境烘托"],
-                rhyme_scheme="AABB",
-                emotional_tone="冷静悲凉"
+                literary_devices=["时间对比", "服饰变化", "身份对比"],
+                rhyme_scheme="AABA", 
+                emotional_tone="悲凉"
             ),
             fate_interpretations=[
                 FateInterpretation(
                     character="贾惜春",
                     fate_summary="看破红尘，出家为尼",
-                    key_events=["家族衰落", "姐妹离散", "勘破世情", "出家修行"],
-                    symbolic_meaning="古庙代表其最终归宿，看经独坐预示其孤独的修行生活",
-                    timeline_hints=["三春景色", "昔年对比"]
+                    key_events=["三春姐妹衰落", "看破世情", "出家修行"],
+                    symbolic_meaning="三春不长暗示三个姐姐的命运，惜春因此看破红尘选择出家",
+                    timeline_hints=["三春对比", "青灯古佛"]
                 )
             ],
-            literary_significance="体现了对家族兴衰的深刻认识和对世俗的彻底决绝",
-            cross_references=["与三春姐妹的不同命运", "贾府彻底败落"]
+            literary_significance="表现封建大家族衰落中个人的觉醒和解脱之路",
+            cross_references=["与三春姐妹对比", "贾府衰落"]
         )
         
         return asdict(prophecy)
     
     def _extract_xifeng_prophecy(self, content: str) -> Optional[Dict[str, Any]]:
         """提取王熙凤判词"""
-        pattern = r"一片冰山,上有一只雌凤.*?凡鸟偏从末世来.*?哭向金陵事更哀"
-        match = re.search(pattern, content, re.DOTALL)
+        patterns = [
+            r"一片冰山,上有一只雌凤.*?凡鸟偏从末世来.*?哭向金陵事更哀",
+            r"凡鸟偏从末世来,都知爱慕此生才.*?哭向金陵事更哀"
+        ]
+        
+        match = None
+        for pattern in patterns:
+            match = re.search(pattern, content, re.DOTALL)
+            if match:
+                break
         
         if not match:
+            logger.warning("未能匹配王熙凤判词")
             return None
         
         prophecy = TaixuProphecy(
@@ -512,35 +567,44 @@ class TaixuProphecyExtractor:
             image=ProphecyImage(
                 description="一片冰山，上有一只雌凤",
                 symbolic_elements=["冰山", "雌凤"],
-                visual_metaphors=["冷酷无情", "女中豪杰"]
+                visual_metaphors=["危险处境", "高贵威严"]
             ),
             poem=ProphecyPoem(
                 lines=["凡鸟偏从末世来", "都知爱慕此生才", "一从二令三人木", "哭向金陵事更哀"],
-                literary_devices=["时代背景", "才能认可", "字谜暗示", "地域情感"],
-                rhyme_scheme="AABB",
-                emotional_tone="悲壮"
+                literary_devices=["时代背景", "谐音暗示", "数字递进"],
+                rhyme_scheme="AABA",
+                emotional_tone="悲愤"
             ),
             fate_interpretations=[
                 FateInterpretation(
                     character="王熙凤",
-                    fate_summary="才能出众但生于末世，最终败落凄惨",
-                    key_events=["管理才能", "权势巅峰", "家族败落", "凄惨结局"],
-                    symbolic_meaning="雌凤代表其杰出才能，冰山暗示其冷酷和最终的孤立",
-                    timeline_hints=["末世时期", "一从二令三人木", "金陵归宿"]
+                    fate_summary="机关算尽，最终败亡",
+                    key_events=["权势显赫", "精明能干", "最终败落", "悲惨结局"],
+                    symbolic_meaning="凤凰立于冰山，再高贵也难逃寒冷，'三人木'暗示'休'字",
+                    timeline_hints=["末世", "一从二令三人木"]
                 )
             ],
-            literary_significance="通过凤凰意象展现女性的杰出才能与时代悲剧的结合",
-            cross_references=["贾府管家", "与贾琏的夫妻关系"]
+            literary_significance="揭示权谋女性的最终命运，机关算尽太聪明",
+            cross_references=["贾府管家", "机关算尽"]
         )
         
         return asdict(prophecy)
     
     def _extract_qiaojie_prophecy(self, content: str) -> Optional[Dict[str, Any]]:
         """提取贾巧姐判词"""
-        pattern = r"一座荒村野店,有一美人在那里纺绩.*?势败休云贵.*?巧得遇恩人"
-        match = re.search(pattern, content, re.DOTALL)
+        patterns = [
+            r"一座荒村野店,有一美人在那里纺绩.*?势败休云贵.*?巧得遇恩人",
+            r"势败休云贵,家亡莫论亲.*?巧得遇恩人"
+        ]
+        
+        match = None
+        for pattern in patterns:
+            match = re.search(pattern, content, re.DOTALL)
+            if match:
+                break
         
         if not match:
+            logger.warning("未能匹配贾巧姐判词")
             return None
         
         prophecy = TaixuProphecy(
@@ -548,36 +612,45 @@ class TaixuProphecyExtractor:
             characters=["贾巧姐"],
             image=ProphecyImage(
                 description="一座荒村野店，有一美人在那里纺绩",
-                symbolic_elements=["荒村野店", "美人", "纺绩"],
-                visual_metaphors=["落魄境遇", "贵族出身", "劳作自立"]
+                symbolic_elements=["荒村野店", "纺绩"],
+                visual_metaphors=["沦落乡野", "自食其力"]
             ),
             poem=ProphecyPoem(
                 lines=["势败休云贵", "家亡莫论亲", "偶因济村妇", "巧得遇恩人"],
-                literary_devices=["劝诫语气", "现实描述", "因果关系", "名字暗示"],
+                literary_devices=["对比", "因果关系", "巧合命名"],
                 rhyme_scheme="AABB",
-                emotional_tone="劝慰希望"
+                emotional_tone="先悲后喜"
             ),
             fate_interpretations=[
                 FateInterpretation(
                     character="贾巧姐",
-                    fate_summary="家族败落后流落乡村，因善行得到帮助",
-                    key_events=["家族败落", "流落民间", "劳作自立", "得到救助"],
-                    symbolic_meaning="荒村野店代表其落魄处境，纺绩象征其自立自强，终有善报",
-                    timeline_hints=["势败家亡", "偶然机缘"]
+                    fate_summary="家败后沦落乡野，幸得恩人相助",
+                    key_events=["家族败落", "沦落民间", "纺织为生", "遇到恩人"],
+                    symbolic_meaning="'巧'字暗示巧合，曾经帮助的村妇成为救命恩人",
+                    timeline_hints=["势败家亡后", "济村妇的因果"]
                 )
             ],
-            literary_significance="体现了善有善报的因果观念和劳动自立的价值观",
-            cross_references=["与刘姥姥的关系", "贾府恩怨报应"]
+            literary_significance="体现善有善报的因果观念和贵族女子的人生起伏",
+            cross_references=["刘姥姥恩情", "因果报应"]
         )
         
         return asdict(prophecy)
     
     def _extract_liwan_prophecy(self, content: str) -> Optional[Dict[str, Any]]:
         """提取李纨判词"""
-        pattern = r"一盆茂兰,旁有一位凤冠霞帔的美人.*?桃李春风结子完.*?枉与他人作笑谈"
-        match = re.search(pattern, content, re.DOTALL)
+        patterns = [
+            r"一盆茂兰,旁有一位凤冠霞帔的美人.*?桃李春风结子完.*?枉与他人作笑谈",
+            r"桃李春风结子完,到头谁似一盆兰.*?枉与他人作笑谈"
+        ]
+        
+        match = None
+        for pattern in patterns:
+            match = re.search(pattern, content, re.DOTALL)
+            if match:
+                break
         
         if not match:
+            logger.warning("未能匹配李纨判词")
             return None
         
         prophecy = TaixuProphecy(
@@ -585,36 +658,45 @@ class TaixuProphecyExtractor:
             characters=["李纨"],
             image=ProphecyImage(
                 description="一盆茂兰，旁有一位凤冠霞帔的美人",
-                symbolic_elements=["茂兰", "凤冠霞帔", "美人"],
-                visual_metaphors=["高洁品格", "荣华富贵", "贵妇形象"]
+                symbolic_elements=["茂兰", "凤冠霞帔"],
+                visual_metaphors=["品格高洁", "荣华富贵"]
             ),
             poem=ProphecyPoem(
                 lines=["桃李春风结子完", "到头谁似一盆兰", "如冰水好空相妒", "枉与他人作笑谈"],
-                literary_devices=["植物比喻", "对比手法", "品格赞美", "世态炎凉"],
+                literary_devices=["植物比喻", "对比", "讽刺"],
                 rhyme_scheme="AABA",
-                emotional_tone="赞叹惋惜"
+                emotional_tone="哀叹"
             ),
             fate_interpretations=[
                 FateInterpretation(
                     character="李纨",
-                    fate_summary="教子成才，品格高洁，但终成他人笑谈",
-                    key_events=["丈夫早逝", "教育贾兰", "儿子成才", "晚年荣华"],
-                    symbolic_meaning="茂兰象征其高洁品格，凤冠霞帔预示因子贵而荣，但终成虚幻",
-                    timeline_hints=["桃李春风", "结子完时", "到头之际"]
+                    fate_summary="守寡教子，晚年富贵却成空",
+                    key_events=["早年丧夫", "守寡教子", "儿子成才", "晚年荣华", "最终虚空"],
+                    symbolic_meaning="如兰花般高洁品格，桃李满天下但最终成空",
+                    timeline_hints=["桃李结子", "晚年富贵"]
                 )
             ],
-            literary_significance="展现了封建社会中节妇的典型命运和品格追求的虚幻性",
-            cross_references=["与贾兰的母子关系", "大观园诗社领袖"]
+            literary_significance="展现贤妻良母的典型命运和封建社会的价值观",
+            cross_references=["贾兰成才", "母子关系"]
         )
         
         return asdict(prophecy)
-    
+
     def _extract_qinkeqing_prophecy(self, content: str) -> Optional[Dict[str, Any]]:
         """提取秦可卿判词"""
-        pattern = r"一座高楼,上有一美人悬梁自缢.*?情天情海幻情身.*?造衅开端实在宁"
-        match = re.search(pattern, content, re.DOTALL)
+        patterns = [
+            r"一座高楼,上有一美人悬梁自缢.*?情天情海幻情身.*?造衅开端实在宁",
+            r"情天情海幻情身,情既相逢必主淫.*?造衅开端实在宁"
+        ]
+        
+        match = None
+        for pattern in patterns:
+            match = re.search(pattern, content, re.DOTALL)
+            if match:
+                break
         
         if not match:
+            logger.warning("未能匹配秦可卿判词")
             return None
         
         prophecy = TaixuProphecy(
@@ -622,26 +704,26 @@ class TaixuProphecyExtractor:
             characters=["秦可卿"],
             image=ProphecyImage(
                 description="一座高楼，上有一美人悬梁自缢",
-                symbolic_elements=["高楼", "美人", "悬梁自缢"],
-                visual_metaphors=["地位显赫", "美貌出众", "自尽结局"]
+                symbolic_elements=["高楼", "悬梁自缢"],
+                visual_metaphors=["高不可攀", "自我了断"]
             ),
             poem=ProphecyPoem(
                 lines=["情天情海幻情身", "情既相逢必主淫", "漫言不肖皆荣出", "造衅开端实在宁"],
-                literary_devices=["情感渲染", "因果揭示", "家族对比", "责任归属"],
-                rhyme_scheme="AABB",
-                emotional_tone="沉重警示"
+                literary_devices=["情字重复", "因果暗示", "双关"],
+                rhyme_scheme="AABA",
+                emotional_tone="痛苦绝望"
             ),
             fate_interpretations=[
                 FateInterpretation(
                     character="秦可卿",
-                    fate_summary="沉溺情海，最终自缢而死，成为家族败落的开端",
-                    key_events=["地位显赫", "情感纠葛", "丑事败露", "悬梁自尽"],
-                    symbolic_meaning="高楼代表其显赫地位，自缢暗示其情感悲剧和家族丑闻的开始",
-                    timeline_hints=["情海沉浮", "开端时期"]
+                    fate_summary="因情致淫，最终自缢身亡",
+                    key_events=["淫乱丑闻", "羞愧难当", "悬梁自尽"],
+                    symbolic_meaning="沉溺情海最终自毁，'宁'字暗示宁国府是祸根",
+                    timeline_hints=["情势发展", "荣宁对比"]
                 )
             ],
-            literary_significance="揭示了情欲的危害和家族败落的内在原因",
-            cross_references=["与贾珍的关系", "宁国府丑闻", "家族败落预兆"]
+            literary_significance="揭露贵族内部的道德沦丧和情欲悲剧",
+            cross_references=["宁国府丑闻", "荣宁二府对比"]
         )
         
         return asdict(prophecy)

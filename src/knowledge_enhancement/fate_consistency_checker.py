@@ -197,6 +197,87 @@ class FateConsistencyChecker:
             }
         }
         
+        # 补充所有新提取的角色命运规则
+        self.fate_rules.update({
+            "史湘云": {
+                "destiny": "orphan_wandering",  # 幼年失亲，飘零孤独
+                "manner": "noble_but_lonely",   # 高贵但孤独
+                "forbidden_outcomes": ["长期婚姻", "稳定家庭", "父母团聚", "永久富贵"],
+                "required_traits": ["豪爽大方", "才情出众", "命运坎坷"],
+                "symbolic_associations": ["飞云", "逝水", "湘江", "楚云"]
+            },
+            "妙玉": {
+                "destiny": "fallen_purity",     # 追求纯洁却堕落
+                "manner": "nun_contaminated",   # 出家人被污染
+                "forbidden_outcomes": ["结婚", "成亲", "生儿育女", "世俗生活", "夫妻生活", "享受天伦", "家庭幸福"],
+                "required_traits": ["洁癖高傲", "超然物外", "终难自保"],
+                "symbolic_associations": ["美玉", "泥污", "洁净", "污染"]
+            },
+            "贾迎春": {
+                "destiny": "marry_evil",        # 嫁给恶人
+                "manner": "tortured_death",     # 被折磨致死
+                "forbidden_outcomes": ["美满婚姻", "好丈夫", "长寿", "幸福生活"],
+                "required_traits": ["懦弱善良", "逆来顺受", "缺乏主见"],
+                "symbolic_associations": ["中山狼", "恶狼", "柔弱", "一载"]
+            },
+            "贾惜春": {
+                "destiny": "become_nun",        # 出家为尼
+                "manner": "see_through_world",  # 看破红尘
+                "forbidden_outcomes": ["结婚", "成家", "世俗生活", "享受富贵"],
+                "required_traits": ["冷漠无情", "超脱世俗", "勘破三春"],
+                "symbolic_associations": ["古庙", "青灯", "古佛", "缁衣"]
+            },
+            "王熙凤": {
+                "destiny": "clever_defeated",   # 机关算尽反误卿卿性命
+                "manner": "power_collapse",     # 权势崩塌
+                "forbidden_outcomes": ["长期权势", "善终", "家庭和睦", "子孙满堂"],
+                "required_traits": ["精明能干", "权力欲强", "机关算尽"],
+                "symbolic_associations": ["雌凤", "冰山", "末世", "三人木"]
+            },
+            "贾巧姐": {
+                "destiny": "noble_to_poor",     # 贵族沦为平民
+                "manner": "saved_by_kindness",  # 因善得救
+                "forbidden_outcomes": ["永远富贵", "高门嫁娶", "不劳而获"],
+                "required_traits": ["天真善良", "适应能力强", "知恩图报"],
+                "symbolic_associations": ["荒村", "野店", "纺绩", "恩人"]
+            },
+            "李纨": {
+                "destiny": "widowed_educator",  # 守寡教子
+                "manner": "late_glory_empty",   # 晚年荣华终成空
+                "forbidden_outcomes": ["再婚", "夫妻恩爱", "长久荣华"],
+                "required_traits": ["贤妻良母", "教子有方", "品格高洁"],
+                "symbolic_associations": ["茂兰", "凤冠霞帔", "桃李", "一盆兰"]
+            },
+            "秦可卿": {
+                "destiny": "suicide_shame",     # 因丑事羞愧自杀
+                "manner": "hanging_death",      # 悬梁自尽
+                "forbidden_outcomes": ["清白名声", "长寿", "美满生活", "受人尊敬"],
+                "required_traits": ["美貌妖娆", "情深如海", "不能自控"],
+                "symbolic_associations": ["高楼", "悬梁", "情海", "淫乱"]
+            },
+            "香菱": {
+                "destiny": "tragic_life",       # 悲惨一生
+                "manner": "fragrant_soul_return", # 香魂返故乡
+                "forbidden_outcomes": ["圆满人生", "家庭幸福", "避免苦难"],
+                "required_traits": ["坚韧善良", "才情横溢", "命运多舛"],
+                "symbolic_associations": ["荷花", "一茎香", "两地", "孤木"]
+            },
+            "晴雯": {
+                "destiny": "die_young",         # 夭折早死
+                "manner": "slandered_death",    # 因诽谤而死
+                "forbidden_outcomes": ["长寿", "得到认可", "避免流言"],
+                "required_traits": ["心高气傲", "美貌灵巧", "招人嫉妒"],
+                "symbolic_associations": ["霁月", "彩云", "心高", "下贱"]
+            },
+            "袭人": {
+                "destiny": "serve_faithfully",  # 忠心服侍
+                "manner": "unrecognized_loyalty", # 忠诚不被认可
+                "forbidden_outcomes": ["得到真爱", "被重视", "改变身份"],
+                "required_traits": ["温柔体贴", "忠心耿耿", "默默付出"],
+                "symbolic_associations": ["温柔", "和顺", "桂兰", "优伶"]
+            }
+        })
+        
         # 扩展到所有有判词的角色
         for character, fate_data in self.character_fates.items():
             if character not in self.fate_rules:

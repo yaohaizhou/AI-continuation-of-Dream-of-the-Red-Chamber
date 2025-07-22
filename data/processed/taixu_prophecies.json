@@ -192,6 +192,439 @@
         "与迎春惜春对比",
         "贾府政治联姻"
       ]
+    },
+    {
+      "册_type": "正册",
+      "characters": [
+        "史湘云"
+      ],
+      "image": {
+        "description": "几缕飞云，一湾逝水",
+        "symbolic_elements": [
+          "飞云",
+          "逝水"
+        ],
+        "visual_metaphors": [
+          "自由飘逸",
+          "时光流逝"
+        ]
+      },
+      "poem": {
+        "lines": [
+          "富贵又何为",
+          "襁褓之间父母违",
+          "展眼吊斜辉",
+          "湘江水逝楚云飞"
+        ],
+        "literary_devices": [
+          "反问修辞",
+          "时间跨越",
+          "地域暗示",
+          "自然意象"
+        ],
+        "rhyme_scheme": "ABAB",
+        "emotional_tone": "旷达中带悲凉"
+      },
+      "fate_interpretations": [
+        {
+          "character": "史湘云",
+          "fate_summary": "幼年失亲，虽得富贵但终归飘零",
+          "key_events": [
+            "幼年丧亲",
+            "进入贾府",
+            "短暂婚姻",
+            "最终孤独"
+          ],
+          "symbolic_meaning": "云水自由却易散，如湘云性格豪爽但命运飘零",
+          "timeline_hints": [
+            "襁褓时期",
+            "展眼之间",
+            "湘江地域"
+          ]
+        }
+      ],
+      "literary_significance": "通过自然意象表现人生无常和女性命运的不可把控",
+      "cross_references": [
+        "与黛玉的友谊",
+        "大观园诗社"
+      ]
+    },
+    {
+      "册_type": "正册",
+      "characters": [
+        "妙玉"
+      ],
+      "image": {
+        "description": "一块美玉，落在泥污之中",
+        "symbolic_elements": [
+          "美玉",
+          "泥污"
+        ],
+        "visual_metaphors": [
+          "纯洁品质",
+          "世俗污染"
+        ]
+      },
+      "poem": {
+        "lines": [
+          "欲洁何曾洁",
+          "云空未必空",
+          "可怜金玉质",
+          "终陷淖泥中"
+        ],
+        "literary_devices": [
+          "反讽",
+          "禅理",
+          "材质隐喻",
+          "对比"
+        ],
+        "rhyme_scheme": "AABB",
+        "emotional_tone": "讽刺悲悯"
+      },
+      "fate_interpretations": [
+        {
+          "character": "妙玉",
+          "fate_summary": "追求纯洁却无法避免世俗污染，最终堕落",
+          "key_events": [
+            "出家修行",
+            "进入大观园",
+            "内心挣扎",
+            "最终堕落"
+          ],
+          "symbolic_meaning": "美玉代表妙玉的洁癖和高洁，泥污暗示其无法逃脱的世俗命运",
+          "timeline_hints": [
+            "修行期间",
+            "在贾府时期"
+          ]
+        }
+      ],
+      "literary_significance": "探讨了宗教修行与世俗欲望的矛盾，体现了人性的复杂",
+      "cross_references": [
+        "与宝钗黛玉的茶道",
+        "佛门修行的虚伪"
+      ]
+    },
+    {
+      "册_type": "正册",
+      "characters": [
+        "贾迎春"
+      ],
+      "image": {
+        "description": "一恶狼，追扑一美女，欲啖之意",
+        "symbolic_elements": [
+          "恶狼",
+          "美女"
+        ],
+        "visual_metaphors": [
+          "凶恶势力",
+          "善良受害"
+        ]
+      },
+      "poem": {
+        "lines": [
+          "子系中山狼",
+          "得志便猖狂",
+          "金闺花柳质",
+          "一载赴黄粱"
+        ],
+        "literary_devices": [
+          "比喻",
+          "对比",
+          "讽刺"
+        ],
+        "rhyme_scheme": "AABB",
+        "emotional_tone": "愤慨"
+      },
+      "fate_interpretations": [
+        {
+          "character": "贾迎春",
+          "fate_summary": "嫁给恶人，一年后死亡",
+          "key_events": [
+            "被迫嫁给孙绍祖",
+            "遭受虐待",
+            "早死"
+          ],
+          "symbolic_meaning": "中山狼比喻忘恩负义的恶人，金闺女子嫁给此人必然悲惨",
+          "timeline_hints": [
+            "一载",
+            "得志时期"
+          ]
+        }
+      ],
+      "literary_significance": "揭露封建社会中女性在政治联姻中的悲惨命运",
+      "cross_references": [
+        "孙绍祖人物",
+        "贾府经济困难"
+      ]
+    },
+    {
+      "册_type": "正册",
+      "characters": [
+        "贾惜春"
+      ],
+      "image": {
+        "description": "一所古庙，里面有一美人在内看经独坐",
+        "symbolic_elements": [
+          "古庙",
+          "美人看经"
+        ],
+        "visual_metaphors": [
+          "出家修行",
+          "孤独清净"
+        ]
+      },
+      "poem": {
+        "lines": [
+          "勘破三春景不长",
+          "缁衣顿改昔年妆",
+          "可怜绣户侯门女",
+          "独卧青灯古佛旁"
+        ],
+        "literary_devices": [
+          "时间对比",
+          "服饰变化",
+          "身份对比"
+        ],
+        "rhyme_scheme": "AABA",
+        "emotional_tone": "悲凉"
+      },
+      "fate_interpretations": [
+        {
+          "character": "贾惜春",
+          "fate_summary": "看破红尘，出家为尼",
+          "key_events": [
+            "三春姐妹衰落",
+            "看破世情",
+            "出家修行"
+          ],
+          "symbolic_meaning": "三春不长暗示三个姐姐的命运，惜春因此看破红尘选择出家",
+          "timeline_hints": [
+            "三春对比",
+            "青灯古佛"
+          ]
+        }
+      ],
+      "literary_significance": "表现封建大家族衰落中个人的觉醒和解脱之路",
+      "cross_references": [
+        "与三春姐妹对比",
+        "贾府衰落"
+      ]
+    },
+    {
+      "册_type": "正册",
+      "characters": [
+        "王熙凤"
+      ],
+      "image": {
+        "description": "一片冰山，上有一只雌凤",
+        "symbolic_elements": [
+          "冰山",
+          "雌凤"
+        ],
+        "visual_metaphors": [
+          "危险处境",
+          "高贵威严"
+        ]
+      },
+      "poem": {
+        "lines": [
+          "凡鸟偏从末世来",
+          "都知爱慕此生才",
+          "一从二令三人木",
+          "哭向金陵事更哀"
+        ],
+        "literary_devices": [
+          "时代背景",
+          "谐音暗示",
+          "数字递进"
+        ],
+        "rhyme_scheme": "AABA",
+        "emotional_tone": "悲愤"
+      },
+      "fate_interpretations": [
+        {
+          "character": "王熙凤",
+          "fate_summary": "机关算尽，最终败亡",
+          "key_events": [
+            "权势显赫",
+            "精明能干",
+            "最终败落",
+            "悲惨结局"
+          ],
+          "symbolic_meaning": "凤凰立于冰山，再高贵也难逃寒冷，'三人木'暗示'休'字",
+          "timeline_hints": [
+            "末世",
+            "一从二令三人木"
+          ]
+        }
+      ],
+      "literary_significance": "揭示权谋女性的最终命运，机关算尽太聪明",
+      "cross_references": [
+        "贾府管家",
+        "机关算尽"
+      ]
+    },
+    {
+      "册_type": "正册",
+      "characters": [
+        "贾巧姐"
+      ],
+      "image": {
+        "description": "一座荒村野店，有一美人在那里纺绩",
+        "symbolic_elements": [
+          "荒村野店",
+          "纺绩"
+        ],
+        "visual_metaphors": [
+          "沦落乡野",
+          "自食其力"
+        ]
+      },
+      "poem": {
+        "lines": [
+          "势败休云贵",
+          "家亡莫论亲",
+          "偶因济村妇",
+          "巧得遇恩人"
+        ],
+        "literary_devices": [
+          "对比",
+          "因果关系",
+          "巧合命名"
+        ],
+        "rhyme_scheme": "AABB",
+        "emotional_tone": "先悲后喜"
+      },
+      "fate_interpretations": [
+        {
+          "character": "贾巧姐",
+          "fate_summary": "家败后沦落乡野，幸得恩人相助",
+          "key_events": [
+            "家族败落",
+            "沦落民间",
+            "纺织为生",
+            "遇到恩人"
+          ],
+          "symbolic_meaning": "'巧'字暗示巧合，曾经帮助的村妇成为救命恩人",
+          "timeline_hints": [
+            "势败家亡后",
+            "济村妇的因果"
+          ]
+        }
+      ],
+      "literary_significance": "体现善有善报的因果观念和贵族女子的人生起伏",
+      "cross_references": [
+        "刘姥姥恩情",
+        "因果报应"
+      ]
+    },
+    {
+      "册_type": "正册",
+      "characters": [
+        "李纨"
+      ],
+      "image": {
+        "description": "一盆茂兰，旁有一位凤冠霞帔的美人",
+        "symbolic_elements": [
+          "茂兰",
+          "凤冠霞帔"
+        ],
+        "visual_metaphors": [
+          "品格高洁",
+          "荣华富贵"
+        ]
+      },
+      "poem": {
+        "lines": [
+          "桃李春风结子完",
+          "到头谁似一盆兰",
+          "如冰水好空相妒",
+          "枉与他人作笑谈"
+        ],
+        "literary_devices": [
+          "植物比喻",
+          "对比",
+          "讽刺"
+        ],
+        "rhyme_scheme": "AABA",
+        "emotional_tone": "哀叹"
+      },
+      "fate_interpretations": [
+        {
+          "character": "李纨",
+          "fate_summary": "守寡教子，晚年富贵却成空",
+          "key_events": [
+            "早年丧夫",
+            "守寡教子",
+            "儿子成才",
+            "晚年荣华",
+            "最终虚空"
+          ],
+          "symbolic_meaning": "如兰花般高洁品格，桃李满天下但最终成空",
+          "timeline_hints": [
+            "桃李结子",
+            "晚年富贵"
+          ]
+        }
+      ],
+      "literary_significance": "展现贤妻良母的典型命运和封建社会的价值观",
+      "cross_references": [
+        "贾兰成才",
+        "母子关系"
+      ]
+    },
+    {
+      "册_type": "正册",
+      "characters": [
+        "秦可卿"
+      ],
+      "image": {
+        "description": "一座高楼，上有一美人悬梁自缢",
+        "symbolic_elements": [
+          "高楼",
+          "悬梁自缢"
+        ],
+        "visual_metaphors": [
+          "高不可攀",
+          "自我了断"
+        ]
+      },
+      "poem": {
+        "lines": [
+          "情天情海幻情身",
+          "情既相逢必主淫",
+          "漫言不肖皆荣出",
+          "造衅开端实在宁"
+        ],
+        "literary_devices": [
+          "情字重复",
+          "因果暗示",
+          "双关"
+        ],
+        "rhyme_scheme": "AABA",
+        "emotional_tone": "痛苦绝望"
+      },
+      "fate_interpretations": [
+        {
+          "character": "秦可卿",
+          "fate_summary": "因情致淫，最终自缢身亡",
+          "key_events": [
+            "淫乱丑闻",
+            "羞愧难当",
+            "悬梁自尽"
+          ],
+          "symbolic_meaning": "沉溺情海最终自毁，'宁'字暗示宁国府是祸根",
+          "timeline_hints": [
+            "情势发展",
+            "荣宁对比"
+          ]
+        }
+      ],
+      "literary_significance": "揭露贵族内部的道德沦丧和情欲悲剧",
+      "cross_references": [
+        "宁国府丑闻",
+        "荣宁二府对比"
+      ]
     }
   ],
   "副册": [
