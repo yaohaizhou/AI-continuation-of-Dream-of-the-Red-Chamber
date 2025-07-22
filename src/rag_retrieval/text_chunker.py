@@ -373,8 +373,13 @@ class TextChunker:
         # 人物检测
         names = self.name_pattern.findall(text)
         if names:
-            metadata['characters'] = list(set(names))
-            metadata['character_count'] = len(set(names))
+            # ChromaDB只支持基本类型，将列表转换为逗号分隔的字符串
+            unique_names = list(set(names))
+            metadata['characters'] = ','.join(unique_names)  # 转换为字符串
+            metadata['character_count'] = len(unique_names)
+        else:
+            metadata['characters'] = ''
+            metadata['character_count'] = 0
         
         # 对话检测
         dialogues = self.dialogue_pattern.findall(text)
@@ -393,6 +398,7 @@ class TextChunker:
                 metadata['chapter_title'] = chapter_match.group().strip()
         else:
             metadata['is_chapter_header'] = False
+            metadata['chapter_title'] = ''
         
         # 文本统计
         metadata.update({

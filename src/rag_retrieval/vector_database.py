@@ -69,16 +69,21 @@ class VectorDatabase:
         # 获取或创建集合
         try:
             self.collection = self.client.get_collection(
-                name=self.config.collection_name,
-                metadata={"hnsw:space": self.config.distance_metric}
+                name=self.config.collection_name
             )
             logger.info(f"加载现有集合: {self.config.collection_name}")
-        except Exception:
-            self.collection = self.client.create_collection(
-                name=self.config.collection_name,
-                metadata={"hnsw:space": self.config.distance_metric}
-            )
-            logger.info(f"创建新集合: {self.config.collection_name}")
+        except Exception as e:
+            try:
+                self.collection = self.client.create_collection(
+                    name=self.config.collection_name,
+                    metadata={"hnsw:space": self.config.distance_metric}
+                )
+                logger.info(f"创建新集合: {self.config.collection_name}")
+            except Exception as create_error:
+                # 如果创建也失败，尝试直接获取（可能已经存在）
+                logger.warning(f"创建集合失败: {create_error}, 尝试获取现有集合")
+                self.collection = self.client.get_collection(name=self.config.collection_name)
+                logger.info(f"成功获取现有集合: {self.config.collection_name}")
     
     def add_chunks(self, chunks: List[TextChunk], embeddings: List[np.ndarray]) -> None:
         """
@@ -407,9 +412,13 @@ class VectorDatabase:
                 
                 for metadata in sample_results['metadatas']:
                     # 统计人物
-                    if 'characters' in metadata:
-                        for char in metadata['characters']:
-                            character_counts[char] = character_counts.get(char, 0) + 1
+                    if 'characters' in metadata and metadata['characters']:
+                        # 现在characters是逗号分隔的字符串
+                        chars = metadata['characters'].split(',')
+                        for char in chars:
+                            char = char.strip()
+                            if char:
+                                character_counts[char] = character_counts.get(char, 0) + 1
                     
                     # 统计对话和章节
                     if metadata.get('has_dialogue'):

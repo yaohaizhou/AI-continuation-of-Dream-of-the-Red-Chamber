@@ -19,7 +19,7 @@ from .text_chunker import TextChunker, ChunkStrategy
 from .vector_database import VectorDatabase
 from .semantic_search import SemanticSearcher
 from .hybrid_retriever import HybridRetriever
-from .rag_pipeline import RAGPipeline
+from .rag_pipeline import RAGPipeline, create_rag_pipeline
 
 __version__ = "1.0.0"
 __author__ = "AI-HongLouMeng Team"
@@ -31,5 +31,6 @@ __all__ = [
     'VectorDatabase',
     'SemanticSearcher',
     'HybridRetriever',
-    'RAGPipeline'
+    'RAGPipeline',
+    'create_rag_pipeline'
 ] 

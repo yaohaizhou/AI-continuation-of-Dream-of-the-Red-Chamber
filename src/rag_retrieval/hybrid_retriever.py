@@ -242,23 +242,71 @@ class HybridRetriever:
         Returns:
             检索结果
         """
-        # 构建人物过滤器
-        metadata_filter = {
-            "characters": {"$in": [character_name]}
-        }
-        
         # 构建查询
         if context:
             query = f"{character_name} {context}"
         else:
             query = character_name
         
-        return self.search(
+        # 执行搜索（不使用元数据过滤，因为现在characters是字符串）
+        results = self.search(
             query,
             search_strategy="hybrid",
-            n_results=n_results,
-            metadata_filter=metadata_filter
+            n_results=n_results * 2,  # 获取更多结果用于后续过滤
+            metadata_filter=None
         )
+        
+        # 手动过滤包含指定人物的结果
+        filtered_results = self._filter_by_character(results, character_name)
+        
+        # 限制结果数量
+        for key in filtered_results:
+            if isinstance(filtered_results[key], list):
+                filtered_results[key] = filtered_results[key][:n_results]
+        
+        return filtered_results
+    
+    def _filter_by_character(self, results: Dict[str, Any], character_name: str) -> Dict[str, Any]:
+        """根据人物名称过滤结果"""
+        filtered_indices = []
+        
+        for i, metadata in enumerate(results.get('metadatas', [])):
+            if 'characters' in metadata and metadata['characters']:
+                # 检查是否包含指定人物
+                chunk_characters = [char.strip() for char in metadata['characters'].split(',')]
+                if character_name in chunk_characters:
+                    filtered_indices.append(i)
+        
+        # 构建过滤后的结果
+        filtered_results = {}
+        for key, values in results.items():
+            if isinstance(values, list) and len(values) > 0:
+                filtered_results[key] = [values[i] for i in filtered_indices if i < len(values)]
+            else:
+                filtered_results[key] = values
+        
+        return filtered_results
+    
+    def _filter_by_characters(self, results: Dict[str, Any], character_names: List[str]) -> Dict[str, Any]:
+        """根据多个人物名称过滤结果"""
+        filtered_indices = []
+        
+        for i, metadata in enumerate(results.get('metadatas', [])):
+            if 'characters' in metadata and metadata['characters']:
+                # 检查是否包含任一指定人物
+                chunk_characters = [char.strip() for char in metadata['characters'].split(',')]
+                if any(char in character_names for char in chunk_characters):
+                    filtered_indices.append(i)
+        
+        # 构建过滤后的结果
+        filtered_results = {}
+        for key, values in results.items():
+            if isinstance(values, list) and len(values) > 0:
+                filtered_results[key] = [values[i] for i in filtered_indices if i < len(values)]
+            else:
+                filtered_results[key] = values
+        
+        return filtered_results
     
     def search_by_theme(self, theme: str,
                        related_characters: Optional[List[str]] = None,
@@ -281,19 +329,24 @@ class HybridRetriever:
         else:
             query = theme
         
-        # 构建人物过滤器
-        metadata_filter = None
-        if related_characters:
-            metadata_filter = {
-                "characters": {"$in": related_characters}
-            }
-        
-        return self.search(
+        # 执行搜索（不使用元数据过滤）
+        results = self.search(
             query,
             search_strategy="semantic",  # 主题检索偏向语义
-            n_results=n_results,
-            metadata_filter=metadata_filter
+            n_results=n_results * 2 if related_characters else n_results,  # 如果有人物过滤，获取更多结果
+            metadata_filter=None
         )
+        
+        # 如果指定了相关人物，进行过滤
+        if related_characters:
+            filtered_results = self._filter_by_characters(results, related_characters)
+            # 限制结果数量
+            for key in filtered_results:
+                if isinstance(filtered_results[key], list):
+                    filtered_results[key] = filtered_results[key][:n_results]
+            return filtered_results
+        
+        return results
 
 
 # 便捷函数

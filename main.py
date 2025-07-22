@@ -955,13 +955,14 @@ def rag():
 
 @rag.command()
 @click.option('--reset', is_flag=True, help='重置现有向量数据库')
+@click.option('--test-single', is_flag=True, help='只处理001.md文件用于测试')
 @click.option('--api-key', help='DashScope API密钥')
 @click.option('--chunk-strategy', default='semantic', 
               type=click.Choice(['semantic', 'paragraph', 'chapter', 'hybrid']),
               help='文本分块策略')
 @click.option('--chunk-size', default=512, help='分块大小')
 @click.option('--batch-size', default=32, help='批处理大小')
-def build(reset, api_key, chunk_strategy, chunk_size, batch_size):
+def build(reset, test_single, api_key, chunk_strategy, chunk_size, batch_size):
     """构建RAG知识库 - 处理章节文本并创建向量索引"""
     try:
         console.print(Panel.fit("🚀 RAG知识库构建", style="bold green"))
@@ -984,8 +985,11 @@ def build(reset, api_key, chunk_strategy, chunk_size, batch_size):
         console.print(f"  批处理大小: {batch_size}")
         
         # 构建知识库
-        console.print(f"\n🔨 开始构建知识库...")
-        stats = pipeline.build_knowledge_base(reset_existing=reset)
+        if test_single:
+            console.print(f"\n🔨 测试模式：只处理 001.md...")
+        else:
+            console.print(f"\n🔨 开始构建知识库...")
+        stats = pipeline.build_knowledge_base(reset_existing=reset, test_single=test_single)
         
         # 显示构建结果
         console.print(f"\n✅ 知识库构建完成!")

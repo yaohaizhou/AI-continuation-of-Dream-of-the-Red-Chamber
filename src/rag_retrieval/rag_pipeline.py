@@ -213,12 +213,13 @@ class RAGPipeline:
         
         return self.process_documents(documents)
     
-    def process_chapter_files(self, chapters_dir: str = "data/processed/chapters") -> Dict[str, Any]:
+    def process_chapter_files(self, chapters_dir: str = "data/processed/chapters", test_single: bool = False) -> Dict[str, Any]:
         """
         处理章节文件目录
         
         Args:
             chapters_dir: 章节文件目录
+            test_single: 是否只处理单个文件（001.md）用于测试
             
         Returns:
             处理结果统计
@@ -228,11 +229,19 @@ class RAGPipeline:
         if not chapters_path.exists():
             raise FileNotFoundError(f"章节目录不存在: {chapters_dir}")
         
-        # 获取所有markdown文件
-        chapter_files = list(chapters_path.glob("*.md"))
-        chapter_files.sort()  # 按文件名排序
-        
-        logger.info(f"发现 {len(chapter_files)} 个章节文件")
+        if test_single:
+            # 只处理001.md文件用于测试
+            test_file = chapters_path / "001.md"
+            if test_file.exists():
+                chapter_files = [test_file]
+                logger.info(f"测试模式：只处理 001.md 文件")
+            else:
+                raise FileNotFoundError(f"测试文件不存在: {test_file}")
+        else:
+            # 获取所有markdown文件
+            chapter_files = list(chapters_path.glob("*.md"))
+            chapter_files.sort()  # 按文件名排序
+            logger.info(f"发现 {len(chapter_files)} 个章节文件")
         
         return self.process_text_files([str(f) for f in chapter_files])
     
@@ -257,10 +266,9 @@ class RAGPipeline:
         # 构建元数据过滤器
         metadata_filter = None
         if character_filter:
-            # ChromaDB的元数据过滤语法
-            metadata_filter = {
-                "characters": {"$in": character_filter}
-            }
+            # 由于characters现在是逗号分隔的字符串，我们需要使用不同的过滤方式
+            # 这里先不做元数据级别的过滤，而是在结果中进行过滤
+            pass
         
         # 根据检索类型执行搜索
         if search_type == "semantic":
@@ -293,14 +301,38 @@ class RAGPipeline:
             )
         
         # 增强结果信息
-        enhanced_results = self._enhance_search_results(results, query)
+        enhanced_results = self._enhance_search_results(results, query, character_filter)
         
         logger.info(f"检索完成: {search_type}, 返回 {len(enhanced_results['documents'])} 个结果")
         return enhanced_results
     
-    def _enhance_search_results(self, results: Dict[str, Any], query: str) -> Dict[str, Any]:
+    def _enhance_search_results(self, results: Dict[str, Any], query: str, 
+                               character_filter: Optional[List[str]] = None) -> Dict[str, Any]:
         """增强检索结果"""
         enhanced = results.copy()
+        
+        # 人物过滤（如果指定）
+        if character_filter:
+            filtered_indices = []
+            for i, metadata in enumerate(results['metadatas']):
+                if 'characters' in metadata and metadata['characters']:
+                    # 检查是否包含指定人物
+                    chunk_characters = [char.strip() for char in metadata['characters'].split(',')]
+                    if any(char in character_filter for char in chunk_characters):
+                        filtered_indices.append(i)
+                
+            # 过滤所有结果数组
+            if filtered_indices:
+                enhanced['ids'] = [results['ids'][i] for i in filtered_indices]
+                enhanced['documents'] = [results['documents'][i] for i in filtered_indices]
+                enhanced['metadatas'] = [results['metadatas'][i] for i in filtered_indices]
+                if 'distances' in results:
+                    enhanced['distances'] = [results['distances'][i] for i in filtered_indices]
+                if 'similarities' in results:
+                    enhanced['similarities'] = [results['similarities'][i] for i in filtered_indices]
+            else:
+                # 没有匹配的结果
+                enhanced = {k: [] for k in enhanced.keys()}
         
         # 添加查询信息
         enhanced['query'] = query
@@ -308,7 +340,7 @@ class RAGPipeline:
         
         # 为每个结果添加摘要
         summaries = []
-        for i, doc in enumerate(results['documents']):
+        for i, doc in enumerate(enhanced['documents']):
             # 简单的文本摘要（前100个字符）
             summary = doc[:100] + "..." if len(doc) > 100 else doc
             summaries.append(summary)
@@ -317,12 +349,13 @@ class RAGPipeline:
         
         return enhanced
     
-    def build_knowledge_base(self, reset_existing: bool = False) -> Dict[str, Any]:
+    def build_knowledge_base(self, reset_existing: bool = False, test_single: bool = False) -> Dict[str, Any]:
         """
         构建完整的知识库
         
         Args:
             reset_existing: 是否重置现有数据
+            test_single: 是否只处理单个文件（001.md）用于测试
             
         Returns:
             构建结果统计
@@ -333,8 +366,8 @@ class RAGPipeline:
             logger.warning("重置现有向量数据库")
             self.vectordb.reset_collection()
         
-        # 处理所有章节文件
-        stats = self.process_chapter_files()
+        # 处理章节文件
+        stats = self.process_chapter_files(test_single=test_single)
         
         # 获取数据库统计
         db_stats = self.vectordb.get_statistics()
