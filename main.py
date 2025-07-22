@@ -20,7 +20,9 @@ sys.path.insert(0, str(Path(__file__).parent / "src"))
 
 from ai_hongloumeng import HongLouMengContinuation, Config
 from ai_hongloumeng.utils import FileManager
+from ai_hongloumeng.prompts import PromptTemplates
 from data_processing import HongLouMengDataPipeline
+from knowledge_enhancement import EnhancedPrompter
 
 # 初始化控制台
 console = Console()
@@ -591,6 +593,76 @@ def batch_process_chapters(chapters_dir):
     except Exception as e:
         console.print(f"[red]批量处理失败: {e}[/red]")
         logger.error(f"批量处理失败: {e}")
+
+
+@cli.command()
+@click.option('--context', '-c', required=True, help='续写的上下文')
+@click.option('--prompt-type', '-t', type=click.Choice(['basic', 'dialogue', 'scene', 'poetry']),
+              default='basic', help='提示词类型')
+@click.option('--max-length', '-l', type=int, default=500, help='续写长度')
+@click.option('--traditional', is_flag=True, help='使用传统提示词（不使用知识增强）')
+def enhanced_continue(context, prompt_type, max_length, traditional):
+    """使用知识增强功能进行续写演示"""
+    console.print(Panel.fit(
+        f"[bold green]知识增强续写演示[/bold green]\n"
+        f"上下文: {context}\n"
+        f"类型: {prompt_type}\n"
+        f"长度: {max_length}字\n"
+        f"模式: {'传统' if traditional else '知识增强'}",
+        title="🌟 知识增强续写"
+    ))
+    
+    try:
+        # 初始化提示词模板
+        prompt_templates = PromptTemplates(enable_knowledge_enhancement=not traditional)
+        
+        if traditional:
+            console.print("[yellow]使用传统提示词模式[/yellow]")
+        else:
+            console.print("[green]使用知识增强模式[/green]")
+            
+        # 获取写作建议
+        suggestions = prompt_templates.get_writing_suggestions(context)
+        
+        if suggestions['knowledge_enhanced']:
+            console.print("\n📊 知识分析结果:")
+            console.print(f"  识别人物: {suggestions['characters']}")
+            console.print(f"  识别地点: {suggestions['locations']}")
+            console.print(f"  建议风格: {suggestions['suggested_style']}")
+            if suggestions.get('character_relationships'):
+                console.print(f"  人物关系: {suggestions['character_relationships']}")
+        
+        # 生成增强提示词
+        enhanced_prompt = prompt_templates.get_enhanced_prompt(
+            context=context,
+            prompt_type=prompt_type,
+            max_length=max_length
+        )
+        
+        console.print(f"\n✨ 生成的{'传统' if traditional else '知识增强'}提示词:")
+        console.print(Panel(
+            enhanced_prompt[:800] + "..." if len(enhanced_prompt) > 800 else enhanced_prompt,
+            title="📝 提示词内容",
+            expand=False
+        ))
+        
+        console.print(f"\n📏 提示词统计:")
+        console.print(f"  总长度: {len(enhanced_prompt)} 字符")
+        console.print(f"  约 {len(enhanced_prompt) // 100} 百字符")
+        
+        if not traditional and suggestions['knowledge_enhanced']:
+            console.print("\n🎯 知识增强优势:")
+            console.print("  ✅ 自动识别文本中的人物和地点")
+            console.print("  ✅ 提供人物关系和性格背景")
+            console.print("  ✅ 建议适合的写作风格")
+            console.print("  ✅ 推荐场景相关角色")
+            console.print("  ✅ 包含专业词汇指导")
+        
+        console.print(f"\n💡 提示: 这个提示词可以直接发送给AI模型进行续写")
+        
+    except Exception as e:
+        console.print(f"[red]知识增强续写演示失败: {e}[/red]")
+        logger.error(f"知识增强续写演示失败: {e}")
 
 
 if __name__ == "__main__":
