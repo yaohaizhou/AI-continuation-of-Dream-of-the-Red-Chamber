@@ -17,7 +17,7 @@ load_dotenv()
 @dataclass
 class ModelConfig:
     """模型配置"""
-    model_name: str = "gpt-4"
+    model_name: str = "claude_sonnet4"
     temperature: float = 0.8
     max_tokens: int = 2000
     top_p: float = 0.9
@@ -42,7 +42,7 @@ class Config:
         
         # API配置
         self.openai_api_key = os.getenv("OPENAI_API_KEY")
-        self.openai_base_url = os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1")
+        self.openai_base_url = os.getenv("OPENAI_BASE_URL", "https://idealab.alibaba-inc.com/api/openai/v1")
         
         # 模型配置
         self.model = ModelConfig(**self._config_data.get("model", {}))
