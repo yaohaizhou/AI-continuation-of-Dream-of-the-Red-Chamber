@@ -20,6 +20,7 @@ sys.path.insert(0, str(Path(__file__).parent / "src"))
 
 from ai_hongloumeng import HongLouMengContinuation, Config
 from ai_hongloumeng.utils import FileManager
+from data_processing import HongLouMengDataPipeline
 
 # 初始化控制台
 console = Console()
@@ -339,6 +340,257 @@ OPENAI_BASE_URL=https://api.openai.com/v1
     except Exception as e:
         console.print(f"[red]初始化失败: {e}[/red]")
         logger.error(f"初始化失败: {e}")
+
+
+@cli.command()
+@click.option('--input-file', '-i', type=click.Path(exists=True), required=True, 
+              help='红楼梦原文文件路径')
+@click.option('--output-dir', '-o', type=click.Path(), default='data/processed', 
+              help='输出目录路径')
+@click.option('--dict-path', '-d', type=click.Path(), 
+              help='自定义词典路径（可选）')
+@click.option('--skip-tokenization', is_flag=True, 
+              help='跳过分词处理')
+@click.option('--skip-entity-recognition', is_flag=True, 
+              help='跳过实体识别')
+@click.option('--force', is_flag=True, 
+              help='强制重新处理（即使输出文件已存在）')
+def process_data(input_file, output_dir, dict_path, skip_tokenization, skip_entity_recognition, force):
+    """完整处理红楼梦文本数据：预处理、分词、实体识别"""
+    try:
+        console.print(Panel.fit(
+            "[bold blue]开始红楼梦数据处理[/bold blue]",
+            border_style="blue"
+        ))
+        
+        # 初始化数据处理管道
+        pipeline = HongLouMengDataPipeline(
+            custom_dict_path=dict_path,
+            output_base_dir=output_dir
+        )
+        
+        # 显示管道信息
+        pipeline_info = pipeline.get_pipeline_info()
+        console.print(f"[green]输出目录: {pipeline_info['output_base_dir']}[/green]")
+        if dict_path:
+            console.print(f"[green]自定义词典: {dict_path}[/green]")
+        
+        # 开始处理
+        with Progress(
+            SpinnerColumn(),
+            TextColumn("[progress.description]{task.description}"),
+            console=console
+        ) as progress:
+            task = progress.add_task("数据处理中...", total=None)
+            
+            result = pipeline.process_complete_text(
+                input_file=input_file,
+                include_tokenization=not skip_tokenization,
+                include_entity_recognition=not skip_entity_recognition,
+                force_reprocess=force
+            )
+            
+            progress.update(task, description="数据处理完成")
+        
+        # 显示处理结果
+        if 'error' in result:
+            console.print(f"[red]处理失败: {result['error']}[/red]")
+            return
+        
+        # 显示统计信息
+        stats_text = "[bold]处理统计:[/bold]\n"
+        
+        if 'preprocessing' in result['statistics']:
+            stats = result['statistics']['preprocessing']
+            stats_text += f"• 总字符数: {stats['total_chars']:,}\n"
+            stats_text += f"• 段落数: {stats['total_paragraphs']:,}\n"
+            stats_text += f"• 对话数: {stats['total_dialogues']:,}\n"
+        
+        if 'chapters' in result['statistics']:
+            stats = result['statistics']['chapters']
+            stats_text += f"• 章节数: {stats['total_chapters']}\n"
+        
+        if 'tokenization' in result['statistics']:
+            stats = result['statistics']['tokenization']
+            stats_text += f"• 总词数: {stats['total_words']:,}\n"
+            stats_text += f"• 独特词汇: {stats['unique_words']:,}\n"
+            stats_text += f"• 自定义词汇: {stats['custom_words_found']}\n"
+        
+        console.print(Panel(stats_text.strip(), title="处理统计", border_style="green"))
+        
+        # 显示输出文件
+        files_text = "[bold]生成的文件:[/bold]\n"
+        for file_type, file_path in result['output_files'].items():
+            files_text += f"• {file_type}: {file_path}\n"
+        
+        console.print(Panel(files_text.strip(), title="输出文件", border_style="yellow"))
+        
+        console.print("[green]✓ 数据处理完成！[/green]")
+        
+    except Exception as e:
+        console.print(f"[red]数据处理失败: {e}[/red]")
+        logger.error(f"数据处理失败: {e}")
+
+
+@cli.command()
+@click.option('--input-file', '-i', type=click.Path(exists=True), required=True,
+              help='要分词的文本文件')
+@click.option('--output-file', '-o', type=click.Path(),
+              help='分词结果输出文件')
+@click.option('--dict-path', '-d', type=click.Path(),
+              help='自定义词典路径')
+@click.option('--mode', '-m', type=click.Choice(['default', 'search', 'all']),
+              default='default', help='分词模式')
+def tokenize(input_file, output_file, dict_path, mode):
+    """对文本进行分词处理"""
+    try:
+        from data_processing import HongLouMengTokenizer
+        
+        console.print(Panel.fit(
+            f"[bold cyan]文本分词处理[/bold cyan]\n模式: {mode}",
+            border_style="cyan"
+        ))
+        
+        # 初始化分词器
+        tokenizer = HongLouMengTokenizer(dict_path)
+        
+        # 处理文件
+        with Progress(
+            SpinnerColumn(),
+            TextColumn("[progress.description]{task.description}"),
+            console=console
+        ) as progress:
+            task = progress.add_task("分词处理中...", total=None)
+            
+            result = tokenizer.tokenize_file(input_file, output_file)
+            
+            progress.update(task, description="分词处理完成")
+        
+        # 显示结果
+        analysis = result['analysis']
+        
+        stats_text = f"""[bold]分词统计:[/bold]
+• 总词数: {analysis['word_count']:,}
+• 独特词汇: {analysis['unique_words']:,}
+• 自定义词汇发现: {len(analysis['custom_words_found'])}
+• 人物实体: {len(analysis['entities']['persons'])}
+• 地点实体: {len(analysis['entities']['locations'])}
+• 对象实体: {len(analysis['entities']['objects'])}
+"""
+        
+        console.print(Panel(stats_text.strip(), title="分词结果", border_style="green"))
+        console.print(f"[green]分词结果已保存到: {result['output_file']}[/green]")
+        
+    except Exception as e:
+        console.print(f"[red]分词处理失败: {e}[/red]")
+        logger.error(f"分词处理失败: {e}")
+
+
+@cli.command()
+@click.option('--input-file', '-i', type=click.Path(exists=True), required=True,
+              help='要进行实体识别的文本文件')
+@click.option('--output-file', '-o', type=click.Path(),
+              help='实体识别结果输出文件')
+@click.option('--dict-path', '-d', type=click.Path(),
+              help='自定义词典路径')
+def recognize_entities(input_file, output_file, dict_path):
+    """对文本进行实体识别"""
+    try:
+        from data_processing import EntityRecognizer
+        
+        console.print(Panel.fit(
+            "[bold magenta]实体识别处理[/bold magenta]",
+            border_style="magenta"
+        ))
+        
+        # 初始化实体识别器
+        recognizer = EntityRecognizer(dict_path)
+        
+        # 读取文件
+        with open(input_file, 'r', encoding='utf-8') as f:
+            text = f.read()
+        
+        # 处理实体识别
+        with Progress(
+            SpinnerColumn(),
+            TextColumn("[progress.description]{task.description}"),
+            console=console
+        ) as progress:
+            task = progress.add_task("实体识别中...", total=None)
+            
+            entities = recognizer.recognize_entities(text)
+            stats = recognizer.get_entity_statistics(text)
+            
+            progress.update(task, description="实体识别完成")
+        
+        # 保存结果
+        if output_file:
+            recognizer.export_entities(text, output_file)
+        
+        # 显示结果
+        stats_text = f"""[bold]实体识别统计:[/bold]
+• 人物: {stats['entity_counts']['persons']}个
+• 地点: {stats['entity_counts']['locations']}个
+• 物品: {stats['entity_counts']['objects']}个
+• 对话: {stats['entity_counts']['dialogues']}段
+• 称谓: {stats['entity_counts']['titles']}个
+
+[bold]实体密度（每千字）:[/bold]
+• 人物: {stats['entity_density']['persons']}
+• 地点: {stats['entity_density']['locations']}
+"""
+        
+        console.print(Panel(stats_text.strip(), title="实体识别结果", border_style="green"))
+        
+        if output_file:
+            console.print(f"[green]实体识别结果已保存到: {output_file}[/green]")
+        
+    except Exception as e:
+        console.print(f"[red]实体识别失败: {e}[/red]")
+        logger.error(f"实体识别失败: {e}")
+
+
+@cli.command()
+@click.option('--chapters-dir', '-d', type=click.Path(exists=True),
+              default='data/processed/chapters', help='章节文件目录')
+def batch_process_chapters(chapters_dir):
+    """批量处理所有章节文件"""
+    try:
+        from data_processing import HongLouMengDataPipeline
+        
+        console.print(Panel.fit(
+            "[bold yellow]批量处理章节[/bold yellow]",
+            border_style="yellow"
+        ))
+        
+        # 初始化管道
+        pipeline = HongLouMengDataPipeline()
+        
+        # 批量处理
+        with Progress(
+            SpinnerColumn(),
+            TextColumn("[progress.description]{task.description}"),
+            console=console
+        ) as progress:
+            task = progress.add_task("批量处理章节中...", total=None)
+            
+            results = pipeline.batch_process_chapters()
+            
+            progress.update(task, description="批量处理完成")
+        
+        # 显示结果
+        success_count = len([r for r in results if 'error' not in r])
+        total_count = len(results)
+        
+        console.print(f"[green]批量处理完成: {success_count}/{total_count} 个章节处理成功[/green]")
+        
+        if success_count < total_count:
+            error_count = total_count - success_count
+            console.print(f"[yellow]警告: {error_count} 个章节处理失败[/yellow]")
+        
+    except Exception as e:
+        console.print(f"[red]批量处理失败: {e}[/red]")
+        logger.error(f"批量处理失败: {e}")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,1216 @@
+{
+  "source_file": "data/raw/hongloumeng_80.md",
+  "total_chapters": 80,
+  "split_timestamp": "2025-07-22 21:01:34",
+  "chapters": [
+    {
+      "chapter_num": 1,
+      "title": "第一回 甄士隐梦幻识通灵 贾雨村风尘怀闺秀",
+      "filename": "001.md",
+      "file_path": "data/processed/chapters/001.md",
+      "content_length": 7818,
+      "line_count": 42,
+      "stats": {
+        "char_count": 7818,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 224,
+        "avg_paragraph_length": 7818.0
+      }
+    },
+    {
+      "chapter_num": 2,
+      "title": "第二回 贾夫人仙逝扬州城 冷子兴演说荣国府",
+      "filename": "002.md",
+      "file_path": "data/processed/chapters/002.md",
+      "content_length": 5995,
+      "line_count": 25,
+      "stats": {
+        "char_count": 5995,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 181,
+        "avg_paragraph_length": 5995.0
+      }
+    },
+    {
+      "chapter_num": 3,
+      "title": "第三回 贾雨村夤缘复旧职 林黛玉抛父进京都",
+      "filename": "003.md",
+      "file_path": "data/processed/chapters/003.md",
+      "content_length": 8510,
+      "line_count": 27,
+      "stats": {
+        "char_count": 8510,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 266,
+        "avg_paragraph_length": 8510.0
+      }
+    },
+    {
+      "chapter_num": 4,
+      "title": "第四回 薄命女偏逢薄命郎 葫芦僧乱判葫芦案",
+      "filename": "004.md",
+      "file_path": "data/processed/chapters/004.md",
+      "content_length": 5799,
+      "line_count": 18,
+      "stats": {
+        "char_count": 5799,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 149,
+        "avg_paragraph_length": 5799.0
+      }
+    },
+    {
+      "chapter_num": 5,
+      "title": "第五回 贾宝玉神游太虚境 警幻仙曲演红楼梦",
+      "filename": "005.md",
+      "file_path": "data/processed/chapters/005.md",
+      "content_length": 7376,
+      "line_count": 66,
+      "stats": {
+        "char_count": 7376,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 258,
+        "avg_paragraph_length": 7376.0
+      }
+    },
+    {
+      "chapter_num": 6,
+      "title": "第六回 贾宝玉初试云雨情 刘姥姥一进荣国府",
+      "filename": "006.md",
+      "file_path": "data/processed/chapters/006.md",
+      "content_length": 7018,
+      "line_count": 22,
+      "stats": {
+        "char_count": 7018,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 212,
+        "avg_paragraph_length": 7018.0
+      }
+    },
+    {
+      "chapter_num": 7,
+      "title": "第七回 送宫花贾琏戏熙凤 宴宁府宝玉会秦钟",
+      "filename": "007.md",
+      "file_path": "data/processed/chapters/007.md",
+      "content_length": 7019,
+      "line_count": 23,
+      "stats": {
+        "char_count": 7019,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 197,
+        "avg_paragraph_length": 7019.0
+      }
+    },
+    {
+      "chapter_num": 8,
+      "title": "第八回 贾宝玉奇缘识金锁 薛宝钗巧合认通灵",
+      "filename": "008.md",
+      "file_path": "data/processed/chapters/008.md",
+      "content_length": 6296,
+      "line_count": 25,
+      "stats": {
+        "char_count": 6296,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 216,
+        "avg_paragraph_length": 6296.0
+      }
+    },
+    {
+      "chapter_num": 9,
+      "title": "第九回 恋风流情友入家塾 起嫌疑顽童闹学堂",
+      "filename": "009.md",
+      "file_path": "data/processed/chapters/009.md",
+      "content_length": 5610,
+      "line_count": 18,
+      "stats": {
+        "char_count": 5610,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 172,
+        "avg_paragraph_length": 5610.0
+      }
+    },
+    {
+      "chapter_num": 10,
+      "title": "第十回 金寡妇贪利权受辱 张太医论病细穷源",
+      "filename": "010.md",
+      "file_path": "data/processed/chapters/010.md",
+      "content_length": 5050,
+      "line_count": 18,
+      "stats": {
+        "char_count": 5050,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 167,
+        "avg_paragraph_length": 5050.0
+      }
+    },
+    {
+      "chapter_num": 11,
+      "title": "第十一回 庆寿辰宁府排家宴 见熙凤贾瑞起淫心",
+      "filename": "011.md",
+      "file_path": "data/processed/chapters/011.md",
+      "content_length": 5815,
+      "line_count": 27,
+      "stats": {
+        "char_count": 5815,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 185,
+        "avg_paragraph_length": 5815.0
+      }
+    },
+    {
+      "chapter_num": 12,
+      "title": "第十二回 王熙凤毒设相思局 贾天祥正照风月鉴",
+      "filename": "012.md",
+      "file_path": "data/processed/chapters/012.md",
+      "content_length": 4229,
+      "line_count": 16,
+      "stats": {
+        "char_count": 4229,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 147,
+        "avg_paragraph_length": 4229.0
+      }
+    },
+    {
+      "chapter_num": 13,
+      "title": "第十三回 秦可卿死封龙禁尉 王熙凤协理宁国府",
+      "filename": "013.md",
+      "file_path": "data/processed/chapters/013.md",
+      "content_length": 5100,
+      "line_count": 24,
+      "stats": {
+        "char_count": 5100,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 168,
+        "avg_paragraph_length": 5100.0
+      }
+    },
+    {
+      "chapter_num": 14,
+      "title": "第十四回 林如海捐馆扬州城 贾宝玉路谒北静王",
+      "filename": "014.md",
+      "file_path": "data/processed/chapters/014.md",
+      "content_length": 5530,
+      "line_count": 26,
+      "stats": {
+        "char_count": 5530,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 175,
+        "avg_paragraph_length": 5530.0
+      }
+    },
+    {
+      "chapter_num": 15,
+      "title": "第十五回 王凤姐弄权铁槛寺 秦鲸卿得趣馒头庵",
+      "filename": "015.md",
+      "file_path": "data/processed/chapters/015.md",
+      "content_length": 4998,
+      "line_count": 20,
+      "stats": {
+        "char_count": 4998,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 165,
+        "avg_paragraph_length": 4998.0
+      }
+    },
+    {
+      "chapter_num": 16,
+      "title": "第十六回 贾元春才选凤藻宫 秦鲸卿夭逝黄泉路",
+      "filename": "016.md",
+      "file_path": "data/processed/chapters/016.md",
+      "content_length": 7513,
+      "line_count": 27,
+      "stats": {
+        "char_count": 7513,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 238,
+        "avg_paragraph_length": 7513.0
+      }
+    },
+    {
+      "chapter_num": 17,
+      "title": "第十七回 大观园试才题对额 荣国府归省庆元宵",
+      "filename": "017.md",
+      "file_path": "data/processed/chapters/017.md",
+      "content_length": 9367,
+      "line_count": 41,
+      "stats": {
+        "char_count": 9367,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 361,
+        "avg_paragraph_length": 9367.0
+      }
+    },
+    {
+      "chapter_num": 18,
+      "title": "第十八回 皇恩重元妃省父母 天伦乐宝玉呈才藻",
+      "filename": "018.md",
+      "file_path": "data/processed/chapters/018.md",
+      "content_length": 6804,
+      "line_count": 51,
+      "stats": {
+        "char_count": 6804,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 246,
+        "avg_paragraph_length": 6804.0
+      }
+    },
+    {
+      "chapter_num": 19,
+      "title": "第十九回 情切切良宵花解语 意绵绵静日玉生香",
+      "filename": "019.md",
+      "file_path": "data/processed/chapters/019.md",
+      "content_length": 9130,
+      "line_count": 34,
+      "stats": {
+        "char_count": 9130,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 303,
+        "avg_paragraph_length": 9130.0
+      }
+    },
+    {
+      "chapter_num": 20,
+      "title": "第二十回 王熙凤正言弹妒意 林黛玉俏语谑娇音",
+      "filename": "020.md",
+      "file_path": "data/processed/chapters/020.md",
+      "content_length": 5262,
+      "line_count": 16,
+      "stats": {
+        "char_count": 5262,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 174,
+        "avg_paragraph_length": 5262.0
+      }
+    },
+    {
+      "chapter_num": 21,
+      "title": "第二十一回 贤袭人娇嗔箴宝玉 俏平儿软语救贾琏",
+      "filename": "021.md",
+      "file_path": "data/processed/chapters/021.md",
+      "content_length": 5986,
+      "line_count": 24,
+      "stats": {
+        "char_count": 5986,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 181,
+        "avg_paragraph_length": 5986.0
+      }
+    },
+    {
+      "chapter_num": 22,
+      "title": "第二十二回 听曲文宝玉悟禅机 制灯迷贾政悲谶语",
+      "filename": "022.md",
+      "file_path": "data/processed/chapters/022.md",
+      "content_length": 6925,
+      "line_count": 50,
+      "stats": {
+        "char_count": 6925,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 284,
+        "avg_paragraph_length": 6925.0
+      }
+    },
+    {
+      "chapter_num": 23,
+      "title": "第二十三回 西厢记妙词通戏语 牡丹亭艳曲警芳心",
+      "filename": "023.md",
+      "file_path": "data/processed/chapters/023.md",
+      "content_length": 5372,
+      "line_count": 22,
+      "stats": {
+        "char_count": 5372,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 181,
+        "avg_paragraph_length": 5372.0
+      }
+    },
+    {
+      "chapter_num": 24,
+      "title": "第二十四回 醉金刚轻财尚义侠 痴女儿遗帕惹相思",
+      "filename": "024.md",
+      "file_path": "data/processed/chapters/024.md",
+      "content_length": 8443,
+      "line_count": 33,
+      "stats": {
+        "char_count": 8443,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 286,
+        "avg_paragraph_length": 8443.0
+      }
+    },
+    {
+      "chapter_num": 25,
+      "title": "第二十五回 魇魔法姊弟逢五鬼 红楼梦通灵遇双真",
+      "filename": "025.md",
+      "file_path": "data/processed/chapters/025.md",
+      "content_length": 8131,
+      "line_count": 31,
+      "stats": {
+        "char_count": 8131,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 243,
+        "avg_paragraph_length": 8131.0
+      }
+    },
+    {
+      "chapter_num": 26,
+      "title": "第二十六回 蜂腰桥设言传心事 潇湘馆春困发幽情",
+      "filename": "026.md",
+      "file_path": "data/processed/chapters/026.md",
+      "content_length": 7270,
+      "line_count": 35,
+      "stats": {
+        "char_count": 7270,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 234,
+        "avg_paragraph_length": 7270.0
+      }
+    },
+    {
+      "chapter_num": 27,
+      "title": "第二十七回 滴翠亭杨妃戏彩蝶 埋香冢飞燕泣残红",
+      "filename": "027.md",
+      "file_path": "data/processed/chapters/027.md",
+      "content_length": 6332,
+      "line_count": 23,
+      "stats": {
+        "char_count": 6332,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 202,
+        "avg_paragraph_length": 6332.0
+      }
+    },
+    {
+      "chapter_num": 28,
+      "title": "第二十八回 蒋玉菡情赠茜香罗 薛宝钗羞笼红麝串",
+      "filename": "028.md",
+      "file_path": "data/processed/chapters/028.md",
+      "content_length": 9467,
+      "line_count": 38,
+      "stats": {
+        "char_count": 9467,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 326,
+        "avg_paragraph_length": 9467.0
+      }
+    },
+    {
+      "chapter_num": 29,
+      "title": "第二十九回 享福人福深还祷福 痴情女情重愈斟情",
+      "filename": "029.md",
+      "file_path": "data/processed/chapters/029.md",
+      "content_length": 8544,
+      "line_count": 26,
+      "stats": {
+        "char_count": 8544,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 272,
+        "avg_paragraph_length": 8544.0
+      }
+    },
+    {
+      "chapter_num": 30,
+      "title": "第三十回 宝钗借扇机带双敲 龄官划蔷痴及局外",
+      "filename": "030.md",
+      "file_path": "data/processed/chapters/030.md",
+      "content_length": 5770,
+      "line_count": 17,
+      "stats": {
+        "char_count": 5770,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 194,
+        "avg_paragraph_length": 5770.0
+      }
+    },
+    {
+      "chapter_num": 31,
+      "title": "第三十一回 撕扇子作千金一笑 因麒麟伏白首双星",
+      "filename": "031.md",
+      "file_path": "data/processed/chapters/031.md",
+      "content_length": 7162,
+      "line_count": 12,
+      "stats": {
+        "char_count": 7162,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 228,
+        "avg_paragraph_length": 7162.0
+      }
+    },
+    {
+      "chapter_num": 32,
+      "title": "第三十二回 诉肺腑心迷活宝玉 含耻辱情烈死金钏",
+      "filename": "032.md",
+      "file_path": "data/processed/chapters/032.md",
+      "content_length": 5788,
+      "line_count": 12,
+      "stats": {
+        "char_count": 5788,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 189,
+        "avg_paragraph_length": 5788.0
+      }
+    },
+    {
+      "chapter_num": 33,
+      "title": "第三十三回 手足耽耽小动唇舌 不肖种种大承笞挞",
+      "filename": "033.md",
+      "file_path": "data/processed/chapters/033.md",
+      "content_length": 4761,
+      "line_count": 13,
+      "stats": {
+        "char_count": 4761,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 121,
+        "avg_paragraph_length": 4761.0
+      }
+    },
+    {
+      "chapter_num": 34,
+      "title": "第三十四回 情中情因情感妹妹 错里错以错劝哥哥",
+      "filename": "034.md",
+      "file_path": "data/processed/chapters/034.md",
+      "content_length": 7239,
+      "line_count": 18,
+      "stats": {
+        "char_count": 7239,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 213,
+        "avg_paragraph_length": 7239.0
+      }
+    },
+    {
+      "chapter_num": 35,
+      "title": "第三十五回 白玉钏亲尝莲叶羹 黄金莺巧结梅花络",
+      "filename": "035.md",
+      "file_path": "data/processed/chapters/035.md",
+      "content_length": 7873,
+      "line_count": 17,
+      "stats": {
+        "char_count": 7873,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 259,
+        "avg_paragraph_length": 7873.0
+      }
+    },
+    {
+      "chapter_num": 36,
+      "title": "第三十六回 绣鸳鸯梦兆绛芸轩 识分定情悟梨香院",
+      "filename": "036.md",
+      "file_path": "data/processed/chapters/036.md",
+      "content_length": 6702,
+      "line_count": 15,
+      "stats": {
+        "char_count": 6702,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 204,
+        "avg_paragraph_length": 6702.0
+      }
+    },
+    {
+      "chapter_num": 37,
+      "title": "第三十七回 秋爽斋偶结海棠社 蘅芜院夜拟菊花题",
+      "filename": "037.md",
+      "file_path": "data/processed/chapters/037.md",
+      "content_length": 9201,
+      "line_count": 42,
+      "stats": {
+        "char_count": 9201,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 332,
+        "avg_paragraph_length": 9201.0
+      }
+    },
+    {
+      "chapter_num": 38,
+      "title": "第三十八回 林潇湘魁夺菊花诗 薛蘅芜讽和螃蟹咏",
+      "filename": "038.md",
+      "file_path": "data/processed/chapters/038.md",
+      "content_length": 5530,
+      "line_count": 19,
+      "stats": {
+        "char_count": 5530,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 231,
+        "avg_paragraph_length": 5530.0
+      }
+    },
+    {
+      "chapter_num": 39,
+      "title": "第三十九回 村姥姥是信口开合 情哥哥偏寻根究底",
+      "filename": "039.md",
+      "file_path": "data/processed/chapters/039.md",
+      "content_length": 6228,
+      "line_count": 11,
+      "stats": {
+        "char_count": 6228,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 241,
+        "avg_paragraph_length": 6228.0
+      }
+    },
+    {
+      "chapter_num": 40,
+      "title": "第四十回 史太君两宴大观园 金鸳鸯三宣牙牌令",
+      "filename": "040.md",
+      "file_path": "data/processed/chapters/040.md",
+      "content_length": 9355,
+      "line_count": 17,
+      "stats": {
+        "char_count": 9355,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 396,
+        "avg_paragraph_length": 9355.0
+      }
+    },
+    {
+      "chapter_num": 41,
+      "title": "第四十一回 栊翠庵茶品梅花雪 怡红院劫遇母蝗虫",
+      "filename": "041.md",
+      "file_path": "data/processed/chapters/041.md",
+      "content_length": 6485,
+      "line_count": 15,
+      "stats": {
+        "char_count": 6485,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 245,
+        "avg_paragraph_length": 6485.0
+      }
+    },
+    {
+      "chapter_num": 42,
+      "title": "第四十二回 蘅芜君兰言解疑癖 潇湘子雅谑补余香",
+      "filename": "042.md",
+      "file_path": "data/processed/chapters/042.md",
+      "content_length": 7510,
+      "line_count": 17,
+      "stats": {
+        "char_count": 7510,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 262,
+        "avg_paragraph_length": 7510.0
+      }
+    },
+    {
+      "chapter_num": 43,
+      "title": "第四十三回 闲取乐偶攒金庆寿 不了情暂撮土为香",
+      "filename": "043.md",
+      "file_path": "data/processed/chapters/043.md",
+      "content_length": 6646,
+      "line_count": 19,
+      "stats": {
+        "char_count": 6646,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 242,
+        "avg_paragraph_length": 6646.0
+      }
+    },
+    {
+      "chapter_num": 44,
+      "title": "第四十四回 变生不测凤姐泼醋 喜出望外平儿理妆",
+      "filename": "044.md",
+      "file_path": "data/processed/chapters/044.md",
+      "content_length": 6648,
+      "line_count": 17,
+      "stats": {
+        "char_count": 6648,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 213,
+        "avg_paragraph_length": 6648.0
+      }
+    },
+    {
+      "chapter_num": 45,
+      "title": "第四十五回 金兰契互剖金兰语 风雨夕闷制风雨词",
+      "filename": "045.md",
+      "file_path": "data/processed/chapters/045.md",
+      "content_length": 7673,
+      "line_count": 17,
+      "stats": {
+        "char_count": 7673,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 246,
+        "avg_paragraph_length": 7673.0
+      }
+    },
+    {
+      "chapter_num": 46,
+      "title": "第四十六回 尴尬人难免尴尬事 鸳鸯女誓绝鸳鸯偶",
+      "filename": "046.md",
+      "file_path": "data/processed/chapters/046.md",
+      "content_length": 8203,
+      "line_count": 16,
+      "stats": {
+        "char_count": 8203,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 244,
+        "avg_paragraph_length": 8203.0
+      }
+    },
+    {
+      "chapter_num": 47,
+      "title": "第四十七回 呆霸王调情遭苦打 冷郎君惧祸走他乡",
+      "filename": "047.md",
+      "file_path": "data/processed/chapters/047.md",
+      "content_length": 7231,
+      "line_count": 19,
+      "stats": {
+        "char_count": 7231,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 240,
+        "avg_paragraph_length": 7231.0
+      }
+    },
+    {
+      "chapter_num": 48,
+      "title": "第四十八回 滥情人情误思游艺 慕雅女雅集苦吟诗",
+      "filename": "048.md",
+      "file_path": "data/processed/chapters/048.md",
+      "content_length": 6598,
+      "line_count": 27,
+      "stats": {
+        "char_count": 6598,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 230,
+        "avg_paragraph_length": 6598.0
+      }
+    },
+    {
+      "chapter_num": 49,
+      "title": "第四十九回 琉璃世界白雪红梅 脂粉香娃割腥啖膻",
+      "filename": "049.md",
+      "file_path": "data/processed/chapters/049.md",
+      "content_length": 7261,
+      "line_count": 22,
+      "stats": {
+        "char_count": 7261,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 244,
+        "avg_paragraph_length": 7261.0
+      }
+    },
+    {
+      "chapter_num": 50,
+      "title": "第五十回 芦雪庵争联即景诗 暖香坞雅制春灯谜",
+      "filename": "050.md",
+      "file_path": "data/processed/chapters/050.md",
+      "content_length": 6916,
+      "line_count": 107,
+      "stats": {
+        "char_count": 6916,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 277,
+        "avg_paragraph_length": 6916.0
+      }
+    },
+    {
+      "chapter_num": 51,
+      "title": "第五十一回 薛小妹新编怀古诗 胡庸医乱用虎狼药",
+      "filename": "051.md",
+      "file_path": "data/processed/chapters/051.md",
+      "content_length": 6844,
+      "line_count": 33,
+      "stats": {
+        "char_count": 6844,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 232,
+        "avg_paragraph_length": 6844.0
+      }
+    },
+    {
+      "chapter_num": 52,
+      "title": "第五十二回 俏平儿情掩虾须镯 勇晴雯病补雀金裘",
+      "filename": "052.md",
+      "file_path": "data/processed/chapters/052.md",
+      "content_length": 8263,
+      "line_count": 20,
+      "stats": {
+        "char_count": 8263,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 294,
+        "avg_paragraph_length": 8263.0
+      }
+    },
+    {
+      "chapter_num": 53,
+      "title": "第五十三回 宁国府除夕祭宗祠 荣国府元宵开夜宴",
+      "filename": "053.md",
+      "file_path": "data/processed/chapters/053.md",
+      "content_length": 8084,
+      "line_count": 25,
+      "stats": {
+        "char_count": 8084,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 251,
+        "avg_paragraph_length": 8084.0
+      }
+    },
+    {
+      "chapter_num": 54,
+      "title": "第五十四回 史太君破陈腐旧套 王熙凤效戏彩斑衣",
+      "filename": "054.md",
+      "file_path": "data/processed/chapters/054.md",
+      "content_length": 8686,
+      "line_count": 17,
+      "stats": {
+        "char_count": 8686,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 310,
+        "avg_paragraph_length": 8686.0
+      }
+    },
+    {
+      "chapter_num": 55,
+      "title": "第五十五回 辱亲女愚妾争闲气 欺幼主刁奴蓄险心",
+      "filename": "055.md",
+      "file_path": "data/processed/chapters/055.md",
+      "content_length": 7945,
+      "line_count": 20,
+      "stats": {
+        "char_count": 7945,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 280,
+        "avg_paragraph_length": 7945.0
+      }
+    },
+    {
+      "chapter_num": 56,
+      "title": "第五十六回 敏探春兴利除宿弊 时宝钗小惠全大体",
+      "filename": "056.md",
+      "file_path": "data/processed/chapters/056.md",
+      "content_length": 8661,
+      "line_count": 17,
+      "stats": {
+        "char_count": 8661,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 269,
+        "avg_paragraph_length": 8661.0
+      }
+    },
+    {
+      "chapter_num": 57,
+      "title": "第五十七回 慧紫鹃情辞试忙玉 慈姨妈爱语慰痴颦",
+      "filename": "057.md",
+      "file_path": "data/processed/chapters/057.md",
+      "content_length": 11128,
+      "line_count": 24,
+      "stats": {
+        "char_count": 11128,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 363,
+        "avg_paragraph_length": 11128.0
+      }
+    },
+    {
+      "chapter_num": 58,
+      "title": "第五十八回 杏子阴假凤泣虚凰 茜纱窗真情揆痴理",
+      "filename": "058.md",
+      "file_path": "data/processed/chapters/058.md",
+      "content_length": 6940,
+      "line_count": 16,
+      "stats": {
+        "char_count": 6940,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 223,
+        "avg_paragraph_length": 6940.0
+      }
+    },
+    {
+      "chapter_num": 59,
+      "title": "第五十九回 柳叶渚边嗔莺咤燕 绛云轩里召将飞符",
+      "filename": "059.md",
+      "file_path": "data/processed/chapters/059.md",
+      "content_length": 4966,
+      "line_count": 18,
+      "stats": {
+        "char_count": 4966,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 146,
+        "avg_paragraph_length": 4966.0
+      }
+    },
+    {
+      "chapter_num": 60,
+      "title": "第六十回 茉莉粉替去蔷薇硝 玫瑰露引来茯苓霜",
+      "filename": "060.md",
+      "file_path": "data/processed/chapters/060.md",
+      "content_length": 7441,
+      "line_count": 27,
+      "stats": {
+        "char_count": 7441,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 251,
+        "avg_paragraph_length": 7441.0
+      }
+    },
+    {
+      "chapter_num": 61,
+      "title": "第六十一回 投鼠忌器宝玉瞒赃 判冤决狱平儿行权",
+      "filename": "061.md",
+      "file_path": "data/processed/chapters/061.md",
+      "content_length": 6548,
+      "line_count": 14,
+      "stats": {
+        "char_count": 6548,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 219,
+        "avg_paragraph_length": 6548.0
+      }
+    },
+    {
+      "chapter_num": 62,
+      "title": "第六十二回 憨湘云醉眠芍药茵 呆香菱情解石榴裙",
+      "filename": "062.md",
+      "file_path": "data/processed/chapters/062.md",
+      "content_length": 11771,
+      "line_count": 40,
+      "stats": {
+        "char_count": 11771,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 454,
+        "avg_paragraph_length": 11771.0
+      }
+    },
+    {
+      "chapter_num": 63,
+      "title": "第六十三回 寿怡红群芳开夜宴 死金丹独艳理亲丧",
+      "filename": "063.md",
+      "file_path": "data/processed/chapters/063.md",
+      "content_length": 11074,
+      "line_count": 42,
+      "stats": {
+        "char_count": 11074,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 429,
+        "avg_paragraph_length": 11074.0
+      }
+    },
+    {
+      "chapter_num": 64,
+      "title": "第六十四回 幽淑女悲题五美吟 浪荡子情遗九龙佩",
+      "filename": "064.md",
+      "file_path": "data/processed/chapters/064.md",
+      "content_length": 9503,
+      "line_count": 30,
+      "stats": {
+        "char_count": 9503,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 347,
+        "avg_paragraph_length": 9503.0
+      }
+    },
+    {
+      "chapter_num": 65,
+      "title": "第六十五回 贾二舍偷娶尤二姨 尤三姐思嫁柳二郎",
+      "filename": "065.md",
+      "file_path": "data/processed/chapters/065.md",
+      "content_length": 6821,
+      "line_count": 18,
+      "stats": {
+        "char_count": 6821,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 242,
+        "avg_paragraph_length": 6821.0
+      }
+    },
+    {
+      "chapter_num": 66,
+      "title": "第六十六回 情小妹耻情归地府 冷二郎一冷入空门",
+      "filename": "066.md",
+      "file_path": "data/processed/chapters/066.md",
+      "content_length": 5037,
+      "line_count": 11,
+      "stats": {
+        "char_count": 5037,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 189,
+        "avg_paragraph_length": 5037.0
+      }
+    },
+    {
+      "chapter_num": 67,
+      "title": "第六十七回 见土仪颦卿思故里 闻秘事凤姐讯家童",
+      "filename": "067.md",
+      "file_path": "data/processed/chapters/067.md",
+      "content_length": 9198,
+      "line_count": 18,
+      "stats": {
+        "char_count": 9198,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 316,
+        "avg_paragraph_length": 9198.0
+      }
+    },
+    {
+      "chapter_num": 68,
+      "title": "第六十八回 苦尤娘赚入大观园 酸凤姐大闹宁国府",
+      "filename": "068.md",
+      "file_path": "data/processed/chapters/068.md",
+      "content_length": 7376,
+      "line_count": 16,
+      "stats": {
+        "char_count": 7376,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 273,
+        "avg_paragraph_length": 7376.0
+      }
+    },
+    {
+      "chapter_num": 69,
+      "title": "第六十九回 弄小巧用借剑杀人 觉大限吞生金自逝",
+      "filename": "069.md",
+      "file_path": "data/processed/chapters/069.md",
+      "content_length": 7157,
+      "line_count": 18,
+      "stats": {
+        "char_count": 7157,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 272,
+        "avg_paragraph_length": 7157.0
+      }
+    },
+    {
+      "chapter_num": 70,
+      "title": "第七十回 林黛玉重建桃花社 史湘云偶填柳絮词",
+      "filename": "070.md",
+      "file_path": "data/processed/chapters/070.md",
+      "content_length": 6317,
+      "line_count": 34,
+      "stats": {
+        "char_count": 6317,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 266,
+        "avg_paragraph_length": 6317.0
+      }
+    },
+    {
+      "chapter_num": 71,
+      "title": "第七十一回 嫌隙人有心生嫌隙 鸳鸯女无意遇鸳鸯",
+      "filename": "071.md",
+      "file_path": "data/processed/chapters/071.md",
+      "content_length": 8906,
+      "line_count": 24,
+      "stats": {
+        "char_count": 8906,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 289,
+        "avg_paragraph_length": 8906.0
+      }
+    },
+    {
+      "chapter_num": 72,
+      "title": "第七十二回 王熙凤恃强羞说病 来旺妇倚势霸成亲",
+      "filename": "072.md",
+      "file_path": "data/processed/chapters/072.md",
+      "content_length": 7472,
+      "line_count": 14,
+      "stats": {
+        "char_count": 7472,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 267,
+        "avg_paragraph_length": 7472.0
+      }
+    },
+    {
+      "chapter_num": 73,
+      "title": "第七十三回 痴丫头误拾绣春囊 懦小姐不问累金凤",
+      "filename": "073.md",
+      "file_path": "data/processed/chapters/073.md",
+      "content_length": 7414,
+      "line_count": 15,
+      "stats": {
+        "char_count": 7414,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 243,
+        "avg_paragraph_length": 7414.0
+      }
+    },
+    {
+      "chapter_num": 74,
+      "title": "第七十四回 惑奸谗抄检大观园 矢孤介杜绝宁国府",
+      "filename": "074.md",
+      "file_path": "data/processed/chapters/074.md",
+      "content_length": 10945,
+      "line_count": 16,
+      "stats": {
+        "char_count": 10945,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 384,
+        "avg_paragraph_length": 10945.0
+      }
+    },
+    {
+      "chapter_num": 75,
+      "title": "第七十五回 开夜宴异兆发悲音 赏中秋新词得佳谶",
+      "filename": "075.md",
+      "file_path": "data/processed/chapters/075.md",
+      "content_length": 9511,
+      "line_count": 20,
+      "stats": {
+        "char_count": 9511,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 382,
+        "avg_paragraph_length": 9511.0
+      }
+    },
+    {
+      "chapter_num": 76,
+      "title": "第七十六回 凸碧堂品笛感凄清 凹晶馆联诗悲寂寞",
+      "filename": "076.md",
+      "file_path": "data/processed/chapters/076.md",
+      "content_length": 7427,
+      "line_count": 58,
+      "stats": {
+        "char_count": 7427,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 318,
+        "avg_paragraph_length": 7427.0
+      }
+    },
+    {
+      "chapter_num": 77,
+      "title": "第七十七回 俏丫鬟抱屈夭风流 美优伶斩情归水月",
+      "filename": "077.md",
+      "file_path": "data/processed/chapters/077.md",
+      "content_length": 10482,
+      "line_count": 17,
+      "stats": {
+        "char_count": 10482,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 357,
+        "avg_paragraph_length": 10482.0
+      }
+    },
+    {
+      "chapter_num": 78,
+      "title": "第七十八回 老学士闲征姽婳词 痴公子杜撰芙蓉诔",
+      "filename": "078.md",
+      "file_path": "data/processed/chapters/078.md",
+      "content_length": 10663,
+      "line_count": 41,
+      "stats": {
+        "char_count": 10663,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 377,
+        "avg_paragraph_length": 10663.0
+      }
+    },
+    {
+      "chapter_num": 79,
+      "title": "第七十九回 薛文龙悔娶河东狮 贾迎春误嫁中山狼",
+      "filename": "079.md",
+      "file_path": "data/processed/chapters/079.md",
+      "content_length": 4734,
+      "line_count": 11,
+      "stats": {
+        "char_count": 4734,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 151,
+        "avg_paragraph_length": 4734.0
+      }
+    },
+    {
+      "chapter_num": 80,
+      "title": "第八十回 美香菱屈受贪夫棒 王道士胡诌妒妇方",
+      "filename": "080.md",
+      "file_path": "data/processed/chapters/080.md",
+      "content_length": 6803,
+      "line_count": 13,
+      "stats": {
+        "char_count": 6803,
+        "paragraph_count": 1,
+        "dialogue_count": 0,
+        "sentence_count": 224,
+        "avg_paragraph_length": 6803.0
+      }
+    }
+  ],
+  "stats": {
+    "total_chars": 590050,
+    "total_lines": 2084,
+    "total_paragraphs": 160,
+    "total_dialogues": 0,
+    "avg_paragraph_length": 3685.8125,
+    "dialogue_char_count": 0,
+    "dialogue_ratio": 0.0
+  }
+}
