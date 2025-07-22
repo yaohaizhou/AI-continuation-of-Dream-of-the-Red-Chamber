@@ -8,11 +8,13 @@ from .entity_retriever import EntityRetriever
 from .relationship_retriever import RelationshipRetriever
 from .vocabulary_suggester import VocabularySuggester
 from .enhanced_prompter import EnhancedPrompter
+from .taixu_prophecy_extractor import TaixuProphecyExtractor
 
 __all__ = [
     'KnowledgeRetriever',
     'EntityRetriever', 
     'RelationshipRetriever',
     'VocabularySuggester',
-    'EnhancedPrompter'
+    'EnhancedPrompter',
+    'TaixuProphecyExtractor'
 ] 

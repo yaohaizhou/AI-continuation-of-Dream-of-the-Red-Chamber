@@ -1,0 +1,373 @@
+{
+  "metadata": {
+    "source": "红楼梦第五回",
+    "extraction_date": "2025-07-22",
+    "description": "太虚幻境金陵十二钗判词完整提取",
+    "literary_significance": "曹雪芹通过太虚幻境的判词预设了主要角色的命运轨迹，是全书的重要预言"
+  },
+  "main_册": [
+    {
+      "册_type": "正册",
+      "characters": [
+        "林黛玉",
+        "薛宝钗"
+      ],
+      "image": {
+        "description": "两株枯木，木上悬着一围玉带；地上又有一堆雪，雪中一股金簪",
+        "symbolic_elements": [
+          "枯木",
+          "玉带",
+          "雪",
+          "金簪"
+        ],
+        "visual_metaphors": [
+          "生命凋零",
+          "高洁品格",
+          "寒冷孤寂",
+          "富贵象征"
+        ]
+      },
+      "poem": {
+        "lines": [
+          "可叹停机德",
+          "堪怜咏絮才",
+          "玉带林中挂",
+          "金簪雪里埋"
+        ],
+        "literary_devices": [
+          "对比",
+          "象征",
+          "谐音",
+          "互文"
+        ],
+        "rhyme_scheme": "ABAB",
+        "emotional_tone": "悲叹"
+      },
+      "fate_interpretations": [
+        {
+          "character": "林黛玉",
+          "fate_summary": "香消玉殒，早逝夭折",
+          "key_events": [
+            "玉带林中挂",
+            "孤高自许",
+            "与宝玉情深"
+          ],
+          "symbolic_meaning": "高洁品格如玉带般珍贵，但终将悬挂在林中凋零",
+          "timeline_hints": [
+            "青春年华",
+            "与宝钗并提"
+          ]
+        },
+        {
+          "character": "薛宝钗",
+          "fate_summary": "独守空房，婚姻不幸",
+          "key_events": [
+            "金簪雪里埋",
+            "停机德",
+            "婚后孤独"
+          ],
+          "symbolic_meaning": "如金簪般贵重，但终将被埋在冰雪中，寓意感情冰冷",
+          "timeline_hints": [
+            "婚后生活",
+            "与黛玉对比"
+          ]
+        }
+      ],
+      "literary_significance": "通过对比手法展现两种不同的女性命运，体现了作者对才情与品德的双重思考",
+      "cross_references": [
+        "与宝玉的感情纠葛",
+        "金玉良缘vs木石前盟"
+      ]
+    },
+    {
+      "册_type": "正册",
+      "characters": [
+        "贾元春"
+      ],
+      "image": {
+        "description": "一张弓，弓上挂着一个香橼",
+        "symbolic_elements": [
+          "弓",
+          "香橼"
+        ],
+        "visual_metaphors": [
+          "武力权势",
+          "芳香易逝"
+        ]
+      },
+      "poem": {
+        "lines": [
+          "二十年来辨是非",
+          "榴花开处照宫闱",
+          "三春争及初春景",
+          "虎兕相逢大梦归"
+        ],
+        "literary_devices": [
+          "时间对比",
+          "宫廷意象",
+          "季节隐喻",
+          "生肖预言"
+        ],
+        "rhyme_scheme": "ABCB",
+        "emotional_tone": "哀叹"
+      },
+      "fate_interpretations": [
+        {
+          "character": "贾元春",
+          "fate_summary": "贵妃身份短暂，在虎兔年间去世",
+          "key_events": [
+            "入宫为妃",
+            "荣华显赫",
+            "虎兔年逝世"
+          ],
+          "symbolic_meaning": "弓箭代表权势，香橼寓意芳华易逝，贵妃身份虽显赫但终究短暂",
+          "timeline_hints": [
+            "二十年",
+            "虎兔年",
+            "三春对比"
+          ]
+        }
+      ],
+      "literary_significance": "通过宫廷生活反映权势的虚幻和生命的无常",
+      "cross_references": [
+        "与三春姐妹对比",
+        "贾府兴衰的标志"
+      ]
+    },
+    {
+      "册_type": "正册",
+      "characters": [
+        "贾探春"
+      ],
+      "image": {
+        "description": "两个人放风筝，一片大海，一只大船，船中有一女子掩面泣涕之状",
+        "symbolic_elements": [
+          "风筝",
+          "大海",
+          "大船",
+          "女子掩面"
+        ],
+        "visual_metaphors": [
+          "身不由己",
+          "离别漂泊",
+          "远嫁他乡",
+          "思乡之苦"
+        ]
+      },
+      "poem": {
+        "lines": [
+          "才自精明志自高",
+          "生于末世运偏消",
+          "清明涕泣江边望",
+          "千里东风一梦遥"
+        ],
+        "literary_devices": [
+          "才情描写",
+          "时代背景",
+          "节气暗示",
+          "距离隐喻"
+        ],
+        "rhyme_scheme": "AABA",
+        "emotional_tone": "悲壮"
+      },
+      "fate_interpretations": [
+        {
+          "character": "贾探春",
+          "fate_summary": "才情出众但生不逢时，远嫁他乡",
+          "key_events": [
+            "才能显露",
+            "家族衰落",
+            "远嫁和亲"
+          ],
+          "symbolic_meaning": "风筝随风飘荡，如探春才高志远却身不由己，最终远嫁离家",
+          "timeline_hints": [
+            "末世时期",
+            "清明时节",
+            "千里之外"
+          ]
+        }
+      ],
+      "literary_significance": "体现了有才华的女性在封建社会中的悲剧命运",
+      "cross_references": [
+        "与迎春惜春对比",
+        "贾府政治联姻"
+      ]
+    }
+  ],
+  "副册": [
+    {
+      "册_type": "副册",
+      "characters": [
+        "香菱"
+      ],
+      "image": {
+        "description": "一枝桂花，下面有一方池沼，其中水涸泥干，莲枯藕败",
+        "symbolic_elements": [
+          "桂花",
+          "池沼",
+          "水涸泥干",
+          "莲枯藕败"
+        ],
+        "visual_metaphors": [
+          "芳香品质",
+          "生存环境",
+          "资源枯竭",
+          "生命凋零"
+        ]
+      },
+      "poem": {
+        "lines": [
+          "根并荷花一茎香",
+          "平生遭际实堪伤",
+          "自从两地生孤木",
+          "致使香魂返故乡"
+        ],
+        "literary_devices": [
+          "植物比喻",
+          "身世感叹",
+          "地域暗示",
+          "灵魂归宿"
+        ],
+        "rhyme_scheme": "AABA",
+        "emotional_tone": "悲叹同情"
+      },
+      "fate_interpretations": [
+        {
+          "character": "香菱",
+          "fate_summary": "被拐卖后遭遇坎坷，最终香消玉殒",
+          "key_events": [
+            "幼年被拐",
+            "成为妾室",
+            "学诗努力",
+            "最终早逝"
+          ],
+          "symbolic_meaning": "桂花荷花象征其本质美好，但环境恶劣最终凋零",
+          "timeline_hints": [
+            "两地生活",
+            "返故乡时"
+          ]
+        }
+      ],
+      "literary_significance": "展现了底层女性的悲惨命运和对美好品质的摧残",
+      "cross_references": [
+        "与薛蟠的关系",
+        "在大观园学诗"
+      ]
+    }
+  ],
+  "又副册": [
+    {
+      "册_type": "又副册",
+      "characters": [
+        "晴雯"
+      ],
+      "image": {
+        "description": "水墨渲染，满纸乌云浊雾",
+        "symbolic_elements": [
+          "乌云",
+          "浊雾"
+        ],
+        "visual_metaphors": [
+          "命运迷茫",
+          "前路不明"
+        ]
+      },
+      "poem": {
+        "lines": [
+          "霁月难逢",
+          "彩云易散",
+          "心比天高",
+          "身为下贱",
+          "风流灵巧招人怨",
+          "寿夭多因诽谤生",
+          "多情公子空牵念"
+        ],
+        "literary_devices": [
+          "天象比喻",
+          "身份对比",
+          "性格描述",
+          "因果分析"
+        ],
+        "rhyme_scheme": "自由体",
+        "emotional_tone": "悲愤不平"
+      },
+      "fate_interpretations": [
+        {
+          "character": "晴雯",
+          "fate_summary": "心高气傲但身份低贱，因谗言而早死",
+          "key_events": [
+            "伺候宝玉",
+            "性格张扬",
+            "遭受诽谤",
+            "被撵早逝"
+          ],
+          "symbolic_meaning": "霁月彩云象征其美好品质，但易散难逢，命运多舛",
+          "timeline_hints": [
+            "寿夭时期",
+            "诽谤传播"
+          ]
+        }
+      ],
+      "literary_significance": "反映了下层女性的悲剧和等级社会的残酷",
+      "cross_references": [
+        "与宝玉的主仆情",
+        "袭人的对比"
+      ]
+    },
+    {
+      "册_type": "又副册",
+      "characters": [
+        "袭人"
+      ],
+      "image": {
+        "description": "一簇鲜花，一床破席",
+        "symbolic_elements": [
+          "鲜花",
+          "破席"
+        ],
+        "visual_metaphors": [
+          "美好品质",
+          "处境困顿"
+        ]
+      },
+      "poem": {
+        "lines": [
+          "枉自温柔和顺",
+          "空云似桂如兰",
+          "堪羡优伶有福",
+          "谁知公子无缘"
+        ],
+        "literary_devices": [
+          "性格赞美",
+          "品质比喻",
+          "命运对比",
+          "缘分感叹"
+        ],
+        "rhyme_scheme": "AABB",
+        "emotional_tone": "惋惜同情"
+      },
+      "fate_interpretations": [
+        {
+          "character": "袭人",
+          "fate_summary": "温柔和顺但最终与宝玉无缘",
+          "key_events": [
+            "悉心照料",
+            "情深意重",
+            "宝玉出家",
+            "改嫁他人"
+          ],
+          "symbolic_meaning": "鲜花代表其美好品质，破席暗示其最终的困顿处境",
+          "timeline_hints": [
+            "公子无缘",
+            "优伶对比"
+          ]
+        }
+      ],
+      "literary_significance": "体现了忠诚品格与现实命运的矛盾",
+      "cross_references": [
+        "与宝玉的情感",
+        "与蒋玉菡的关系"
+      ]
+    }
+  ]
+}

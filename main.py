@@ -22,7 +22,7 @@ from ai_hongloumeng import HongLouMengContinuation, Config
 from ai_hongloumeng.utils import FileManager
 from ai_hongloumeng.prompts import PromptTemplates
 from data_processing import HongLouMengDataPipeline
-from knowledge_enhancement import EnhancedPrompter
+from knowledge_enhancement import EnhancedPrompter, TaixuProphecyExtractor
 
 # 初始化控制台
 console = Console()
@@ -663,6 +663,126 @@ def enhanced_continue(context, prompt_type, max_length, traditional):
     except Exception as e:
         console.print(f"[red]知识增强续写演示失败: {e}[/red]")
         logger.error(f"知识增强续写演示失败: {e}")
+
+
+@cli.command()
+@click.option('--extract', is_flag=True, help='重新提取判词（如果已存在会覆盖）')
+@click.option('--character', '-c', help='查询指定角色的判词')
+@click.option('--report', is_flag=True, help='生成判词分析报告')
+@click.option('--save-report', help='保存报告到指定文件')
+def taixu_prophecy(extract, character, report, save_report):
+    """太虚幻境判词提取与分析"""
+    console.print(Panel.fit(
+        "[bold magenta]太虚幻境判词分析系统[/bold magenta]\n"
+        "从红楼梦第五回提取金陵十二钗判词\n"
+        "为AI续写提供文学深度指导",
+        title="🔮 太虚幻境"
+    ))
+    
+    try:
+        extractor = TaixuProphecyExtractor()
+        
+        # 检查是否需要提取判词
+        existing_prophecies = extractor.load_prophecies()
+        should_extract = extract or not existing_prophecies
+        
+        if should_extract:
+            console.print("[yellow]开始提取太虚幻境判词...[/yellow]")
+            
+            with Progress(
+                SpinnerColumn(),
+                TextColumn("[progress.description]{task.description}"),
+                console=console
+            ) as progress:
+                task = progress.add_task("提取判词中...", total=None)
+                
+                # 提取判词
+                prophecies = extractor.extract_prophecies_from_chapter5()
+                progress.update(task, description="保存判词数据...")
+                
+                # 保存数据
+                extractor.save_prophecies(prophecies)
+                progress.update(task, description="提取完成!")
+            
+            console.print("[green]✅ 判词提取完成![/green]")
+            
+            # 显示统计信息
+            main_count = len(prophecies.get("main_册", []))
+            secondary_count = len(prophecies.get("副册", []))
+            tertiary_count = len(prophecies.get("又副册", []))
+            
+            console.print(f"\n📊 提取统计:")
+            console.print(f"  正册判词: [bold]{main_count}[/bold] 个")
+            console.print(f"  副册判词: [bold]{secondary_count}[/bold] 个")
+            console.print(f"  又副册判词: [bold]{tertiary_count}[/bold] 个")
+            console.print(f"  总计: [bold]{main_count + secondary_count + tertiary_count}[/bold] 个")
+        
+        else:
+            console.print("[green]使用已存在的判词数据[/green]")
+        
+        # 查询指定角色的判词
+        if character:
+            console.print(f"\n🔍 查询角色: [bold]{character}[/bold]")
+            
+            character_prophecy = extractor.get_character_prophecy(character)
+            if character_prophecy:
+                console.print(Panel(
+                    f"**角色**: {', '.join(character_prophecy['characters'])}\n"
+                    f"**册别**: {character_prophecy['册_type']}\n"
+                    f"**画面**: {character_prophecy['image']['description']}\n"
+                    f"**判词**: {' / '.join(character_prophecy['poem']['lines'])}\n"
+                    f"**命运**: {extractor.get_fate_summary(character) or '未找到'}\n"
+                    f"**象征**: {', '.join(extractor.get_symbolic_elements(character))}",
+                    title=f"📜 {character}的判词",
+                    expand=False
+                ))
+            else:
+                console.print(f"[red]未找到 {character} 的判词信息[/red]")
+        
+        # 生成分析报告
+        if report or save_report:
+            console.print("\n📝 生成判词分析报告...")
+            
+            report_content = extractor.generate_prophecy_report()
+            
+            if save_report:
+                # 保存报告到文件
+                report_path = Path(save_report)
+                report_path.parent.mkdir(parents=True, exist_ok=True)
+                
+                with open(report_path, 'w', encoding='utf-8') as f:
+                    f.write(report_content)
+                
+                console.print(f"[green]报告已保存到: {report_path}[/green]")
+            
+            if report:
+                # 显示报告内容（截取前1000字符）
+                display_content = report_content[:1000] + "..." if len(report_content) > 1000 else report_content
+                console.print(Panel(
+                    display_content,
+                    title="📊 判词分析报告",
+                    expand=False
+                ))
+        
+        # 显示一些示例查询建议
+        if not character and not report and not save_report:
+            console.print("\n💡 使用建议:")
+            console.print("  查看林黛玉判词: [bold]python main.py taixu-prophecy -c 林黛玉[/bold]")
+            console.print("  查看薛宝钗判词: [bold]python main.py taixu-prophecy -c 薛宝钗[/bold]")
+            console.print("  生成分析报告: [bold]python main.py taixu-prophecy --report[/bold]")
+            console.print("  保存分析报告: [bold]python main.py taixu-prophecy --save-report reports/prophecy.md[/bold]")
+            console.print("  重新提取判词: [bold]python main.py taixu-prophecy --extract[/bold]")
+        
+        console.print(f"\n🎭 太虚幻境判词系统已准备就绪！")
+        console.print("这些判词将为AI续写提供深层的文学指导和命运一致性检验。")
+        
+    except FileNotFoundError as e:
+        console.print(f"[red]文件未找到: {e}[/red]")
+        console.print("请确保 data/processed/chapters/005.md 文件存在")
+        logger.error(f"文件未找到: {e}")
+    except Exception as e:
+        console.print(f"[red]太虚幻境分析失败: {e}[/red]")
+        logger.error(f"太虚幻境分析失败: {e}")
 
 
 if __name__ == "__main__":
