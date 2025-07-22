@@ -20,6 +20,7 @@ from chromadb.api.models.Collection import Collection
 from loguru import logger
 
 from .text_chunker import TextChunk
+from .chroma_qwen_embedding import ChromaQwenEmbedding
 
 
 @dataclass
@@ -45,8 +46,10 @@ class VectorDatabase:
     - 持久化存储和备份恢复
     """
     
-    def __init__(self, config: Optional[VectorDBConfig] = None):
+    def __init__(self, config: Optional[VectorDBConfig] = None, 
+                 qwen_embeddings: Optional['QwenEmbeddings'] = None):
         self.config = config or VectorDBConfig()
+        self.qwen_embeddings = qwen_embeddings
         self._setup_database()
         
         logger.info(f"向量数据库初始化: {self.config.collection_name}")
@@ -66,19 +69,44 @@ class VectorDatabase:
             )
         )
         
+        # 准备embedding函数
+        embedding_function = None
+        if self.qwen_embeddings:
+            embedding_function = ChromaQwenEmbedding(self.qwen_embeddings.config)
+            logger.info("使用ChromaDB兼容的Qwen Embedding")
+        
         # 获取或创建集合
         try:
             self.collection = self.client.get_collection(
                 name=self.config.collection_name
             )
             logger.info(f"加载现有集合: {self.config.collection_name}")
+            
+            # 检查现有集合是否为空，如果为空且有embedding函数，则重新创建
+            if embedding_function:
+                count = self.collection.count()
+                if count == 0:
+                    logger.info("检测到空集合，重新创建以确保embedding函数正确配置")
+                    self.client.delete_collection(name=self.config.collection_name)
+                    self.collection = self.client.create_collection(
+                        name=self.config.collection_name,
+                        metadata={"hnsw:space": self.config.distance_metric},
+                        embedding_function=embedding_function
+                    )
+                    logger.info(f"重新创建集合: {self.config.collection_name}")
+                    logger.info("集合已配置使用Qwen Embedding函数")
+                    
         except Exception as e:
             try:
+                # 创建新集合
                 self.collection = self.client.create_collection(
                     name=self.config.collection_name,
-                    metadata={"hnsw:space": self.config.distance_metric}
+                    metadata={"hnsw:space": self.config.distance_metric},
+                    embedding_function=embedding_function
                 )
                 logger.info(f"创建新集合: {self.config.collection_name}")
+                if embedding_function:
+                    logger.info("集合已配置使用Qwen Embedding函数")
             except Exception as create_error:
                 # 如果创建也失败，尝试直接获取（可能已经存在）
                 logger.warning(f"创建集合失败: {create_error}, 尝试获取现有集合")
@@ -193,7 +221,10 @@ class VectorDatabase:
                       n_results: Optional[int] = None,
                       metadata_filter: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """
-        基于文本内容搜索（关键词匹配）
+        基于文本内容搜索（高性能版本）
+        
+        现在使用ChromaDB原生的query_texts功能，因为集合已配置使用我们的Qwen embedding函数，
+        避免了维度不匹配问题，同时获得了最佳性能。
         
         Args:
             query_text: 查询文本
@@ -205,23 +236,93 @@ class VectorDatabase:
         """
         n_results = n_results or self.config.max_results
         
-        # 执行文本搜索
-        results = self.collection.query(
-            query_texts=[query_text],
-            n_results=n_results,
-            where=metadata_filter
+        try:
+            # 使用ChromaDB原生文本搜索（现在会使用我们的Qwen embedding）
+            results = self.collection.query(
+                query_texts=[query_text],
+                n_results=n_results,
+                where=metadata_filter
+            )
+            
+            # 格式化结果（与相似度搜索保持一致）
+            formatted_results = {
+                'ids': results['ids'][0] if results['ids'] else [],
+                'documents': results['documents'][0] if results['documents'] else [],
+                'distances': results['distances'][0] if results['distances'] else [],
+                'metadatas': results['metadatas'][0] if results['metadatas'] else []
+            }
+            
+            # 转换距离为相似度分数
+            similarities = []
+            for distance in formatted_results['distances']:
+                if self.config.distance_metric == "cosine":
+                    similarity = 1 - distance
+                elif self.config.distance_metric == "l2":
+                    similarity = 1 / (1 + distance)
+                else:  # inner product
+                    similarity = distance
+                similarities.append(max(0, similarity))
+            
+            formatted_results['similarities'] = similarities
+            
+            logger.debug(f"高性能文本搜索完成，返回 {len(formatted_results['ids'])} 个结果")
+            return formatted_results
+            
+        except Exception as e:
+            logger.warning(f"ChromaDB文本搜索失败，回退到关键词匹配: {e}")
+            # 回退到关键词匹配方法
+            return self._fallback_text_search(query_text, n_results, metadata_filter)
+    
+    def _fallback_text_search(self, query_text: str, n_results: int, 
+                              metadata_filter: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """
+        回退的关键词匹配搜索方法
+        
+        当ChromaDB原生搜索失败时使用的备用方法。
+        """
+        # 获取所有文档进行关键词匹配
+        all_results = self.collection.get(
+            where=metadata_filter,
+            include=['documents', 'metadatas']
         )
         
-        # 格式化结果（与相似度搜索保持一致）
+        if not all_results['documents']:
+            return {
+                'ids': [], 'documents': [], 'distances': [], 
+                'metadatas': [], 'similarities': []
+            }
+        
+        # 简单的关键词匹配评分
+        scored_results = []
+        query_terms = query_text.lower().split()
+        
+        for i, doc in enumerate(all_results['documents']):
+            doc_lower = doc.lower()
+            score = sum(1 for term in query_terms if term in doc_lower)
+            
+            if score > 0:  # 只保留有匹配的文档
+                scored_results.append({
+                    'id': all_results['ids'][i],
+                    'document': doc,
+                    'metadata': all_results['metadatas'][i],
+                    'score': score / len(query_terms),  # 归一化分数
+                    'distance': 1 - (score / len(query_terms))  # 转换为距离
+                })
+        
+        # 按分数排序并取前n个
+        scored_results.sort(key=lambda x: x['score'], reverse=True)
+        scored_results = scored_results[:n_results]
+        
+        # 格式化结果
         formatted_results = {
-            'ids': results['ids'][0] if results['ids'] else [],
-            'documents': results['documents'][0] if results['documents'] else [],
-            'distances': results['distances'][0] if results['distances'] else [],
-            'metadatas': results['metadatas'][0] if results['metadatas'] else [],
-            'similarities': [1.0] * len(results['ids'][0]) if results['ids'] else []  # 文本匹配默认高相似度
+            'ids': [r['id'] for r in scored_results],
+            'documents': [r['document'] for r in scored_results],
+            'distances': [r['distance'] for r in scored_results],
+            'metadatas': [r['metadata'] for r in scored_results],
+            'similarities': [r['score'] for r in scored_results]
         }
         
-        logger.debug(f"文本搜索完成，返回 {len(formatted_results['ids'])} 个结果")
+        logger.debug(f"回退关键词搜索完成，返回 {len(formatted_results['ids'])} 个结果")
         return formatted_results
     
     def hybrid_search(self, query_embedding: np.ndarray, query_text: str,

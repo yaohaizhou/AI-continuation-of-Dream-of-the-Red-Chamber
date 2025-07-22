@@ -80,8 +80,8 @@ class RAGPipeline:
         # 文本分块器
         self.chunker = TextChunker(self.config.chunk_config)
         
-        # 向量数据库
-        self.vectordb = VectorDatabase(self.config.vectordb_config)
+        # 向量数据库（传递embeddings实例以启用优化的搜索）
+        self.vectordb = VectorDatabase(self.config.vectordb_config, self.embeddings)
         
         logger.info("RAG核心组件初始化完成")
     

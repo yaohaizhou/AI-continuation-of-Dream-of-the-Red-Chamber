@@ -15,6 +15,7 @@ RAG智能检索系统
 """
 
 from .qwen_embeddings import QwenEmbeddings
+from .chroma_qwen_embedding import ChromaQwenEmbedding
 from .text_chunker import TextChunker, ChunkStrategy
 from .vector_database import VectorDatabase
 from .semantic_search import SemanticSearcher
@@ -26,6 +27,7 @@ __author__ = "AI-HongLouMeng Team"
 
 __all__ = [
     'QwenEmbeddings',
+    'ChromaQwenEmbedding',
     'TextChunker',
     'ChunkStrategy', 
     'VectorDatabase',

@@ -22,7 +22,7 @@ from dashscope import TextEmbedding
 class EmbeddingConfig:
     """Embedding配置"""
     model_name: str = "text-embedding-v4"
-    dimension: int = 1536
+    dimension: int = 1024  # Qwen3 text-embedding-v4实际维度
     batch_size: int = 32
     max_text_length: int = 2048
     cache_enabled: bool = True
