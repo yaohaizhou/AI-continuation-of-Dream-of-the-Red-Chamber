@@ -57,49 +57,54 @@
 ### 系统架构全景图
 
 ```mermaid
+%%{init: {'theme':'base', 'themeVariables': {'primaryColor': '#ffffff', 'primaryTextColor': '#000000', 'primaryBorderColor': '#000000', 'lineColor': '#000000', 'sectionBkgColor': '#ffffff', 'altSectionBkgColor': '#f0f0f0', 'gridColor': '#cccccc', 'secondaryColor': '#ffffff', 'tertiaryColor': '#ffffff'}}}%%
 graph TB
     subgraph "📊 数据输入层"
-        A1[红楼梦前80回<br/>590k字符] --> A2[太虚幻境判词<br/>14个完整预言]
-        A1 --> A3[知识图谱<br/>64人物+32地点]
-        A1 --> A4[RAG向量库<br/>语义检索索引]
+        A1["🔖 红楼梦前80回<br/>📊 590k字符"] 
+        A2["🔮 太虚幻境判词<br/>📝 14个完整预言"]
+        A3["🕸️ 知识图谱<br/>👥 64人物+32地点"]
+        A4["🔍 RAG向量库<br/>🧠 语义检索索引"]
+        A1 --> A2
+        A1 --> A3  
+        A1 --> A4
     end
     
     subgraph "🧠 长文本管理层"
-        B1[上下文压缩器 ✅]
-        B2[章节规划器 📅]
-        B3[进度追踪器 📅]
-        B4[状态管理器 📅]
+        B1["📦 上下文压缩器 ✅"]
+        B2["📋 章节规划器 📅"]
+        B3["📈 进度追踪器 📅"]
+        B4["⚙️ 状态管理器 📅"]
     end
     
     subgraph "⚙️ 智能续写引擎"
-        C1[知识增强续写器 ✅]
-        C2[RAG语义检索器 ✅]
-        C3[象征意象建议器 ✅]
-        C4[多模式续写器 ✅]
+        C1["🎯 知识增强续写器 ✅"]
+        C2["🔍 RAG语义检索器 ✅"]
+        C3["🎨 象征意象建议器 ✅"]
+        C4["✍️ 多模式续写器 ✅"]
     end
     
     subgraph "🔍 质量控制层"
-        D1[命运一致性检验器 ✅]
-        D2[风格一致性监控器 📅]
-        D3[情节连贯性验证器 📅]
-        D4[文学质量评估器 📅]
+        D1["🎭 命运一致性检验器 ✅"]
+        D2["📝 风格一致性监控器 📅"]
+        D3["🔗 情节连贯性验证器 📅"]
+        D4["📊 文学质量评估器 📅"]
     end
     
     subgraph "🔄 迭代优化层"
-        E1[质量反馈分析器 📅]
-        E2[自动修正建议器 📅]
-        E3[版本对比管理器 📅]
+        E1["📈 质量反馈分析器 📅"]
+        E2["🔧 自动修正建议器 📅"]
+        E3["📋 版本对比管理器 📅"]
     end
     
     subgraph "📤 输出管理层"
-        F1[章节内容整合器 📅]
-        F2[格式标准化器 📅]
-        F3[最终发布准备器 📅]
+        F1["📚 章节内容整合器 📅"]
+        F2["📝 格式标准化器 📅"]
+        F3["🎯 最终发布准备器 📅"]
     end
     
     subgraph "🎯 续写产出"
-        G1[红楼梦后40回<br/>约500k字符]
-        G2[完整版本<br/>前80回+后40回]
+        G1["📖 红楼梦后40回<br/>📊 约500k字符"]
+        G2["📚 完整版本<br/>📖 前80回+后40回"]
     end
     
     %% 主要数据流
@@ -136,11 +141,13 @@ graph TB
     E2 -.-> C4
     E3 -.-> B1
     
-    classDef implemented fill:#90EE90,stroke:#006400,stroke-width:2px
-    classDef todo fill:#FFE4B5,stroke:#FF8C00,stroke-width:2px
-    classDef output fill:#E6E6FA,stroke:#4B0082,stroke-width:2px
+    classDef implemented fill:#2ECC71,stroke:#27AE60,stroke-width:3px,color:#FFFFFF
+    classDef todo fill:#F39C12,stroke:#E67E22,stroke-width:3px,color:#FFFFFF  
+    classDef output fill:#9B59B6,stroke:#8E44AD,stroke-width:3px,color:#FFFFFF
+    classDef data fill:#3498DB,stroke:#2980B9,stroke-width:3px,color:#FFFFFF
     
-    class A1,A2,A3,A4,B1,C1,C2,C3,C4,D1 implemented
+    class A1,A2,A3,A4 data
+    class B1,C1,C2,C3,C4,D1 implemented
     class B2,B3,B4,D2,D3,D4,E1,E2,E3,F1,F2,F3 todo
     class G1,G2 output
 ```
@@ -148,59 +155,65 @@ graph TB
 ### 长文本续写核心流程
 
 ```mermaid
+%%{init: {'theme':'base', 'themeVariables': {'primaryColor': '#ffffff', 'primaryTextColor': '#000000', 'primaryBorderColor': '#000000', 'lineColor': '#000000', 'sectionBkgColor': '#ffffff', 'altSectionBkgColor': '#f0f0f0', 'gridColor': '#cccccc', 'secondaryColor': '#ffffff', 'tertiaryColor': '#ffffff'}}}%%
 flowchart TD
-    Start([开始续写后40回]) --> Plan[📋 整体规划阶段]
+    Start(["🚀 开始续写后40回"]) --> Plan["📋 整体规划阶段"]
     
-    Plan --> Plan1[基于太虚幻境判词<br/>规划40回命运轨迹]
-    Plan1 --> Plan2[设计章节主题<br/>和情节发展线]
-    Plan2 --> Plan3[标记关键转折点<br/>和人物命运节点]
+    Plan --> Plan1["🔮 基于太虚幻境判词<br/>📜 规划40回命运轨迹"]
+    Plan1 --> Plan2["📖 设计章节主题<br/>📈 和情节发展线"]
+    Plan2 --> Plan3["🎯 标记关键转折点<br/>👥 和人物命运节点"]
     
-    Plan3 --> Loop{🔄 章节循环<br/>第81-120回}
+    Plan3 --> Loop{"🔄 章节循环<br/>📚 第81-120回"}
     
-    Loop --> Compress[📝 上下文压缩<br/>前文590k→8k字符]
-    Compress --> Retrieve[🔍 知识检索<br/>RAG+实体+象征]
-    Retrieve --> Generate[✍️ 智能续写<br/>多模式生成]
-    Generate --> Validate[✅ 质量检验<br/>命运+风格+逻辑]
+    Loop --> Compress["📦 上下文压缩<br/>📊 前文590k→8k字符"]
+    Compress --> Retrieve["🔍 知识检索<br/>🧠 RAG+实体+象征"]
+    Retrieve --> Generate["✍️ 智能续写<br/>🎨 多模式生成"]
+    Generate --> Validate["✅ 质量检验<br/>🎭 命运+风格+逻辑"]
     
-    Validate --> Pass{验证通过?}
-    Pass -->|是| Save[💾 保存章节]
-    Pass -->|否| Refine[🔧 迭代优化]
+    Validate --> Pass{"🤔 验证通过?"}
+    Pass -->|"✅ 是"| Save["💾 保存章节"]
+    Pass -->|"❌ 否"| Refine["🔧 迭代优化"]
     Refine --> Generate
     
-    Save --> Progress{完成进度?}
-    Progress -->|未完成| Loop
-    Progress -->|已完成| Final[🎯 最终整合]
+    Save --> Progress{"📈 完成进度?"}
+    Progress -->|"⏳ 未完成"| Loop
+    Progress -->|"🎉 已完成"| Final["🎯 最终整合"]
     
-    Final --> Final1[📚 章节合并]
-    Final1 --> Final2[📝 格式标准化]
-    Final2 --> Final3[🔍 全文校对]
-    Final3 --> Complete([📖 红楼梦120回完整版])
+    Final --> Final1["📚 章节合并"]
+    Final1 --> Final2["📝 格式标准化"]
+    Final2 --> Final3["🔍 全文校对"]
+    Final3 --> Complete(["📖 红楼梦120回完整版"])
     
-    classDef process fill:#E6F3FF,stroke:#0066CC,stroke-width:2px
-    classDef decision fill:#FFE6CC,stroke:#FF6600,stroke-width:2px
-    classDef endpoint fill:#E6FFE6,stroke:#00AA00,stroke-width:2px
+    classDef process fill:#3498DB,stroke:#2980B9,stroke-width:3px,color:#FFFFFF
+    classDef decision fill:#E67E22,stroke:#D35400,stroke-width:3px,color:#FFFFFF
+    classDef endpoint fill:#27AE60,stroke:#229954,stroke-width:3px,color:#FFFFFF
+    classDef planning fill:#9B59B6,stroke:#8E44AD,stroke-width:3px,color:#FFFFFF
+    classDef final fill:#E74C3C,stroke:#C0392B,stroke-width:3px,color:#FFFFFF
     
-    class Plan1,Plan2,Plan3,Compress,Retrieve,Generate,Save,Final1,Final2,Final3 process
+    class Plan,Plan1,Plan2,Plan3 planning
+    class Compress,Retrieve,Generate,Save process
     class Loop,Pass,Progress decision
     class Start,Complete endpoint
+    class Validate,Refine,Final,Final1,Final2,Final3 final
 ```
 
 ### 关键技术突破点
 
 ```mermaid
+%%{init: {'theme':'base', 'themeVariables': {'primaryColor': '#ffffff', 'primaryTextColor': '#000000', 'primaryBorderColor': '#000000', 'lineColor': '#000000', 'sectionBkgColor': '#ffffff', 'altSectionBkgColor': '#f0f0f0', 'gridColor': '#cccccc', 'secondaryColor': '#ffffff', 'tertiaryColor': '#ffffff'}}}%%
 graph LR
     subgraph "🎯 核心挑战"
-        Challenge1[50万字长文本<br/>超出LLM限制]
-        Challenge2[40回连贯性<br/>人物性格一致]
-        Challenge3[符合太虚幻境<br/>预设命运轨迹]
-        Challenge4[保持曹雪芹<br/>原著文学风格]
+        Challenge1["⚠️ 50万字长文本<br/>🚫 超出LLM限制"]
+        Challenge2["🔗 40回连贯性<br/>👥 人物性格一致"]
+        Challenge3["🔮 符合太虚幻境<br/>📜 预设命运轨迹"]
+        Challenge4["✍️ 保持曹雪芹<br/>🎨 原著文学风格"]
     end
     
     subgraph "🚀 技术解决方案"
-        Solution1[上下文压缩器<br/>98%+压缩比 ✅]
-        Solution2[命运一致性检验<br/>多维度质量控制 ✅]
-        Solution3[知识增强续写<br/>人物关系+词汇 ✅]
-        Solution4[RAG语义检索<br/>相关背景知识 ✅]
+        Solution1["📦 上下文压缩器<br/>📊 98%+压缩比 ✅"]
+        Solution2["🎭 命运一致性检验<br/>🔍 多维度质量控制 ✅"]
+        Solution3["🧠 知识增强续写<br/>👥 人物关系+词汇 ✅"]
+        Solution4["🔍 RAG语义检索<br/>📚 相关背景知识 ✅"]
     end
     
     Challenge1 --> Solution1
@@ -208,14 +221,14 @@ graph LR
     Challenge3 --> Solution3
     Challenge4 --> Solution4
     
-    Solution1 --> Result1[突破长度限制<br/>保留核心信息]
-    Solution2 --> Result2[实时质量监控<br/>确保一致性]
-    Solution3 --> Result3[智能写作指导<br/>符合原著设定]
-    Solution4 --> Result4[精准背景检索<br/>提升续写质量]
+    Solution1 --> Result1["🎯 突破长度限制<br/>💾 保留核心信息"]
+    Solution2 --> Result2["📈 实时质量监控<br/>✅ 确保一致性"]
+    Solution3 --> Result3["🎯 智能写作指导<br/>📖 符合原著设定"]
+    Solution4 --> Result4["🔎 精准背景检索<br/>⭐ 提升续写质量"]
     
-    classDef challenge fill:#FFE4E1,stroke:#DC143C,stroke-width:2px
-    classDef solution fill:#E0FFFF,stroke:#008B8B,stroke-width:2px
-    classDef result fill:#F0FFF0,stroke:#228B22,stroke-width:2px
+    classDef challenge fill:#E74C3C,stroke:#C0392B,stroke-width:3px,color:#FFFFFF
+    classDef solution fill:#1ABC9C,stroke:#16A085,stroke-width:3px,color:#FFFFFF
+    classDef result fill:#27AE60,stroke:#229954,stroke-width:3px,color:#FFFFFF
     
     class Challenge1,Challenge2,Challenge3,Challenge4 challenge
     class Solution1,Solution2,Solution3,Solution4 solution
@@ -238,7 +251,7 @@ graph LR
 - [x] **象征意象建议**: 67个文学象征的智能推荐
 - [x] **多模式续写**: 基础、对话、场景、诗词四种专业模式
 
-### 🔧 技术架构 (完成度: 85%)
+### 🔧 技术架构 (完成度: 90%)
 - [x] **LangChain统一架构**: 代码量优化40%，维护性大幅提升
 - [x] **CLI工具集**: 完整的命令行接口和批量处理
 - [x] **API接口**: Python编程接口和扩展能力
@@ -250,7 +263,7 @@ graph LR
 
 ### 🎯 高优先级 (P0)
 - [ ] **长文本续写管理器**
-  - [ ] 上下文压缩算法 (解决长度限制)
+  - [x] 上下文压缩算法 (解决长度限制) ✅ 已实现
   - [ ] 章节间信息传递机制
   - [ ] 进度跟踪和状态管理
   - [ ] 智能断点续写功能
@@ -368,7 +381,7 @@ class ChapterPlanningEngine:
 | **章节数量** | 80章已处理 | 40章待续写 |
 | **人物覆盖** | 64个主要人物 | 完整命运闭环 |
 | **判词覆盖** | 14个完整解析 | 100%命运实现 |
-| **技术模块** | 28个功能模块 | +15个续写专用 |
+| **技术模块** | 29个功能模块 | +14个续写专用 |
 
 ---
 
@@ -416,6 +429,27 @@ enhanced_prompt = templates.get_enhanced_prompt(
 
 ---
 
+## 📊 架构图视觉优化说明
+
+### ✅ **新增优化特性**
+- **🎨 高对比度配色**: 白底黑字，确保各种显示环境下的清晰度
+- **🔧 主题配置**: 明确的base主题设置，避免dark mode显示问题  
+- **📐 增强边框**: 3px边框宽度，模块区分更加明显
+- **🎯 图标丰富**: 每个模块增加专属图标，提升视觉识别度
+- **🌈 色彩语义**: 5种颜色分别代表不同功能状态和优先级
+
+### 🎨 **颜色方案说明**
+| 颜色 | 含义 | 适用模块 |
+|------|------|----------|
+| 🔴 **红色** | 核心挑战 | 长文本限制、一致性难题 |
+| 🟢 **绿色** | 已实现 | RAG检索、知识增强、命运检验 |
+| 🟠 **橙色** | 待开发 | 规划器、监控器、优化器 |
+| 🔵 **蓝色** | 数据输入 | 知识库、图谱、向量库 |
+| 🟣 **紫色** | 最终产出 | 后40回、完整版本 |
+
+---
+
 *最后更新: 2025-07-23*  
 *项目状态: 基础架构完成，长文本续写模块开发中*  
-*技术栈: LangChain + Qwen3 + Claude-4 + 太虚幻境知识库*
+*技术栈: LangChain + Qwen3 + Claude-4 + 太虚幻境知识库*  
+*架构图优化: 高对比度设计，适配多种显示环境*
