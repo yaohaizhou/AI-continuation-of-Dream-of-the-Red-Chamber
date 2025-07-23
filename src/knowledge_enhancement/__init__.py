@@ -10,6 +10,7 @@ from .vocabulary_suggester import VocabularySuggester
 from .enhanced_prompter import EnhancedPrompter
 from .taixu_prophecy_extractor import TaixuProphecyExtractor
 from .fate_consistency_checker import FateConsistencyChecker
+from .symbolic_imagery_advisor import create_symbolic_imagery_advisor
 
 __all__ = [
     'KnowledgeRetriever',
@@ -18,5 +19,6 @@ __all__ = [
     'VocabularySuggester',
     'EnhancedPrompter',
     'TaixuProphecyExtractor',
-    'FateConsistencyChecker'
+    'FateConsistencyChecker',
+    'create_symbolic_imagery_advisor'
 ] 

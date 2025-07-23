@@ -22,7 +22,7 @@ from ai_hongloumeng import HongLouMengContinuation, Config
 from ai_hongloumeng.utils import FileManager
 from ai_hongloumeng.prompts import PromptTemplates
 from data_processing import HongLouMengDataPipeline
-from knowledge_enhancement import EnhancedPrompter, TaixuProphecyExtractor, FateConsistencyChecker
+from knowledge_enhancement import EnhancedPrompter, TaixuProphecyExtractor, FateConsistencyChecker, create_symbolic_imagery_advisor
 from rag_retrieval import RAGPipeline, create_rag_pipeline
 
 # 初始化控制台
@@ -1124,6 +1124,117 @@ def export(output_dir):
     except Exception as e:
         console.print(f"[red]导出失败: {e}[/red]")
         logger.error(f"导出失败: {e}")
+
+
+@cli.command()
+@click.option('--character', '-c', help='指定角色名称')
+@click.option('--scene', '-s', help='场景上下文描述')
+@click.option('--tone', '-t', help='情感基调 (悲叹/哀愁/凄美/欢快/壮丽)')
+@click.option('--style', help='文学风格 (诗词/对话/场景/抒情)')
+@click.option('--text', help='待增强的文本内容')
+@click.option('--search', help='搜索包含指定象征元素的角色')
+@click.option('--stats', is_flag=True, help='显示象征意象建议器统计信息')
+def symbolic_suggest(character, scene, tone, style, text, search, stats):
+    """象征意象建议器 - 基于太虚幻境判词推荐象征元素"""
+    console.print(Panel.fit(
+        f"[bold magenta]象征意象建议器[/bold magenta]\n"
+        f"基于太虚幻境判词数据，为续写提供智能的象征意象推荐\n"
+        f"支持角色专属象征、情境感知推荐、文学手法建议等功能",
+        title="🎨 象征意象"
+    ))
+    
+    try:
+        # 初始化象征意象建议器
+        advisor = create_symbolic_imagery_advisor()
+        
+        # 显示统计信息
+        if stats:
+            console.print("\n📊 统计信息:")
+            statistics = advisor.get_statistics()
+            console.print(Panel(
+                f"角色数量: {statistics['total_characters']}\n"
+                f"象征元素数量: {statistics['total_symbols']}\n"
+                f"角色列表: {', '.join(statistics['character_list'])}\n"
+                f"最常见象征: {', '.join([f'{sym}({cnt})' for sym, cnt in statistics['most_common_symbols']])}\n"
+                f"情感基调: {', '.join(statistics['emotional_tones'])}",
+                title="系统统计"
+            ))
+            return
+        
+        # 搜索象征元素
+        if search:
+            console.print(f"\n🔍 搜索象征元素: {search}")
+            results = advisor.search_symbols(search)
+            if results:
+                for symbol, characters_list in results.items():
+                    console.print(f"• {symbol}: {', '.join(characters_list)}")
+            else:
+                console.print("[yellow]未找到相关象征元素[/yellow]")
+            return
+        
+        # 查看角色象征信息
+        if character and not (scene or tone or style or text):
+            console.print(f"\n👤 查看角色象征信息: {character}")
+            char_info = advisor.get_character_symbols(character)
+            if char_info['found']:
+                console.print(Panel(
+                    f"象征元素: {', '.join(char_info['symbols'])}\n"
+                    f"视觉隐喻: {', '.join(char_info['metaphors'])}\n"
+                    f"情感基调: {char_info['emotional_tone']}\n"
+                    f"命运主题: {char_info['fate_theme']}\n"
+                    f"文学手法: {', '.join(char_info['literary_devices'])}",
+                    title=f"{character}的象征信息"
+                ))
+            else:
+                console.print(f"[yellow]{char_info['message']}[/yellow]")
+            return
+        
+        # 文学氛围增强
+        if text:
+            console.print(f"\n📖 文学氛围增强:")
+            console.print(f"原文: {text}")
+            enhancement = advisor.enhance_literary_atmosphere(text, character)
+            console.print(Panel(
+                f"检测到的角色: {', '.join(enhancement['detected_characters']) if enhancement['detected_characters'] else '无'}\n"
+                f"主要角色: {enhancement['main_character'] or '无'}\n\n"
+                f"增强建议:\n" + '\n'.join([f"• {suggestion}" for suggestion in enhancement['enhancement_suggestions']]),
+                title="文学氛围增强建议"
+            ))
+            return
+        
+        # 象征意象推荐
+        console.print(f"\n🎨 象征意象推荐:")
+        if character:
+            console.print(f"角色: {character}")
+        if scene:
+            console.print(f"场景: {scene}")
+        if tone:
+            console.print(f"情感基调: {tone}")
+        if style:
+            console.print(f"文学风格: {style}")
+        
+        recommendation = advisor.recommend_symbols(
+            character=character,
+            scene_context=scene,
+            emotional_tone=tone,
+            literary_style=style
+        )
+        
+        console.print(Panel(
+            f"主要象征: {', '.join(recommendation.primary_symbols)}\n"
+            f"次要象征: {', '.join(recommendation.secondary_symbols)}\n"
+            f"情感基调: {recommendation.emotional_tone}\n"
+            f"文学手法: {', '.join(recommendation.literary_devices)}\n"
+            f"使用语境: {recommendation.usage_context}\n"
+            f"推荐理由: {recommendation.explanation}\n"
+            f"置信度: {recommendation.confidence:.2f}",
+            title="象征意象推荐",
+            border_style="magenta"
+        ))
+        
+    except Exception as e:
+        console.print(f"[red]象征建议失败: {e}[/red]")
+        logger.error(f"象征建议失败: {e}")
 
 
 if __name__ == "__main__":

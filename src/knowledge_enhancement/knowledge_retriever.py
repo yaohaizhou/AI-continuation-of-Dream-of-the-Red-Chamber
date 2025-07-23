@@ -8,6 +8,7 @@ from loguru import logger
 from .entity_retriever import EntityRetriever
 from .relationship_retriever import RelationshipRetriever
 from .vocabulary_suggester import VocabularySuggester
+from .symbolic_imagery_advisor import create_symbolic_imagery_advisor
 
 
 class KnowledgeRetriever:
@@ -26,8 +27,9 @@ class KnowledgeRetriever:
         self.entity_retriever = EntityRetriever(data_dir)
         self.relationship_retriever = RelationshipRetriever(data_dir)
         self.vocabulary_suggester = VocabularySuggester(data_dir)
+        self.symbolic_advisor = create_symbolic_imagery_advisor()
         
-        logger.info("知识检索器初始化完成")
+        logger.info("知识检索器初始化完成，包含象征意象建议器")
     
     def retrieve_comprehensive_context(self, text: str) -> Dict[str, Any]:
         """
@@ -63,6 +65,20 @@ class KnowledgeRetriever:
         # 3. 词汇建议
         vocabulary_suggestions = self.vocabulary_suggester.suggest_words_by_context(text)
         
+        # 4. 象征意象建议
+        symbolic_recommendations = {}
+        if characters:
+            main_character = characters[0]  # 取第一个角色作为主要角色
+            emotional_tone = self._detect_emotional_tone(text)
+            literary_style = self._detect_literary_style(text)
+            
+            symbolic_recommendations = self.symbolic_advisor.recommend_symbols(
+                character=main_character,
+                scene_context=text,
+                emotional_tone=emotional_tone,
+                literary_style=literary_style
+            )
+        
         # 构建综合上下文
         comprehensive_context = {
             'input_text': text,
@@ -74,8 +90,9 @@ class KnowledgeRetriever:
                 'group_dynamics': relationship_context.get('group_dynamics', '')
             },
             'vocabulary_enhancement': vocabulary_suggestions,
+            'symbolic_imagery': symbolic_recommendations,
             'knowledge_summary': self._generate_knowledge_summary(
-                entity_context, relationship_context, vocabulary_suggestions
+                entity_context, relationship_context, vocabulary_suggestions, symbolic_recommendations
             )
         }
         
@@ -84,14 +101,18 @@ class KnowledgeRetriever:
     
     def _generate_knowledge_summary(self, entity_context: Dict, 
                                   relationship_context: Dict, 
-                                  vocabulary_suggestions: Dict) -> Dict[str, str]:
+                                  vocabulary_suggestions: Dict,
+                                  symbolic_recommendations: Any = None) -> Dict[str, str]:
         """生成知识摘要"""
         summary = {
             'main_characters': [],
             'main_location': '',
             'character_relationships': '',
             'scene_atmosphere': '',
-            'suggested_writing_style': ''
+            'suggested_writing_style': '',
+            'symbolic_elements': '',  # 新增：象征元素
+            'emotional_tone': '',     # 新增：情感基调
+            'literary_devices': ''    # 新增：文学手法
         }
         
         # 主要人物
@@ -124,6 +145,14 @@ class KnowledgeRetriever:
             summary['suggested_writing_style'] = 'luxurious'
         else:
             summary['suggested_writing_style'] = 'classical'
+        
+        # 象征意象建议摘要
+        if symbolic_recommendations and hasattr(symbolic_recommendations, 'primary_symbols'):
+            primary_symbols = symbolic_recommendations.primary_symbols[:3]
+            summary['symbolic_elements'] = '、'.join(primary_symbols) if primary_symbols else ''
+            summary['emotional_tone'] = symbolic_recommendations.emotional_tone or ''
+            literary_devices = symbolic_recommendations.literary_devices[:3]
+            summary['literary_devices'] = '、'.join(literary_devices) if literary_devices else ''
         
         return summary
     
@@ -293,6 +322,11 @@ class KnowledgeRetriever:
 【建议的写作风格】
 {summary['suggested_writing_style']}风格，体现红楼梦的文学特色
 
+【象征意象建议】
+象征元素: {summary['symbolic_elements']}
+情感基调: {summary['emotional_tone']}
+文学手法: {summary['literary_devices']}
+
 【场景推荐角色】
 {', '.join(knowledge_context['scene_recommendations']['recommended_characters'])}
         """
@@ -357,6 +391,69 @@ class KnowledgeRetriever:
                 enhancement += f"【{category}】\n{', '.join(words)}\n\n"
         
         return enhancement.strip()
+    
+    def _detect_emotional_tone(self, text: str) -> Optional[str]:
+        """检测文本的情感基调
+        
+        Args:
+            text: 输入文本
+            
+        Returns:
+            Optional[str]: 检测到的情感基调
+        """
+        # 情感关键词映射
+        emotion_keywords = {
+            '悲叹': ['悲', '叹', '愁', '泪', '哭', '伤心', '难过', '凄凉'],
+            '哀愁': ['哀', '愁', '忧', '叹息', '惆怅', '思愁', '孤独'],
+            '凄美': ['凄', '美', '淡雅', '清冷', '幽静', '素净'],
+            '欢快': ['欢', '快', '乐', '笑', '喜', '兴', '欣'],
+            '壮丽': ['壮', '丽', '雄伟', '华丽', '豪华', '盛大']
+        }
+        
+        text_lower = text.lower()
+        emotion_scores = {}
+        
+        for emotion, keywords in emotion_keywords.items():
+            score = sum(1 for keyword in keywords if keyword in text_lower)
+            if score > 0:
+                emotion_scores[emotion] = score
+        
+        if emotion_scores:
+            # 返回得分最高的情感基调
+            return max(emotion_scores.items(), key=lambda x: x[1])[0]
+        
+        return None
+    
+    def _detect_literary_style(self, text: str) -> Optional[str]:
+        """检测文本的文学风格
+        
+        Args:
+            text: 输入文本
+            
+        Returns:
+            Optional[str]: 检测到的文学风格
+        """
+        # 文学风格关键词映射
+        style_keywords = {
+            '诗词': ['诗', '词', '韵', '对', '律', '吟', '咏', '赋'],
+            '对话': ['说', '道', '言', '话', '问', '答', '曰', '云'],
+            '场景': ['见', '看', '景', '色', '光', '影', '风', '雨', '花', '树'],
+            '抒情': ['情', '爱', '思', '念', '恨', '怨', '感', '怀']
+        }
+        
+        text_lower = text.lower()
+        style_scores = {}
+        
+        for style, keywords in style_keywords.items():
+            score = sum(1 for keyword in keywords if keyword in text_lower)
+            if score > 0:
+                style_scores[style] = score
+        
+        if style_scores:
+            # 返回得分最高的文学风格
+            return max(style_scores.items(), key=lambda x: x[1])[0]
+        
+        return None
 
 
 if __name__ == "__main__":
