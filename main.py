@@ -24,6 +24,7 @@ from ai_hongloumeng.prompts import PromptTemplates
 from data_processing import HongLouMengDataPipeline
 from knowledge_enhancement import EnhancedPrompter, TaixuProphecyExtractor, FateConsistencyChecker, create_symbolic_imagery_advisor
 from rag_retrieval import RAGPipeline, create_rag_pipeline
+from long_text_management import ChapterPlanner
 
 # 初始化控制台
 console = Console()
@@ -1235,6 +1236,191 @@ def symbolic_suggest(character, scene, tone, style, text, search, stats):
     except Exception as e:
         console.print(f"[red]象征建议失败: {e}[/red]")
         logger.error(f"象征建议失败: {e}")
+
+
+@cli.command()
+@click.option('--generate', is_flag=True, help='生成新的40回章节规划')
+@click.option('--load', is_flag=True, help='加载现有的章节规划')
+@click.option('--chapter', '-c', type=int, help='查看指定章节的规划')
+@click.option('--report', is_flag=True, help='生成规划报告')
+@click.option('--save-report', help='保存报告到指定文件')
+@click.option('--save-plan', help='保存规划到指定文件')
+@click.option('--timeline', is_flag=True, help='显示角色命运时间线')
+@click.option('--themes', is_flag=True, help='显示主题分布')
+@click.option('--character-arcs', help='查看指定角色的章节弧线')
+def plan_chapters(generate, load, chapter, report, save_report, save_plan, timeline, themes, character_arcs):
+    """章节规划器 - 基于太虚幻境判词制定后40回规划"""
+    console.print(Panel.fit(
+        f"[bold blue]红楼梦后40回章节规划器[/bold blue]\n"
+        f"基于太虚幻境判词数据，智能规划第81-120回的详细章节安排\n"
+        f"包括人物命运、情节发展、时间线设计等完整规划",
+        title="📋 章节规划"
+    ))
+    
+    try:
+        # 初始化章节规划器
+        planner = ChapterPlanner()
+        
+        # 生成新规划
+        if generate:
+            console.print("\n🚀 开始生成40回章节规划...")
+            
+            with Progress(
+                SpinnerColumn(),
+                TextColumn("[progress.description]{task.description}"),
+                console=console
+            ) as progress:
+                task = progress.add_task("分析太虚幻境判词...", total=None)
+                
+                # 生成总体规划
+                overall_plan = planner.generate_overall_plan()
+                progress.update(task, description="保存规划数据...")
+                
+                # 保存规划
+                save_path = save_plan if save_plan else None
+                planner.save_plan(overall_plan, save_path)
+                progress.update(task, description="规划生成完成!")
+            
+            console.print("[green]✅ 章节规划生成完成![/green]")
+            
+            # 显示统计信息
+            console.print(f"\n📊 规划统计:")
+            console.print(f"  规划章节: [bold]{len(overall_plan.chapters)}[/bold] 回 (第81-120回)")
+            console.print(f"  预估字数: [bold]{overall_plan.total_estimated_words:,}[/bold] 字")
+            console.print(f"  平均章节: [bold]{overall_plan.total_estimated_words // len(overall_plan.chapters):,}[/bold] 字/回")
+            console.print(f"  关键转折: [bold]{len(overall_plan.critical_turning_points)}[/bold] 个")
+            
+            # 命运覆盖情况
+            covered_count = sum(1 for covered in overall_plan.fate_coverage.values() if covered)
+            total_count = len(overall_plan.fate_coverage)
+            console.print(f"  命运覆盖: [bold]{covered_count}/{total_count}[/bold] 个角色")
+            
+        # 加载现有规划
+        elif load or chapter or report or timeline or themes or character_arcs:
+            console.print("[yellow]加载现有章节规划...[/yellow]")
+            overall_plan = planner.load_plan()
+            
+            if not overall_plan:
+                console.print("[red]❌ 未找到现有规划，请先运行 --generate 生成规划[/red]")
+                return
+            
+            console.print("[green]✅ 规划加载成功![/green]")
+            
+            # 查看指定章节
+            if chapter:
+                if 81 <= chapter <= 120:
+                    chapter_plan = planner.get_chapter_plan(chapter, overall_plan)
+                    if chapter_plan:
+                        console.print(f"\n📖 第{chapter}回规划详情:")
+                        
+                        # 基本信息
+                        info_text = f"""[bold]标题:[/bold] {chapter_plan.title}
+[bold]主题:[/bold] {chapter_plan.theme.value}
+[bold]优先级:[/bold] {chapter_plan.priority.value}
+[bold]预估字数:[/bold] {chapter_plan.estimated_length:,} 字
+[bold]难度等级:[/bold] {chapter_plan.difficulty_level}
+[bold]命运符合度:[/bold] {chapter_plan.fate_compliance:.1%}
+[bold]情感基调:[/bold] {chapter_plan.emotional_tone}
+
+[bold]主要人物:[/bold] {', '.join(chapter_plan.main_characters)}
+[bold]次要人物:[/bold] {', '.join(chapter_plan.supporting_characters)}
+
+[bold]情节梗概:[/bold]
+{chapter_plan.plot_summary}
+
+[bold]象征意象:[/bold] {', '.join(chapter_plan.symbolic_imagery)}
+[bold]文学手法:[/bold] {', '.join(chapter_plan.literary_devices)}"""
+                        
+                        console.print(Panel(info_text, title=f"第{chapter}回", expand=False))
+                        
+                        # 关键事件
+                        if chapter_plan.key_events:
+                            console.print(f"\n🎭 关键事件:")
+                            for i, event in enumerate(chapter_plan.key_events, 1):
+                                console.print(f"  {i}. {event.character}: {event.description}")
+                                console.print(f"     判词引用: {event.prophecy_reference}")
+                    else:
+                        console.print(f"[red]未找到第{chapter}回的规划[/red]")
+                else:
+                    console.print(f"[red]章节号必须在81-120之间[/red]")
+            
+            # 显示角色命运时间线
+            if timeline:
+                console.print(f"\n📅 角色命运时间线:")
+                for character, chapter_num in sorted(overall_plan.fate_timeline.items(), key=lambda x: x[1]):
+                    console.print(f"  第{chapter_num:3d}回: {character}")
+            
+            # 显示主题分布
+            if themes:
+                console.print(f"\n🎭 主题分布:")
+                for theme, chapter_nums in overall_plan.thematic_structure.items():
+                    console.print(f"  {theme.value}: {len(chapter_nums)} 回 - {chapter_nums}")
+            
+            # 显示角色弧线
+            if character_arcs:
+                if character_arcs in overall_plan.character_arcs:
+                    chapters = overall_plan.character_arcs[character_arcs]
+                    console.print(f"\n👤 {character_arcs} 的章节弧线:")
+                    console.print(f"  出现章节: {chapters}")
+                    console.print(f"  总计: {len(chapters)} 回")
+                    
+                    # 查找命运实现章节
+                    fate_chapter = overall_plan.fate_timeline.get(character_arcs)
+                    if fate_chapter:
+                        console.print(f"  命运实现: 第{fate_chapter}回")
+                else:
+                    console.print(f"[red]未找到角色 '{character_arcs}' 的弧线[/red]")
+                    available_chars = list(overall_plan.character_arcs.keys())[:10]
+                    console.print(f"[yellow]可用角色: {', '.join(available_chars)}...[/yellow]")
+        
+        # 生成规划报告
+        if report or save_report:
+            if 'overall_plan' not in locals():
+                overall_plan = planner.load_plan()
+                if not overall_plan:
+                    console.print("[red]❌ 未找到规划数据，请先生成规划[/red]")
+                    return
+            
+            console.print("\n📝 生成章节规划报告...")
+            
+            report_content = planner.generate_planning_report(overall_plan)
+            
+            if save_report:
+                # 保存报告到文件
+                report_path = Path(save_report)
+                report_path.parent.mkdir(parents=True, exist_ok=True)
+                
+                with open(report_path, 'w', encoding='utf-8') as f:
+                    f.write(report_content)
+                
+                console.print(f"[green]报告已保存到: {report_path}[/green]")
+            
+            if report:
+                # 显示报告内容（截取前1500字符）
+                display_content = report_content[:1500] + "..." if len(report_content) > 1500 else report_content
+                console.print(Panel(
+                    display_content,
+                    title="📊 章节规划报告",
+                    expand=False
+                ))
+        
+        # 默认显示使用建议
+        if not any([generate, load, chapter, report, timeline, themes, character_arcs, save_report]):
+            console.print("\n💡 使用建议:")
+            console.print("  生成新规划: [bold]python main.py plan-chapters --generate[/bold]")
+            console.print("  查看第81回: [bold]python main.py plan-chapters -c 81[/bold]")
+            console.print("  查看时间线: [bold]python main.py plan-chapters --timeline[/bold]")
+            console.print("  查看主题分布: [bold]python main.py plan-chapters --themes[/bold]")
+            console.print("  查看角色弧线: [bold]python main.py plan-chapters --character-arcs 林黛玉[/bold]")
+            console.print("  生成报告: [bold]python main.py plan-chapters --report[/bold]")
+            console.print("  保存报告: [bold]python main.py plan-chapters --save-report reports/planning.md[/bold]")
+        
+        console.print(f"\n📋 章节规划器已准备就绪！")
+        console.print("基于太虚幻境判词的智能规划将为后40回续写提供结构化指导。")
+        
+    except Exception as e:
+        console.print(f"[red]章节规划失败: {e}[/red]")
+        logger.error(f"章节规划失败: {e}")
 
 
 if __name__ == "__main__":

@@ -2,11 +2,12 @@
 # 长文本续写管理模块
 
 from .context_compressor import ContextCompressor
-from .chapter_planner import ChapterPlanner
-from .progress_tracker import ProgressTracker
+from .chapter_planner import ChapterPlanner, ChapterPlan, OverallPlan, FateEvent
 
 __all__ = [
     'ContextCompressor',
-    'ChapterPlanner', 
-    'ProgressTracker'
+    'ChapterPlanner',
+    'ChapterPlan',
+    'OverallPlan', 
+    'FateEvent'
 ] 
