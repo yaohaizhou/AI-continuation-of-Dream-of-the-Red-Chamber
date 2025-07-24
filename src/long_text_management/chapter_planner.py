@@ -111,6 +111,18 @@ class ChapterPlanner:
         self.character_fates = {}
         self.chapter_templates = {}
         
+        # 已在前80回死亡的角色列表（不应出现在后40回规划中）
+        self.deceased_characters = {
+            "秦可卿",    # 第13回已死
+            "晴雯",      # 第77回已死  
+            "金钏",      # 第32回已死
+            "尤二姐",    # 第69回已死
+            "尤三姐",    # 第66回已死
+            "司棋",      # 第92回在高鹗续书中死亡，但我们重新规划
+            "入画",      # 相关角色
+            "芳官",      # 相关角色
+        }
+        
         # 规划参数
         self.target_chapters = 40  # 目标章节数 (81-120)
         self.avg_chapter_length = 12000  # 平均章节字数
@@ -150,7 +162,8 @@ class ChapterPlanner:
                 
                 for fate in fate_interpretations:
                     character = fate.get("character")
-                    if character:
+                    # 过滤已死角色：不应出现在后40回规划中
+                    if character and character not in self.deceased_characters:
                         self.character_fates[character] = {
                             "fate_summary": fate.get("fate_summary", ""),
                             "key_events": fate.get("key_events", []),
@@ -161,6 +174,8 @@ class ChapterPlanner:
                             "emotional_tone": prophecy.get("poem", {}).get("emotional_tone", "悲剧"),
                             "section": section_name
                         }
+                    elif character in self.deceased_characters:
+                        logger.info(f"跳过已死角色: {character} (已在前80回完成命运)")
         
         logger.info(f"构建了 {len(self.character_fates)} 个角色的命运数据")
     
@@ -237,6 +252,7 @@ class ChapterPlanner:
         fate_timeline = {}
         
         # 基于判词暗示和情节逻辑分配命运实现的章节
+        # 注意：已在前80回死亡的角色（如秦可卿、晴雯等）不应出现在后40回规划中
         fate_assignments = {
             # 早期命运实现 (81-90回)
             "贾迎春": 85,  # 嫁给孙绍祖后很快死亡
@@ -254,12 +270,17 @@ class ChapterPlanner:
             "史湘云": 115, # 湘江水逝楚云飞
             "贾惜春": 118, # 独卧青灯古佛旁
             "李纨": 119,   # 晚年荣华终成空
-            "秦可卿": 81,  # 在前80回已死，但影响后续
             
             # 副册、又副册角色
             "香菱": 108,   # 香魂返故乡
-            "晴雯": 93,    # 早期死亡
             "袭人": 100    # 忠心服侍后的结局
+            
+            # 注意：以下角色已在前80回死亡，不应出现在后40回中：
+            # "秦可卿" - 第13回已死
+            # "晴雯" - 第77回已死
+            # "金钏" - 第32回已死
+            # "尤二姐" - 第69回已死
+            # "尤三姐" - 第66回已死
         }
         
         fate_timeline.update(fate_assignments)
