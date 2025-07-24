@@ -4,6 +4,7 @@
 from .context_compressor import ContextCompressor
 from .chapter_planner import ChapterPlanner, ChapterPlan, OverallPlan, FateEvent
 from .chapter_info_transfer import ChapterInfoTransfer, create_chapter_info_transfer
+from .progress_tracker import ProgressTracker, ProjectStatus, ChapterStatus, create_progress_tracker
 
 __all__ = [
     'ContextCompressor',
@@ -12,5 +13,9 @@ __all__ = [
     'OverallPlan', 
     'FateEvent',
     'ChapterInfoTransfer',
-    'create_chapter_info_transfer'
+    'create_chapter_info_transfer',
+    'ProgressTracker',
+    'ProjectStatus',
+    'ChapterStatus', 
+    'create_progress_tracker'
 ] 

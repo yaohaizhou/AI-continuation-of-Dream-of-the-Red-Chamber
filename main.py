@@ -25,7 +25,7 @@ from ai_hongloumeng.prompts import PromptTemplates
 from data_processing import HongLouMengDataPipeline
 from knowledge_enhancement import EnhancedPrompter, TaixuProphecyExtractor, FateConsistencyChecker, create_symbolic_imagery_advisor
 from rag_retrieval import RAGPipeline, create_rag_pipeline
-from long_text_management import ChapterPlanner, ChapterInfoTransfer, create_chapter_info_transfer
+from long_text_management import ChapterPlanner, ChapterInfoTransfer, create_chapter_info_transfer, ProgressTracker, ProjectStatus, ChapterStatus, create_progress_tracker
 
 # 初始化控制台
 console = Console()
@@ -1646,6 +1646,173 @@ def chapter_transfer(extract, chapter_file, transfer, check_consistency,
     except Exception as e:
         console.print(f"[red]章节信息传递失败: {e}[/red]")
         logger.error(f"章节信息传递失败: {e}")
+
+
+@cli.command()
+@click.option('--init', '-i', is_flag=True, help='初始化项目进度状态')
+@click.option('--status', '-s', is_flag=True, help='显示项目状态概览')
+@click.option('--start-chapter', '-sc', type=int, help='开始指定章节的续写')
+@click.option('--update-chapter', '-uc', type=int, help='更新指定章节的进度')
+@click.option('--word-count', '-w', type=int, help='更新章节字数')
+@click.option('--percentage', '-p', type=float, help='更新完成百分比')
+@click.option('--complete-chapter', '-cc', type=int, help='标记指定章节为已完成')
+@click.option('--report', '-r', type=str, help='生成进度报告到指定文件')
+@click.option('--backup', '-b', is_flag=True, help='备份项目状态')
+@click.option('--list-chapters', '-lc', is_flag=True, help='列出所有章节状态')
+@click.option('--session-start', is_flag=True, help='开始工作会话')
+@click.option('--session-end', is_flag=True, help='结束工作会话')
+def progress(init, status, start_chapter, update_chapter, word_count, percentage, 
+            complete_chapter, report, backup, list_chapters, session_start, session_end):
+    """进度跟踪和状态管理"""
+    try:
+        # 创建进度跟踪器
+        tracker = create_progress_tracker()
+        
+        # 初始化项目
+        if init:
+            console.print("[yellow]正在初始化项目进度状态...[/yellow]")
+            project_state = tracker.initialize_project(force=True)
+            console.print("[green]✅ 项目状态初始化完成！[/green]")
+            console.print(f"项目开始时间: {project_state.start_date.strftime('%Y-%m-%d %H:%M:%S')}")
+            console.print(f"章节总数: {project_state.statistics.total_chapters}")
+            return
+        
+        # 显示项目状态
+        if status:
+            summary = tracker.get_progress_summary()
+            console.print(Panel(
+                f"""📊 项目状态: {summary['项目状态']}
+🎯 总体进度: {summary['总体进度']}
+📚 完成章节: {summary['完成章节']}
+📝 当前章节: 第{summary['当前章节']}回 """ + (f"({summary['当前章节']})" if summary['当前章节'] else "无") + f"""
+📖 总字数: {summary['总字数']}
+📊 完成字数比例: {summary['完成字数比例']}
+⏱️ 平均每章字数: {summary['平均每章字数']}
+🕐 预估完成时间: {summary['预估完成时间']}
+🔄 最后更新: {summary['最后更新']}""",
+                title="📈 项目进度概览",
+                border_style="green"
+            ))
+            return
+        
+        # 开始章节
+        if start_chapter:
+            if tracker.start_chapter(start_chapter):
+                console.print(f"[green]✅ 开始第{start_chapter}回续写[/green]")
+                console.print(f"开始时间: {tracker.project_state.chapters[start_chapter].start_time.strftime('%Y-%m-%d %H:%M:%S')}")
+            else:
+                console.print(f"[red]❌ 无法开始第{start_chapter}回[/red]")
+            return
+        
+        # 更新章节进度
+        if update_chapter:
+            updates = {}
+            if word_count is not None:
+                updates['word_count'] = word_count
+            if percentage is not None:
+                updates['completion_percentage'] = percentage
+            
+            if updates:
+                if tracker.update_chapter_progress(update_chapter, **updates):
+                    console.print(f"[green]✅ 第{update_chapter}回进度已更新[/green]")
+                    chapter = tracker.project_state.chapters[update_chapter]
+                    console.print(f"当前状态: {chapter.status.value}")
+                    if word_count is not None:
+                        console.print(f"字数: {chapter.word_count}/{chapter.estimated_words}")
+                    console.print(f"完成度: {chapter.completion_percentage:.1f}%")
+                else:
+                    console.print(f"[red]❌ 更新第{update_chapter}回失败[/red]")
+            else:
+                console.print("[yellow]请指定要更新的内容（字数或百分比）[/yellow]")
+            return
+        
+        # 完成章节
+        if complete_chapter:
+            final_words = word_count if word_count else None
+            if tracker.complete_chapter(complete_chapter, final_words):
+                console.print(f"[green]🎉 第{complete_chapter}回已完成！[/green]")
+                chapter = tracker.project_state.chapters[complete_chapter]
+                console.print(f"完成时间: {chapter.end_time.strftime('%Y-%m-%d %H:%M:%S')}")
+                console.print(f"最终字数: {chapter.word_count}")
+                
+                # 检查项目是否完成
+                if tracker.project_state.project_status == ProjectStatus.COMPLETED:
+                    console.print("[bold green]🎊 恭喜！所有章节已完成！[/bold green]")
+            else:
+                console.print(f"[red]❌ 无法完成第{complete_chapter}回[/red]")
+            return
+        
+        # 生成进度报告
+        if report:
+            report_content = tracker.generate_progress_report(report)
+            console.print(f"[green]✅ 进度报告已生成: {report}[/green]")
+            # 显示报告预览
+            lines = report_content.split('\n')
+            preview = '\n'.join(lines[:20])
+            console.print(Panel(
+                preview + "\n\n[dim]... (查看完整报告请打开文件)[/dim]",
+                title="📋 报告预览",
+                border_style="blue"
+            ))
+            return
+        
+        # 备份状态
+        if backup:
+            backup_file = tracker.backup_state()
+            if backup_file:
+                console.print(f"[green]✅ 状态已备份: {backup_file}[/green]")
+            else:
+                console.print("[red]❌ 备份失败[/red]")
+            return
+        
+        # 列出章节
+        if list_chapters:
+            chapters = tracker.get_chapter_list()
+            
+            # 按状态分组显示
+            status_groups = {}
+            for chapter in chapters:
+                status = chapter['状态']
+                if status not in status_groups:
+                    status_groups[status] = []
+                status_groups[status].append(chapter)
+            
+            for status, group in status_groups.items():
+                console.print(f"\n📋 {status} ({len(group)} 章节):")
+                for chapter in group:
+                    console.print(f"  • {chapter['章节']} - {chapter['标题']} - {chapter['进度']} - {chapter['字数']}")
+            return
+        
+        # 会话管理
+        if session_start:
+            tracker.start_session()
+            console.print("[green]✅ 工作会话已开始[/green]")
+            console.print(f"会话开始时间: {tracker.project_state.session_start.strftime('%Y-%m-%d %H:%M:%S')}")
+            return
+        
+        if session_end:
+            tracker.end_session()
+            console.print("[green]✅ 工作会话已结束[/green]")
+            return
+        
+        # 默认显示使用建议
+        if not any([init, status, start_chapter, update_chapter, complete_chapter, 
+                   report, backup, list_chapters, session_start, session_end]):
+            console.print("\n💡 使用建议:")
+            console.print("  初始化项目: [bold]python main.py progress --init[/bold]")
+            console.print("  查看状态: [bold]python main.py progress --status[/bold]")
+            console.print("  开始章节: [bold]python main.py progress -sc 81[/bold]")
+            console.print("  更新进度: [bold]python main.py progress -uc 81 -w 5000 -p 50[/bold]")
+            console.print("  完成章节: [bold]python main.py progress -cc 81 -w 12000[/bold]")
+            console.print("  生成报告: [bold]python main.py progress -r reports/progress.md[/bold]")
+            console.print("  列出章节: [bold]python main.py progress --list-chapters[/bold]")
+        
+        console.print(f"\n📊 进度跟踪器已准备就绪！")
+        console.print("提供完整的项目进度管理和状态跟踪功能。")
+        
+    except Exception as e:
+        console.print(f"[red]进度管理失败: {e}[/red]")
+        logger.error(f"进度管理失败: {e}")
 
 
 if __name__ == "__main__":
