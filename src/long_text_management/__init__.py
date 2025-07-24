@@ -3,11 +3,14 @@
 
 from .context_compressor import ContextCompressor
 from .chapter_planner import ChapterPlanner, ChapterPlan, OverallPlan, FateEvent
+from .chapter_info_transfer import ChapterInfoTransfer, create_chapter_info_transfer
 
 __all__ = [
     'ContextCompressor',
     'ChapterPlanner',
     'ChapterPlan',
     'OverallPlan', 
-    'FateEvent'
+    'FateEvent',
+    'ChapterInfoTransfer',
+    'create_chapter_info_transfer'
 ] 

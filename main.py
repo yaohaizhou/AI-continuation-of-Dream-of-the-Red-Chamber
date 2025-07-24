@@ -5,6 +5,7 @@ AI续写红楼梦 - 主程序入口
 """
 
 import asyncio
+import re
 import sys
 from pathlib import Path
 from typing import Optional
@@ -24,7 +25,7 @@ from ai_hongloumeng.prompts import PromptTemplates
 from data_processing import HongLouMengDataPipeline
 from knowledge_enhancement import EnhancedPrompter, TaixuProphecyExtractor, FateConsistencyChecker, create_symbolic_imagery_advisor
 from rag_retrieval import RAGPipeline, create_rag_pipeline
-from long_text_management import ChapterPlanner
+from long_text_management import ChapterPlanner, ChapterInfoTransfer, create_chapter_info_transfer
 
 # 初始化控制台
 console = Console()
@@ -1421,6 +1422,230 @@ def plan_chapters(generate, load, chapter, report, save_report, save_plan, timel
     except Exception as e:
         console.print(f"[red]章节规划失败: {e}[/red]")
         logger.error(f"章节规划失败: {e}")
+
+
+@cli.command()
+@click.option('--extract', '-e', type=int, help='从指定章节提取状态信息')
+@click.option('--chapter-file', '-f', help='指定章节文件路径')
+@click.option('--transfer', '-t', help='传递信息到下一章节，格式：from_chapter,to_chapter')
+@click.option('--check-consistency', '-c', help='检查章节一致性，格式：start_chapter,end_chapter')
+@click.option('--save-state', '-s', type=int, help='保存指定章节的状态')
+@click.option('--load-state', '-l', type=int, help='加载指定章节的状态')
+@click.option('--summary', help='显示信息传递摘要，格式：from_chapter,to_chapter')
+@click.option('--list-states', is_flag=True, help='列出所有保存的章节状态')
+def chapter_transfer(extract, chapter_file, transfer, check_consistency, 
+                    save_state, load_state, summary, list_states):
+    """章节信息传递机制 - 管理章节间的状态传递和一致性"""
+    console.print(Panel.fit(
+        f"[bold cyan]章节间信息传递机制[/bold cyan]\n"
+        f"处理章节之间的状态传递、信息继承和一致性维护\n"
+        f"确保40回续写的连贯性和逻辑一致性",
+        title="🔄 信息传递"
+    ))
+    
+    try:
+        # 初始化章节信息传递机制
+        transfer_manager = create_chapter_info_transfer()
+        
+        # 提取章节状态
+        if extract:
+            chapter_num = extract
+            if not chapter_file:
+                chapter_file = f"data/processed/chapters/{chapter_num:03d}.md"
+            
+            console.print(f"\n📊 提取第{chapter_num}回状态信息...")
+            
+            # 检查文件是否存在
+            if not Path(chapter_file).exists():
+                console.print(f"[red]错误：章节文件不存在 {chapter_file}[/red]")
+                return
+            
+            # 读取章节内容
+            with open(chapter_file, 'r', encoding='utf-8') as f:
+                content = f.read()
+            
+            # 提取章节标题
+            title_match = re.match(r'^#\s*(.+)', content)
+            chapter_title = title_match.group(1) if title_match else f"第{chapter_num}回"
+            
+            with Progress(
+                SpinnerColumn(),
+                TextColumn("[progress.description]{task.description}"),
+                console=console
+            ) as progress:
+                task = progress.add_task("分析章节内容...", total=None)
+                
+                # 提取状态信息
+                chapter_state = transfer_manager.extract_chapter_state(
+                    chapter_num, content, chapter_title
+                )
+                
+                progress.update(task, description="保存状态信息...")
+                
+                # 保存状态
+                transfer_manager.save_chapter_state(chapter_state)
+                
+                progress.update(task, description="状态提取完成!")
+            
+            # 显示提取结果
+            console.print("[green]✅ 状态提取完成![/green]")
+            console.print(f"\n📋 提取统计:")
+            console.print(f"  人物数量: [bold]{len(chapter_state.character_states)}[/bold] 个")
+            console.print(f"  情节线程: [bold]{len(chapter_state.plot_threads)}[/bold] 个")
+            console.print(f"  关键对话: [bold]{len(chapter_state.key_dialogues)}[/bold] 段")
+            console.print(f"  未解决问题: [bold]{len(chapter_state.unresolved_questions)}[/bold] 个")
+            
+            # 显示主要人物状态
+            if chapter_state.character_states:
+                console.print(f"\n👤 主要人物状态:")
+                for name, state in list(chapter_state.character_states.items())[:5]:
+                    console.print(f"  [bold]{name}[/bold]: {state.status.value} - {state.location}")
+        
+        # 信息传递
+        if transfer:
+            try:
+                from_ch, to_ch = map(int, transfer.split(','))
+            except ValueError:
+                console.print("[red]错误：传递格式应为 'from_chapter,to_chapter'，如 '81,82'[/red]")
+                return
+            
+            console.print(f"\n🔄 传递第{from_ch}回信息到第{to_ch}回...")
+            
+            # 加载源章节状态
+            from_state = transfer_manager.load_chapter_state(from_ch)
+            if not from_state:
+                console.print(f"[red]错误：无法加载第{from_ch}回状态，请先提取状态信息[/red]")
+                return
+            
+            # 获取下一章节规划（如果存在）
+            try:
+                planner = ChapterPlanner()
+                plan = planner.load_plan()
+                next_plan = planner.get_chapter_plan(to_ch, plan) if plan else {}
+            except:
+                next_plan = {}
+            
+            # 生成传递指导
+            guidance = transfer_manager.pass_info_to_next(from_state, next_plan)
+            
+            console.print("[green]✅ 信息传递完成![/green]")
+            
+            # 显示传递指导
+            console.print(Panel(
+                f"传递章节: 第{from_ch}回 → 第{to_ch}回\n"
+                f"继承人物: {len(guidance.get('inherited_character_states', {}))} 个\n"
+                f"持续情节: {len(guidance.get('continuing_plot_threads', {}))} 个\n"
+                f"写作指导: {len(guidance.get('writing_guidelines', []))} 条",
+                title="📋 传递摘要",
+                border_style="cyan"
+            ))
+            
+            # 显示写作指导
+            if guidance.get('writing_guidelines'):
+                console.print(f"\n📝 写作指导:")
+                for guideline in guidance['writing_guidelines'][:5]:
+                    console.print(f"  • {guideline}")
+        
+        # 一致性检查
+        if check_consistency:
+            try:
+                start_ch, end_ch = map(int, check_consistency.split(','))
+            except ValueError:
+                console.print("[red]错误：检查格式应为 'start_chapter,end_chapter'，如 '81,85'[/red]")
+                return
+            
+            console.print(f"\n🔍 检查第{start_ch}-{end_ch}回一致性...")
+            
+            # 加载章节状态
+            chapter_states = []
+            for ch_num in range(start_ch, end_ch + 1):
+                state = transfer_manager.load_chapter_state(ch_num)
+                if state:
+                    chapter_states.append(state)
+            
+            if len(chapter_states) < 2:
+                console.print("[red]错误：需要至少2个章节的状态信息进行一致性检查[/red]")
+                return
+            
+            # 执行一致性检查
+            issues = transfer_manager.maintain_consistency(chapter_states)
+            
+            if issues:
+                console.print(f"[yellow]⚠️  发现 {len(issues)} 个一致性问题:[/yellow]")
+                for i, issue in enumerate(issues[:10], 1):
+                    console.print(f"  {i}. {issue}")
+            else:
+                console.print("[green]✅ 未发现一致性问题![/green]")
+        
+        # 显示传递摘要
+        if summary:
+            try:
+                from_ch, to_ch = map(int, summary.split(','))
+            except ValueError:
+                console.print("[red]错误：摘要格式应为 'from_chapter,to_chapter'，如 '81,82'[/red]")
+                return
+            
+            summary_data = transfer_manager.get_transfer_summary(from_ch, to_ch)
+            
+            if 'error' in summary_data:
+                console.print(f"[red]{summary_data['error']}[/red]")
+            else:
+                console.print(Panel(
+                    f"传递时间: {summary_data['transfer_timestamp'][:19]}\n"
+                    f"源章节: 第{summary_data['from_chapter']}回\n"
+                    f"目标章节: 第{summary_data['to_chapter']}回\n"
+                    f"人物数量: {summary_data['character_count']}\n"
+                    f"情节线程: {summary_data['plot_thread_count']}\n"
+                    f"未解决问题: {summary_data['unresolved_count']}",
+                    title="📊 传递摘要",
+                    border_style="blue"
+                ))
+        
+        # 保存状态
+        if save_state:
+            console.print(f"[yellow]提示：状态在提取时已自动保存到 data/processed/chapter_states/[/yellow]")
+        
+        # 加载状态
+        if load_state:
+            state = transfer_manager.load_chapter_state(load_state)
+            if state:
+                console.print(f"[green]✅ 成功加载第{load_state}回状态[/green]")
+                console.print(f"章节标题: {state.get('chapter_title', '未知')}")
+                console.print(f"人物数量: {len(state.get('character_states', {}))}")
+            else:
+                console.print(f"[red]无法加载第{load_state}回状态[/red]")
+        
+        # 列出所有状态
+        if list_states:
+            states_dir = Path("data/processed/chapter_states")
+            if states_dir.exists():
+                state_files = list(states_dir.glob("chapter_*_state.json"))
+                if state_files:
+                    console.print(f"\n📁 已保存的章节状态 ({len(state_files)} 个):")
+                    for file in sorted(state_files):
+                        chapter_num = re.search(r'chapter_(\d+)_state', file.name)
+                        if chapter_num:
+                            console.print(f"  • 第{int(chapter_num.group(1))}回")
+                else:
+                    console.print("[yellow]暂无保存的章节状态[/yellow]")
+            else:
+                console.print("[yellow]状态目录不存在[/yellow]")
+        
+        # 默认显示使用建议
+        if not any([extract, transfer, check_consistency, summary, save_state, load_state, list_states]):
+            console.print("\n💡 使用建议:")
+            console.print("  提取状态: [bold]python main.py chapter-transfer -e 81[/bold]")
+            console.print("  信息传递: [bold]python main.py chapter-transfer -t 81,82[/bold]")
+            console.print("  一致性检查: [bold]python main.py chapter-transfer -c 81,85[/bold]")
+            console.print("  查看摘要: [bold]python main.py chapter-transfer --summary 81,82[/bold]")
+            console.print("  列出状态: [bold]python main.py chapter-transfer --list-states[/bold]")
+        
+        console.print(f"\n🔄 章节信息传递机制已准备就绪！")
+        console.print("提供章节间状态传递、一致性检查和写作指导功能。")
+        
+    except Exception as e:
+        console.print(f"[red]章节信息传递失败: {e}[/red]")
+        logger.error(f"章节信息传递失败: {e}")
 
 
 if __name__ == "__main__":
