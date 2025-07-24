@@ -63,6 +63,12 @@ AI-continuation-of-Dream-of-the-Red-Chamber/
 │   ├── 📁 models/                 # 模型接口模块
 │   └── 📁 utils/                  # 工具模块
 ├── 📁 docs/                       # 文档目录
+│   ├── chapter_planning_report.md        # 章节规划报告
+│   ├── taixu_prophecy_implementation.md  # 太虚幻境预言实现文档
+│   ├── taixu_prophecy_analysis.md        # 太虚幻境预言分析
+│   ├── fate_consistency_report.md        # 命运一致性检验报告
+│   ├── complete_taixu_test_report.md     # 完整太虚幻境测试报告
+│   └── comprehensive_report.md           # 数据处理综合报告
 ├── 📁 logs/                       # 日志文件
 ├── 📁 scripts/                    # 脚本文件
 ├── 📁 tests/                      # 测试文件
