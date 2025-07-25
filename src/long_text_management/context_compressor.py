@@ -13,13 +13,12 @@ import logging
 from pathlib import Path
 import os
 
-# 添加LLM支持
+# 使用统一的模型管理器
 try:
-    from langchain_openai import ChatOpenAI
-    from langchain.schema import HumanMessage, SystemMessage
-    LLM_AVAILABLE = True
+    from ..models import get_llm_manager, get_config
+    LLM_MANAGER_AVAILABLE = True
 except ImportError:
-    LLM_AVAILABLE = False
+    LLM_MANAGER_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
 
@@ -67,10 +66,11 @@ class ContextCompressor:
             use_llm: 是否使用LLM进行智能摘要
         """
         self.max_context_length = max_context_length
-        self.use_llm = use_llm and LLM_AVAILABLE
+        self.use_llm = use_llm and LLM_MANAGER_AVAILABLE
         
-        # 初始化LLM（如果可用）
-        self.llm = None
+        # 初始化LLM管理器（如果可用）
+        self.llm_manager = None
+        self.config = None
         if self.use_llm:
             self._init_llm()
         
@@ -86,29 +86,21 @@ class ContextCompressor:
         self._ensure_state_dir()
     
     def _init_llm(self) -> None:
-        """初始化LLM"""
+        """初始化LLM管理器"""
         try:
-            # 尝试从环境变量获取API密钥
-            api_key = os.getenv('OPENAI_API_KEY')
-            base_url = os.getenv('OPENAI_BASE_URL', 'https://api.openai.com/v1')
+            self.config = get_config()
+            self.llm_manager = get_llm_manager()
             
-            if not api_key:
+            # 检查配置
+            if not self.config.llm.api_key:
                 logger.warning("OPENAI_API_KEY未设置，将使用规则方法进行摘要")
                 self.use_llm = False
                 return
             
-            self.llm = ChatOpenAI(
-                model=self.config.model.model_name,
-                temperature=self.config.model.temperature,
-                max_tokens=self.config.model.max_tokens,
-                openai_api_key=api_key,
-                openai_api_base=base_url
-            )
-            
-            logger.info("LLM初始化成功，将使用智能摘要功能")
+            logger.info("LLM管理器初始化成功，将使用智能摘要功能")
             
         except Exception as e:
-            logger.warning(f"LLM初始化失败，将使用规则方法: {e}")
+            logger.warning(f"LLM管理器初始化失败，将使用规则方法: {e}")
             self.use_llm = False
     
     def _ensure_state_dir(self) -> None:
@@ -181,7 +173,7 @@ class ContextCompressor:
         lines = chapter_text.split('\n')
         title = lines[0] if lines else f"第{chapter_num}回"
         
-        if self.use_llm and self.llm:
+        if self.use_llm and self.llm_manager:
             try:
                 # 使用LLM生成智能摘要
                 summary_data = self._create_llm_summary(chapter_text, chapter_num, title)
@@ -251,7 +243,7 @@ class ContextCompressor:
 4. plot_developments: 识别2-3个重要的情节推进
 5. emotional_tone: 用一个词概括章节的主要情感基调（如：欢乐、悲伤、紧张、平和等）"""
         
-        human_prompt = f"""请分析以下红楼梦章节内容：
+        prompt = f"""请分析以下红楼梦章节内容：
 
 章节信息：{title}
 
@@ -261,12 +253,13 @@ class ContextCompressor:
 请严格按照JSON格式返回分析结果。"""
         
         try:
-            messages = [
-                SystemMessage(content=system_prompt),
-                HumanMessage(content=human_prompt)
-            ]
+            # 使用统一的LLM管理器
+            response = self.llm_manager.simple_call(
+                prompt=prompt,
+                system_prompt=system_prompt,
+                task="context_compression"
+            )
             
-            response = self.llm.invoke(messages)
             response_text = response.content.strip()
             
             # 尝试解析JSON响应
@@ -295,7 +288,7 @@ class ContextCompressor:
         except Exception as e:
             logger.error(f"LLM摘要生成异常: {e}")
             raise
-    
+
     def _extract_key_events(self, text: str) -> List[str]:
         """提取关键事件 - TODO: 需要智能化"""
         # 简单实现：查找包含动作词的句子

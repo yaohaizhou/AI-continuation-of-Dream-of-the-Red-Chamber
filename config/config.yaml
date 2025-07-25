@@ -1,11 +1,33 @@
 # AI续写红楼梦 - 主配置文件
 
-# 模型配置
-model:
-  model_name: "claude_sonnet4"  # 可选: gpt-4, gpt-3.5-turbo, gpt-4-turbo-preview
-  temperature: 0.8     # 控制创造性，0.0-1.0，越高越有创造性
-  max_tokens: 2000     # 单次生成的最大token数
-  top_p: 0.9          # 核采样参数
+# LLM模型配置
+llm:
+  # 基础配置
+  provider: "openai"           # 模型提供商: openai, anthropic, etc.
+  model_name: "gpt-4"          # 模型名称
+  
+  # 生成参数
+  temperature: 0.8             # 控制创造性，0.0-1.0，越高越有创造性
+  max_tokens: 2000             # 单次生成的最大token数
+  top_p: 0.9                   # 核采样参数
+  frequency_penalty: 0.0       # 频率惩罚
+  presence_penalty: 0.0        # 存在惩罚
+  
+  # 请求设置
+  timeout: 60                  # 请求超时时间（秒）
+  max_retries: 3               # 最大重试次数
+  retry_delay: 1               # 重试延迟（秒）
+  
+  # 特定功能的模型配置
+  context_compression:
+    model_name: "gpt-3.5-turbo"  # 上下文压缩使用更便宜的模型
+    temperature: 0.1             # 压缩需要更准确
+    max_tokens: 1000
+  
+  style_conversion:
+    model_name: "gpt-4"          # 文风转换需要更好的模型
+    temperature: 0.2             # 风格转换需要一致性
+    max_tokens: 1500
 
 # 写作配置
 writing:
@@ -13,21 +35,52 @@ writing:
   style_consistency: true          # 保持文体一致性
   character_consistency: true      # 保持人物一致性
   enable_chapter_structure: true   # 启用章节结构
+  enable_knowledge_enhancement: true  # 启用知识增强功能
 
 # 路径配置
 paths:
-  data_dir: "data"           # 数据文件目录
-  output_dir: "output"       # 输出文件目录
+  data_dir: "data"                 # 数据文件目录
+  output_dir: "output"             # 输出文件目录
+  original_text_path: "data/raw/hongloumeng_80.md"  # 原著文本路径
   
+# 知识增强配置
+knowledge_enhancement:
+  enable_rag: true                 # 启用RAG检索
+  enable_fate_check: true          # 启用命运一致性检查
+  enable_symbolic_advisor: true    # 启用象征意象建议
+  enable_context_compression: true # 启用上下文压缩
+
+# RAG配置
+rag:
+  chunk_size: 1000                 # 文本块大小
+  chunk_overlap: 100               # 文本块重叠
+  top_k: 5                         # 检索Top-K结果
+  similarity_threshold: 0.7        # 相似度阈值
+  
+# 文风转换配置
+style_conversion:
+  vocabulary_level: "high"         # 词汇转换强度: low, medium, high
+  enable_sentence_restructure: true   # 启用句式重构
+  enable_rhetorical_devices: true     # 启用修辞增强
+  enable_context_optimization: true   # 启用语境优化
+
 # 高级配置
 advanced:
-  enable_memory: false       # 启用上下文记忆(未来功能)
-  use_vector_search: false   # 使用向量搜索(未来功能)
-  batch_size: 5             # 批量处理大小
+  enable_memory: false             # 启用上下文记忆(未来功能)
+  use_vector_search: false         # 使用向量搜索(未来功能)
+  batch_size: 5                    # 批量处理大小
+  enable_caching: true             # 启用结果缓存
   
 # 日志配置  
 logging:
-  level: "INFO"             # DEBUG, INFO, WARNING, ERROR
-  save_to_file: true        # 是否保存到文件
-  max_file_size: "10 MB"    # 日志文件最大大小
-  backup_count: 7           # 保留的日志文件数量
+  level: "INFO"                    # DEBUG, INFO, WARNING, ERROR
+  save_to_file: true               # 是否保存到文件
+  max_file_size: "10 MB"           # 日志文件最大大小
+  backup_count: 7                  # 保留的日志文件数量
+  log_llm_calls: false             # 是否记录LLM调用详情
+
+# 性能配置
+performance:
+  enable_parallel_processing: false   # 启用并行处理
+  max_concurrent_requests: 3          # 最大并发请求数
+  request_rate_limit: 10              # 每秒最大请求数

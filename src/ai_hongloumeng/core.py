@@ -8,14 +8,14 @@ from typing import Dict, Any, List, Optional, Tuple
 from pathlib import Path
 from datetime import datetime
 
-from langchain_openai import ChatOpenAI
 from langchain.schema import HumanMessage, SystemMessage
-from langchain.callbacks import get_openai_callback
 from loguru import logger
 
-from .config import Config
 from .prompts import PromptTemplates
 from .utils import TextProcessor, FileManager, OutputFormatter, validate_continuation_quality
+
+# 使用统一的模型管理器
+from ..models import get_llm_manager, get_config
 
 # 添加知识增强模块导入
 try:
@@ -33,19 +33,14 @@ except ImportError:
 class HongLouMengContinuation:
     """红楼梦AI续写核心类"""
     
-    def __init__(self, config: Optional[Config] = None, enable_knowledge_enhancement: bool = True):
+    def __init__(self, enable_knowledge_enhancement: bool = True):
         """初始化续写系统"""
-        self.config = config or Config()
-        self.config.validate()
+        # 使用统一的配置管理器
+        self.config = get_config()
+        self.llm_manager = get_llm_manager()
         
-        # 初始化LLM
-        self.llm = ChatOpenAI(
-            model=self.config.model.model_name,
-            temperature=self.config.model.temperature,
-            max_tokens=self.config.model.max_tokens,
-            openai_api_key=self.config.openai_api_key,
-            openai_api_base=self.config.openai_base_url
-        )
+        # 验证配置
+        self.config.validate()
         
         # 初始化基础组件
         self.text_processor = TextProcessor()
@@ -93,7 +88,7 @@ class HongLouMengContinuation:
     def load_original_text(self, file_path: Optional[Path] = None) -> str:
         """加载原著文本"""
         if file_path is None:
-            file_path = self.config.original_text_path
+            file_path = Path(self.config.paths.original_text_path)
             
         if not file_path.exists():
             logger.warning(f"原著文件不存在: {file_path}")
@@ -355,37 +350,37 @@ class HongLouMengContinuation:
             prompt_template = self.prompt_templates.get_basic_continuation_prompt()
             prompt = prompt_template.format(context=context, max_length=max_length)
         
-        with get_openai_callback() as cb:
-            messages = [
-                SystemMessage(content="你是一位精通红楼梦的古典文学专家和作家。"),
-                HumanMessage(content=prompt)
-            ]
-            
-            response = await self.llm.ainvoke(messages)
-            continuation = response.content
-            
-            return {
-                "continuation": continuation,
-                "type": "basic",
-                "context": context,
-                "enhanced": self.enable_knowledge_enhancement,
-                "metadata": {
-                    "model": self.config.model.model_name,
-                    "temperature": self.config.model.temperature,
-                    "max_tokens": self.config.model.max_tokens,
-                    "tokens_used": cb.total_tokens,
-                    "cost": cb.total_cost,
-                    "timestamp": datetime.now().isoformat()
-                }
+        # 使用统一的LLM管理器
+        system_prompt = "你是一位精通红楼梦的古典文学专家和作家。"
+        response = await self.llm_manager.simple_acall(
+            prompt=prompt,
+            system_prompt=system_prompt,
+            task="basic_continuation"
+        )
+        
+        return {
+            "continuation": response.content,
+            "type": "basic",
+            "context": context,
+            "enhanced": self.enable_knowledge_enhancement,
+            "metadata": {
+                "model": response.model,
+                "temperature": response.metadata.get("temperature"),
+                "max_tokens": response.metadata.get("max_tokens"),
+                "tokens_used": response.tokens_used,
+                "cost": response.cost,
+                "duration": response.duration,
+                "timestamp": response.timestamp
             }
-    
+        }
+
     async def _enhanced_dialogue_continuation(
         self,
         context: str,
+        rag_info: Dict[str, Any] = {},
         character_info: str = "",
         scene_context: str = "",
         dialogue_context: str = "",
-        rag_info: Dict[str, Any] = {},
         **kwargs
     ) -> Dict[str, Any]:
         """对话续写 - 知识增强版"""
@@ -405,41 +400,41 @@ class HongLouMengContinuation:
                 dialogue_context=dialogue_context or "日常对话"
             )
         
-        with get_openai_callback() as cb:
-            messages = [
-                SystemMessage(content="你是一位精通红楼梦人物对话的专家。"),
-                HumanMessage(content=prompt)
-            ]
-            
-            response = await self.llm.ainvoke(messages)
-            continuation = response.content
-            
-            return {
-                "continuation": continuation,
-                "type": "dialogue",
-                "context": context,
-                "parameters": {
-                    "character_info": character_info,
-                    "scene_context": scene_context,
-                    "dialogue_context": dialogue_context
-                },
-                "enhanced": self.enable_knowledge_enhancement,
-                "metadata": {
-                    "model": self.config.model.model_name,
-                    "tokens_used": cb.total_tokens,
-                    "cost": cb.total_cost,
-                    "timestamp": datetime.now().isoformat()
-                }
+        # 使用统一的LLM管理器
+        system_prompt = "你是一位精通红楼梦人物对话的专家。"
+        response = await self.llm_manager.simple_acall(
+            prompt=prompt,
+            system_prompt=system_prompt,
+            task="dialogue_continuation"
+        )
+        
+        return {
+            "continuation": response.content,
+            "type": "dialogue",
+            "context": context,
+            "parameters": {
+                "character_info": character_info,
+                "scene_context": scene_context,
+                "dialogue_context": dialogue_context
+            },
+            "enhanced": self.enable_knowledge_enhancement,
+            "metadata": {
+                "model": response.model,
+                "tokens_used": response.tokens_used,
+                "cost": response.cost,
+                "duration": response.duration,
+                "timestamp": response.timestamp
             }
-    
+        }
+
     async def _enhanced_scene_continuation(
         self,
         context: str,
+        rag_info: Dict[str, Any] = {},
         scene_setting: str = "",
         time: str = "",
         location: str = "",
         characters: str = "",
-        rag_info: Dict[str, Any] = {},
         **kwargs
     ) -> Dict[str, Any]:
         """场景续写 - 知识增强版"""
@@ -460,41 +455,41 @@ class HongLouMengContinuation:
                 characters=characters or "主要人物"
             )
         
-        with get_openai_callback() as cb:
-            messages = [
-                SystemMessage(content="你是一位精通红楼梦场景描写的专家。"),
-                HumanMessage(content=prompt)
-            ]
-            
-            response = await self.llm.ainvoke(messages)
-            continuation = response.content
-            
-            return {
-                "continuation": continuation,
-                "type": "scene",
-                "context": context,
-                "parameters": {
-                    "scene_setting": scene_setting,
-                    "time": time,
-                    "location": location,
-                    "characters": characters
-                },
-                "enhanced": self.enable_knowledge_enhancement,
-                "metadata": {
-                    "model": self.config.model.model_name,
-                    "tokens_used": cb.total_tokens,
-                    "cost": cb.total_cost,
-                    "timestamp": datetime.now().isoformat()
-                }
+        # 使用统一的LLM管理器
+        system_prompt = "你是一位精通红楼梦场景描写的专家。"
+        response = await self.llm_manager.simple_acall(
+            prompt=prompt,
+            system_prompt=system_prompt,
+            task="scene_continuation"
+        )
+        
+        return {
+            "continuation": response.content,
+            "type": "scene",
+            "context": context,
+            "parameters": {
+                "scene_setting": scene_setting,
+                "time": time,
+                "location": location,
+                "characters": characters
+            },
+            "enhanced": self.enable_knowledge_enhancement,
+            "metadata": {
+                "model": response.model,
+                "tokens_used": response.tokens_used,
+                "cost": response.cost,
+                "duration": response.duration,
+                "timestamp": response.timestamp
             }
-    
+        }
+
     async def _enhanced_poetry_continuation(
         self,
         context: str,
+        rag_info: Dict[str, Any] = {},
         poetry_type: str = "律诗",
         theme: str = "",
         character: str = "",
-        rag_info: Dict[str, Any] = {},
         **kwargs
     ) -> Dict[str, Any]:
         """诗词续写 - 知识增强版"""
@@ -515,32 +510,32 @@ class HongLouMengContinuation:
                 character=character or "不详"
             )
         
-        with get_openai_callback() as cb:
-            messages = [
-                SystemMessage(content="你是一位精通古典诗词创作的专家。"),
-                HumanMessage(content=prompt)
-            ]
-            
-            response = await self.llm.ainvoke(messages)
-            continuation = response.content
-            
-            return {
-                "continuation": continuation,
-                "type": "poetry",
-                "context": context,
-                "parameters": {
-                    "poetry_type": poetry_type,
-                    "theme": theme,
-                    "character": character
-                },
-                "enhanced": self.enable_knowledge_enhancement,
-                "metadata": {
-                    "model": self.config.model.model_name,
-                    "tokens_used": cb.total_tokens,
-                    "cost": cb.total_cost,
-                    "timestamp": datetime.now().isoformat()
-                }
+        # 使用统一的LLM管理器
+        system_prompt = "你是一位精通古典诗词创作的专家。"
+        response = await self.llm_manager.simple_acall(
+            prompt=prompt,
+            system_prompt=system_prompt,
+            task="poetry_continuation"
+        )
+        
+        return {
+            "continuation": response.content,
+            "type": "poetry",
+            "context": context,
+            "parameters": {
+                "poetry_type": poetry_type,
+                "theme": theme,
+                "character": character
+            },
+            "enhanced": self.enable_knowledge_enhancement,
+            "metadata": {
+                "model": response.model,
+                "tokens_used": response.tokens_used,
+                "cost": response.cost,
+                "duration": response.duration,
+                "timestamp": response.timestamp
             }
+        }
     
     def save_continuation(
         self,
@@ -552,7 +547,7 @@ class HongLouMengContinuation:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             output_filename = f"continuation_{timestamp}.txt"
         
-        output_path = self.config.output_dir / output_filename
+        output_path = Path(self.config.paths.output_dir) / output_filename
         
         # 格式化输出
         formatted_output = self.output_formatter.format_continuation_output(
