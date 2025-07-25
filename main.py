@@ -26,6 +26,7 @@ from data_processing import HongLouMengDataPipeline
 from knowledge_enhancement import EnhancedPrompter, TaixuProphecyExtractor, FateConsistencyChecker, create_symbolic_imagery_advisor
 from rag_retrieval import RAGPipeline, create_rag_pipeline
 from long_text_management import ChapterPlanner, ChapterInfoTransfer, create_chapter_info_transfer, ProgressTracker, ProjectStatus, ChapterStatus, create_progress_tracker
+from style_imitation import ClassicalStyleAnalyzer, StyleTemplateLibrary, create_classical_analyzer, create_style_template_library
 
 # 初始化控制台
 console = Console()
@@ -1813,6 +1814,234 @@ def progress(init, status, start_chapter, update_chapter, word_count, percentage
     except Exception as e:
         console.print(f"[red]进度管理失败: {e}[/red]")
         logger.error(f"进度管理失败: {e}")
+
+
+@cli.command()
+@click.option('--text', '-t', type=str, help='要分析的文本内容')
+@click.option('--file', '-f', type=click.Path(exists=True), help='要分析的文本文件路径')
+@click.option('--output', '-o', type=str, help='分析结果保存路径')
+@click.option('--report', '-r', is_flag=True, help='生成详细分析报告')
+@click.option('--compare', '-c', is_flag=True, help='与红楼梦原著进行对比')
+def style_analyze(text, file, output, report, compare):
+    """🎨 古典文风分析器 - 分析文本的古典文学风格特征"""
+    try:
+        console.print(Panel.fit(
+            "[bold red]🎨 古典文风分析器[/bold red]\n"
+            "[dim]分析文本的古典文学风格特征[/dim]",
+            border_style="red"
+        ))
+        
+        # 获取要分析的文本
+        if file:
+            with open(file, 'r', encoding='utf-8') as f:
+                text_content = f.read()
+            console.print(f"[green]从文件加载文本: {file}[/green]")
+        elif text:
+            text_content = text
+        else:
+            console.print("[red]错误: 请提供要分析的文本内容或文件路径[/red]")
+            return
+        
+        # 文本预览
+        preview = text_content[:200] + "..." if len(text_content) > 200 else text_content
+        console.print(Panel(
+            f"[bold]文本预览:[/bold]\n{preview}",
+            title="待分析文本",
+            border_style="blue"
+        ))
+        
+        # 创建分析器
+        with Progress(
+            SpinnerColumn(),
+            TextColumn("[progress.description]{task.description}"),
+            console=console
+        ) as progress:
+            task = progress.add_task("初始化古典文风分析器...", total=None)
+            analyzer = create_classical_analyzer()
+            progress.update(task, description="开始分析文本特征...")
+            
+            # 进行分析
+            features = analyzer.analyze_text(text_content)
+            progress.update(task, description="分析完成！")
+        
+        # 显示分析结果
+        console.print("\n" + "="*60)
+        console.print("[bold green]📊 文风分析结果[/bold green]")
+        console.print("="*60)
+        
+        console.print(f"\n[bold]📝 词汇特征[/bold]")
+        console.print(f"  总词数: {features.vocabulary.total_word_count}")
+        console.print(f"  古典词汇比例: {features.vocabulary.classical_word_ratio:.2%}")
+        console.print(f"  检测到的现代词汇: {len(features.vocabulary.modern_words_detected)} 个")
+        if features.vocabulary.modern_words_detected:
+            console.print(f"    现代词汇: {', '.join(features.vocabulary.modern_words_detected[:5])}")
+        
+        console.print(f"\n[bold]📖 句式特征[/bold]")
+        console.print(f"  平均句长: {features.sentence.avg_sentence_length:.1f} 字")
+        console.print(f"  句式复杂度: {features.sentence.sentence_complexity:.2f}")
+        console.print(f"  古典句式使用: {sum(features.sentence.classical_patterns.values())} 处")
+        
+        console.print(f"\n[bold]🎭 修辞特征[/bold]")
+        console.print(f"  比喻象征: {features.rhetorical.metaphor_simile_count} 处")
+        console.print(f"  对偶排比: {features.rhetorical.parallelism_count} 处")
+        console.print(f"  典故引用: {features.rhetorical.allusion_count} 处")
+        console.print(f"  修辞密度: {features.rhetorical.rhetorical_density:.4f}")
+        
+        console.print(f"\n[bold]👤 称谓特征[/bold]")
+        console.print(f"  身份一致性: {features.addressing.identity_consistency:.2%}")
+        console.print(f"  情境适应性: {features.addressing.contextual_appropriateness:.2%}")
+        
+        console.print(f"\n[bold]🎯 综合评分[/bold]")
+        console.print(f"  文学优雅度: {features.literary_elegance:.2%}")
+        console.print(f"  古典真实性: {features.classical_authenticity:.2%}")
+        
+        # 与原著对比
+        if compare:
+            console.print(f"\n[bold]📈 与原著对比[/bold]")
+            similarity_scores = analyzer.compare_with_original(text_content)
+            if similarity_scores:
+                for metric, score in similarity_scores.items():
+                    console.print(f"  {metric}: {score:.2%}")
+            else:
+                console.print("  [yellow]无法进行对比：原著文本未加载[/yellow]")
+        
+        # 生成详细报告
+        if report:
+            report_content = analyzer.generate_analysis_report(features)
+            if output:
+                report_path = output
+            else:
+                report_path = f"reports/style_analysis_report_{len(text_content)}chars.md"
+            
+            Path(report_path).parent.mkdir(parents=True, exist_ok=True)
+            with open(report_path, 'w', encoding='utf-8') as f:
+                f.write(report_content)
+            console.print(f"\n[green]✅ 详细分析报告已保存到: {report_path}[/green]")
+        
+        # 保存分析结果
+        if output and not report:
+            analyzer.save_analysis_result(features, output)
+            console.print(f"\n[green]✅ 分析结果已保存到: {output}[/green]")
+        
+        console.print(f"\n🎨 古典文风分析完成！")
+        
+    except Exception as e:
+        console.print(f"[red]文风分析失败: {e}[/red]")
+        logger.error(f"文风分析失败: {e}")
+
+
+@cli.command()
+@click.option('--template-type', '-t', 
+              type=click.Choice(['dialogue', 'narrative', 'scene', 'rhetorical', 'all']), 
+              default='all', help='模板类型')
+@click.option('--keyword', '-k', type=str, help='搜索关键词')
+@click.option('--text-type', type=str, help='文本类型（dialogue/description/scene）')
+@click.option('--emotion', '-e', type=str, default='neutral', help='情感基调')
+@click.option('--save', '-s', is_flag=True, help='保存模板库到文件')
+@click.option('--report', '-r', type=str, help='生成模板库报告')
+def style_templates(template_type, keyword, text_type, emotion, save, report):
+    """📚 文体风格模板库 - 管理和查询古典文学写作模板"""
+    try:
+        console.print(Panel.fit(
+            "[bold red]📚 文体风格模板库[/bold red]\n"
+            "[dim]管理和查询古典文学写作模板[/dim]",
+            border_style="red"
+        ))
+        
+        # 创建模板库
+        with Progress(
+            SpinnerColumn(),
+            TextColumn("[progress.description]{task.description}"),
+            console=console
+        ) as progress:
+            task = progress.add_task("初始化文体风格模板库...", total=None)
+            template_library = create_style_template_library()
+            progress.update(task, description="模板库初始化完成")
+        
+        # 根据关键词搜索模板
+        if keyword:
+            console.print(f"\n[bold]🔍 搜索关键词: {keyword}[/bold]")
+            results = template_library.search_templates_by_keyword(keyword)
+            
+            for category, templates in results.items():
+                if templates:
+                    console.print(f"\n[bold]{category.upper()} 模板:[/bold]")
+                    for template in templates:
+                        console.print(f"  - {template.type.value}: {template.context}")
+                        console.print(f"    示例: {template.examples[0]}")
+        
+        # 根据文本类型获取建议模板
+        elif text_type:
+            console.print(f"\n[bold]💡 {text_type} 类型模板建议 (情感: {emotion})[/bold]")
+            suggestions = template_library.get_template_suggestions(text_type, emotion)
+            
+            for template in suggestions:
+                console.print(f"\n[bold]{template.type.value}[/bold]")
+                console.print(f"  使用场景: {template.context}")
+                console.print(f"  示例:")
+                for example in template.examples[:2]:
+                    console.print(f"    - {example}")
+        
+        # 显示指定类型的模板
+        elif template_type != 'all':
+            console.print(f"\n[bold]📝 {template_type.upper()} 模板[/bold]")
+            
+            if template_type == 'dialogue':
+                for template in template_library.dialogue_templates.values():
+                    console.print(f"\n[bold]{template.type.value}[/bold] ({template.tone})")
+                    console.print(f"  场景: {template.context}")
+                    console.print(f"  示例: {template.examples[0]}")
+            
+            elif template_type == 'narrative':
+                for template in template_library.narrative_templates.values():
+                    console.print(f"\n[bold]{template.type.value}[/bold] ({template.style})")
+                    console.print(f"  场景: {template.context}")
+                    console.print(f"  示例: {template.examples[0]}")
+            
+            elif template_type == 'scene':
+                for template in template_library.scene_templates.values():
+                    console.print(f"\n[bold]{template.type.value}[/bold] ({template.atmosphere})")
+                    console.print(f"  场景: {template.context}")
+                    console.print(f"  示例: {template.examples[0]}")
+            
+            elif template_type == 'rhetorical':
+                for template in template_library.rhetorical_templates.values():
+                    console.print(f"\n[bold]{template.type.value}[/bold]")
+                    console.print(f"  场景: {template.context}")
+                    console.print(f"  示例: {template.examples[0]}")
+                    console.print(f"  技巧: {', '.join(template.usage_tips)}")
+        
+        # 显示所有模板统计
+        else:
+            console.print(f"\n[bold green]📊 模板库统计[/bold green]")
+            console.print(f"  对话模板: {len(template_library.dialogue_templates)} 个")
+            console.print(f"  叙述模板: {len(template_library.narrative_templates)} 个")
+            console.print(f"  场景模板: {len(template_library.scene_templates)} 个")
+            console.print(f"  修辞模板: {len(template_library.rhetorical_templates)} 个")
+            total = (len(template_library.dialogue_templates) + 
+                    len(template_library.narrative_templates) + 
+                    len(template_library.scene_templates) + 
+                    len(template_library.rhetorical_templates))
+            console.print(f"  总计: {total} 个模板")
+        
+        # 保存模板库
+        if save:
+            template_library.save_templates()
+            console.print(f"\n[green]✅ 模板库已保存[/green]")
+        
+        # 生成报告
+        if report:
+            report_content = template_library.generate_template_report()
+            Path(report).parent.mkdir(parents=True, exist_ok=True)
+            with open(report, 'w', encoding='utf-8') as f:
+                f.write(report_content)
+            console.print(f"\n[green]✅ 模板库报告已保存到: {report}[/green]")
+        
+        console.print(f"\n📚 文体风格模板库操作完成！")
+        
+    except Exception as e:
+        console.print(f"[red]模板库操作失败: {e}[/red]")
+        logger.error(f"模板库操作失败: {e}")
 
 
 if __name__ == "__main__":

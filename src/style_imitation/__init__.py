@@ -1,0 +1,50 @@
+"""
+古典文风仿照引擎
+
+这个模块专门用于将现代化的AI生成文本转换为符合红楼梦原著风格的古典文学文本。
+
+主要功能:
+- 古典文风分析: 分析红楼梦原著的语言特征
+- 文体风格库: 提供分情景的写作模板
+- 智能转换器: 将现代文本转换为古典风格
+- 相似度评估: 量化评估文风匹配度
+- 实时优化: 根据评估结果动态调整
+"""
+
+from .classical_style_analyzer import ClassicalStyleAnalyzer, StyleFeatures, VocabularyFeatures, SentenceFeatures, RhetoricalFeatures, AddressingFeatures
+from .style_template_library import StyleTemplateLibrary, DialogueTemplate, NarrativeTemplate, SceneTemplate, RhetoricalTemplate
+
+# TODO: 后续阶段实现的模块
+# from .intelligent_style_converter import IntelligentStyleConverter
+# from .style_similarity_evaluator import StyleSimilarityEvaluator  
+# from .realtime_style_optimizer import RealtimeStyleOptimizer
+
+__all__ = [
+    # 第一阶段：古典文风分析器
+    'ClassicalStyleAnalyzer',
+    'StyleFeatures',
+    'VocabularyFeatures', 
+    'SentenceFeatures',
+    'RhetoricalFeatures',
+    'AddressingFeatures',
+    
+    # 第二阶段：文体风格库
+    'StyleTemplateLibrary',
+    'DialogueTemplate',
+    'NarrativeTemplate', 
+    'SceneTemplate',
+    'RhetoricalTemplate',
+    
+    # 第三阶段和第四阶段（待实现）
+    # 'IntelligentStyleConverter',
+    # 'StyleSimilarityEvaluator',
+    # 'RealtimeStyleOptimizer'
+]
+
+def create_classical_analyzer(hongloumeng_path: str = "data/raw/hongloumeng_80.md"):
+    """创建古典文风分析器实例"""
+    return ClassicalStyleAnalyzer(hongloumeng_path)
+
+def create_style_template_library(style_data_path: str = "data/processed/style_templates.json"):
+    """创建文体风格库实例"""
+    return StyleTemplateLibrary(style_data_path) 
