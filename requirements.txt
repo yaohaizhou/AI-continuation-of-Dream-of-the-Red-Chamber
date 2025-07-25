@@ -14,6 +14,7 @@ regex==2023.12.25
 pandas==2.1.4
 numpy==1.26.2
 pydantic==2.5.2
+scikit-learn==1.3.2
 
 # Configuration and environment
 python-dotenv==1.0.0

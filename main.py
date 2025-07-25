@@ -26,7 +26,7 @@ from data_processing import HongLouMengDataPipeline
 from knowledge_enhancement import EnhancedPrompter, TaixuProphecyExtractor, FateConsistencyChecker, create_symbolic_imagery_advisor
 from rag_retrieval import RAGPipeline, create_rag_pipeline
 from long_text_management import ChapterPlanner, ChapterInfoTransfer, create_chapter_info_transfer, ProgressTracker, ProjectStatus, ChapterStatus, create_progress_tracker
-from style_imitation import ClassicalStyleAnalyzer, StyleTemplateLibrary, IntelligentStyleConverter, ConversionConfig, ConversionResult, create_classical_analyzer, create_style_template_library, create_intelligent_converter
+from style_imitation import ClassicalStyleAnalyzer, StyleTemplateLibrary, IntelligentStyleConverter, ConversionConfig, ConversionResult, StyleSimilarityEvaluator, SimilarityScores, EvaluationResult, BatchEvaluationResult, create_classical_analyzer, create_style_template_library, create_intelligent_converter, create_style_similarity_evaluator
 
 # 初始化控制台
 console = Console()
@@ -2234,6 +2234,253 @@ def style_convert(text, file, output, level, character, scene, no_rhetoric, no_r
     except Exception as e:
         console.print(f"[red]文风转换失败: {e}[/red]")
         logger.error(f"文风转换失败: {e}")
+
+
+@cli.command()
+@click.option('--text', '-t', type=str, help='要评估的文本内容')
+@click.option('--file', '-f', type=click.Path(exists=True), help='要评估的文本文件路径')
+@click.option('--original', '-o', type=str, help='原始文本（转换前）用于对比')
+@click.option('--detailed', '-d', is_flag=True, help='生成详细分析结果')
+@click.option('--batch', '-b', type=click.Path(exists=True), help='批量评估文件夹路径')
+@click.option('--report', '-r', type=str, help='生成评估报告')
+@click.option('--history', '-h', type=str, help='查看评估历史记录')
+@click.option('--conversion-result', '-c', type=str, help='评估转换结果JSON文件')
+@click.option('--threshold', type=float, default=70.0, help='相似度阈值（默认70分）')
+@click.option('--save-history', type=str, help='保存评估历史到指定文件')
+def style_evaluate(text, file, original, detailed, batch, report, history, conversion_result, threshold, save_history):
+    """📊 风格相似度评估器 - 量化评估文本与红楼梦原著的风格相似度"""
+    try:
+        console.print(Panel.fit(
+            "[bold red]📊 风格相似度评估器[/bold red]\n"
+            "[dim]量化评估文本与红楼梦原著的风格相似度[/dim]",
+            border_style="red"
+        ))
+        
+        # 导入评估器
+        from style_imitation import create_style_similarity_evaluator
+        
+        # 创建评估器
+        with Progress(
+            SpinnerColumn(),
+            TextColumn("[progress.description]{task.description}"),
+            console=console
+        ) as progress:
+            task = progress.add_task("初始化风格相似度评估器...", total=None)
+            evaluator = create_style_similarity_evaluator()
+            progress.update(task, description="评估器初始化完成！")
+        
+        # 评估转换结果文件
+        if conversion_result:
+            console.print(f"\n[bold]📄 评估转换结果文件[/bold]")
+            try:
+                import json
+                with open(conversion_result, 'r', encoding='utf-8') as f:
+                    result_data = json.load(f)
+                
+                # 假设转换结果包含原文和转换后文本
+                if 'converted_text' in result_data and 'original_text' in result_data:
+                    evaluation = evaluator.evaluate_similarity(
+                        text=result_data['converted_text'],
+                        original_text=result_data['original_text'],
+                        detailed=detailed
+                    )
+                    
+                    console.print("[green]✅ 转换结果评估完成![/green]")
+                    _display_evaluation_result(evaluation, console, threshold)
+                else:
+                    console.print("[red]错误: 转换结果文件格式不正确[/red]")
+                    return
+                    
+            except Exception as e:
+                console.print(f"[red]读取转换结果文件失败: {e}[/red]")
+                return
+        
+        # 批量评估模式
+        elif batch:
+            console.print(f"\n[bold]📁 批量评估模式[/bold]")
+            batch_path = Path(batch)
+            text_files = list(batch_path.glob("*.txt")) + list(batch_path.glob("*.md"))
+            
+            if not text_files:
+                console.print("[yellow]警告: 未找到可评估的文本文件[/yellow]")
+                return
+            
+            console.print(f"找到 {len(text_files)} 个文件待评估")
+            
+            # 读取所有文本
+            texts = []
+            with Progress(console=console) as progress:
+                task = progress.add_task("读取文件中...", total=len(text_files))
+                
+                for text_file in text_files:
+                    try:
+                        with open(text_file, 'r', encoding='utf-8') as f:
+                            file_content = f.read()
+                        texts.append(file_content)
+                        progress.advance(task)
+                        
+                    except Exception as e:
+                        console.print(f"[red]读取文件 {text_file} 失败: {e}[/red]")
+                        progress.advance(task)
+            
+            # 执行批量评估
+            console.print("\n[yellow]开始批量评估...[/yellow]")
+            batch_result = evaluator.batch_evaluate(texts, detailed=detailed)
+            
+            # 显示批量评估结果
+            console.print("\n" + "="*80)
+            console.print("[bold green]📊 批量评估结果[/bold green]")
+            console.print("="*80)
+            
+            console.print(f"\n[bold]📈 整体统计[/bold]")
+            console.print(f"  评估文本数: {batch_result.total_evaluations}")
+            console.print(f"  平均综合评分: {batch_result.average_scores.total_score:.1f}")
+            console.print(f"  平均等级: {batch_result.average_scores.grade}")
+            console.print(f"  评分标准差: {batch_result.evaluation_statistics.get('score_std', 0):.2f}")
+            console.print(f"  评分范围: {batch_result.evaluation_statistics.get('score_range', (0, 0))}")
+            
+            # 评分分布
+            console.print(f"\n[bold]📊 评分分布[/bold]")
+            for grade, count in sorted(batch_result.score_distribution.items()):
+                percentage = count / batch_result.total_evaluations * 100
+                console.print(f"  {grade}级: {count}个 ({percentage:.1f}%)")
+            
+            # 最佳和最差结果
+            if batch_result.best_results:
+                console.print(f"\n[bold]🏆 最佳结果[/bold]")
+                for i, result in enumerate(batch_result.best_results[:3], 1):
+                    preview = result.evaluated_text[:100] + "..." if len(result.evaluated_text) > 100 else result.evaluated_text
+                    console.print(f"  {i}. 评分: {result.similarity_scores.total_score:.1f} - {preview}")
+            
+            if batch_result.worst_results:
+                console.print(f"\n[bold]⚠️ 需要改进[/bold]")
+                for i, result in enumerate(batch_result.worst_results[:3], 1):
+                    preview = result.evaluated_text[:100] + "..." if len(result.evaluated_text) > 100 else result.evaluated_text
+                    console.print(f"  {i}. 评分: {result.similarity_scores.total_score:.1f} - {preview}")
+        
+        # 单文本评估模式
+        else:
+            # 获取要评估的文本
+            if file:
+                with open(file, 'r', encoding='utf-8') as f:
+                    text_content = f.read()
+                console.print(f"[green]从文件加载文本: {file}[/green]")
+            elif text:
+                text_content = text
+            else:
+                console.print("[red]错误: 请提供要评估的文本内容或文件路径[/red]")
+                return
+            
+            # 显示文本预览
+            preview = text_content[:300] + "..." if len(text_content) > 300 else text_content
+            console.print(Panel(
+                f"[bold]待评估文本:[/bold]\n{preview}",
+                title="文本预览",
+                border_style="blue"
+            ))
+            
+            # 执行评估
+            with Progress(
+                SpinnerColumn(),
+                TextColumn("[progress.description]{task.description}"),
+                console=console
+            ) as progress:
+                task = progress.add_task("正在进行风格相似度评估...", total=None)
+                evaluation = evaluator.evaluate_similarity(
+                    text=text_content,
+                    original_text=original,
+                    detailed=detailed
+                )
+                progress.update(task, description="评估完成！")
+            
+            console.print("[green]✅ 风格相似度评估完成![/green]")
+            _display_evaluation_result(evaluation, console, threshold)
+        
+        # 生成评估报告
+        if report:
+            if 'batch_result' in locals():
+                evaluator.generate_evaluation_report(report, batch_result)
+            else:
+                evaluator.generate_evaluation_report(report)
+            console.print(f"\n[green]✅ 评估报告已生成: {report}[/green]")
+        
+        # 查看评估历史
+        if history:
+            stats = evaluator.get_evaluation_statistics()
+            if stats:
+                console.print(f"\n[bold]📈 评估历史统计[/bold]")
+                console.print(f"  总评估次数: {stats['total_evaluations']}")
+                console.print(f"  平均评分: {stats['average_score']:.1f}")
+                console.print(f"  评分标准差: {stats['score_std']:.2f}")
+                console.print(f"  评分范围: {stats['score_range']}")
+                
+                # 等级分布
+                console.print(f"\n[bold]📊 历史评分分布[/bold]")
+                for grade, count in sorted(stats['grade_distribution'].items()):
+                    console.print(f"  {grade}级: {count}次")
+            else:
+                console.print("[yellow]暂无评估历史记录[/yellow]")
+        
+        # 保存评估历史
+        if save_history:
+            evaluator.save_evaluation_history(save_history)
+            console.print(f"\n[green]✅ 评估历史已保存: {save_history}[/green]")
+        
+        console.print(f"\n📊 风格相似度评估完成！")
+        
+    except Exception as e:
+        console.print(f"[red]风格评估失败: {e}[/red]")
+        logger.error(f"风格评估失败: {e}")
+
+
+def _display_evaluation_result(evaluation, console, threshold):
+    """显示评估结果的辅助函数"""
+    scores = evaluation.similarity_scores
+    
+    # 显示评估结果
+    console.print("\n" + "="*80)
+    console.print("[bold green]📊 风格相似度评估结果[/bold green]")
+    console.print("="*80)
+    
+    # 综合评分
+    score_color = "green" if scores.total_score >= threshold else "yellow" if scores.total_score >= 50 else "red"
+    console.print(f"\n[bold]🎯 综合评分: [{score_color}]{scores.total_score:.1f}/100 ({scores.grade}级)[/{score_color}][/bold]")
+    
+    # 各维度评分
+    console.print(f"\n[bold]📈 详细维度评分[/bold]")
+    console.print(f"  📝 词汇相似度: {scores.vocabulary_similarity:.3f} ({scores.vocabulary_similarity * 100:.1f}%)")
+    console.print(f"  📖 句式相似度: {scores.sentence_similarity:.3f} ({scores.sentence_similarity * 100:.1f}%)")
+    console.print(f"  🎭 修辞相似度: {scores.rhetorical_similarity:.3f} ({scores.rhetorical_similarity * 100:.1f}%)")
+    console.print(f"  👤 称谓相似度: {scores.addressing_similarity:.3f} ({scores.addressing_similarity * 100:.1f}%)")
+    console.print(f"  🎨 整体风格相似度: {scores.overall_style_similarity:.3f} ({scores.overall_style_similarity * 100:.1f}%)")
+    
+    # 改进建议
+    if evaluation.improvement_suggestions:
+        console.print(f"\n[bold]💡 改进建议[/bold]")
+        for i, suggestion in enumerate(evaluation.improvement_suggestions, 1):
+            console.print(f"  {i}. {suggestion}")
+    
+    # 详细分析
+    if evaluation.detailed_analysis:
+        analysis = evaluation.detailed_analysis
+        console.print(f"\n[bold]🔍 详细分析[/bold]")
+        
+        if 'text_statistics' in analysis:
+            stats = analysis['text_statistics']
+            console.print(f"  文本统计: {stats['total_characters']}字符, {stats['total_words']}词, {stats['unique_words']}唯一词")
+        
+        if 'vocabulary_analysis' in analysis:
+            vocab = analysis['vocabulary_analysis']
+            console.print(f"  词汇分析: 古典词汇比例 {vocab['classical_word_ratio']:.2%}, 现代词汇 {vocab['modern_words_detected']}个")
+        
+        if 'style_comparison' in analysis:
+            comp = analysis['style_comparison']
+            console.print(f"  与原著对比:")
+            for metric, value in comp.items():
+                console.print(f"    {metric}: {value}")
+    
+    # 评估耗时
+    console.print(f"\n[dim]⏱️ 评估耗时: {evaluation.evaluation_time:.3f}秒[/dim]")
 
 
 if __name__ == "__main__":

@@ -14,9 +14,9 @@
 from .classical_style_analyzer import ClassicalStyleAnalyzer, StyleFeatures, VocabularyFeatures, SentenceFeatures, RhetoricalFeatures, AddressingFeatures
 from .style_template_library import StyleTemplateLibrary, DialogueTemplate, NarrativeTemplate, SceneTemplate, RhetoricalTemplate
 from .intelligent_style_converter import IntelligentStyleConverter, ConversionResult, ConversionConfig
+from .style_similarity_evaluator import StyleSimilarityEvaluator, SimilarityScores, EvaluationResult, BatchEvaluationResult
 
 # TODO: 后续阶段实现的模块
-# from .style_similarity_evaluator import StyleSimilarityEvaluator  
 # from .realtime_style_optimizer import RealtimeStyleOptimizer
 
 __all__ = [
@@ -40,8 +40,13 @@ __all__ = [
     'ConversionResult',
     'ConversionConfig',
     
-    # 第四阶段（待实现）
-    # 'StyleSimilarityEvaluator',
+    # 第四阶段：风格相似度评估器 ✅ 已实现
+    'StyleSimilarityEvaluator',
+    'SimilarityScores',
+    'EvaluationResult',
+    'BatchEvaluationResult',
+    
+    # 第五阶段（待实现）
     # 'RealtimeStyleOptimizer'
 ]
 
@@ -55,4 +60,8 @@ def create_style_template_library(style_data_path: str = "data/processed/style_t
 
 def create_intelligent_converter(analyzer: ClassicalStyleAnalyzer = None, template_library: StyleTemplateLibrary = None):
     """创建智能文风转换器实例"""
-    return IntelligentStyleConverter(analyzer, template_library) 
+    return IntelligentStyleConverter(analyzer, template_library)
+
+def create_style_similarity_evaluator(analyzer: ClassicalStyleAnalyzer = None):
+    """创建风格相似度评估器实例"""
+    return StyleSimilarityEvaluator(analyzer) 
