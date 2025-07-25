@@ -13,9 +13,9 @@
 
 from .classical_style_analyzer import ClassicalStyleAnalyzer, StyleFeatures, VocabularyFeatures, SentenceFeatures, RhetoricalFeatures, AddressingFeatures
 from .style_template_library import StyleTemplateLibrary, DialogueTemplate, NarrativeTemplate, SceneTemplate, RhetoricalTemplate
+from .intelligent_style_converter import IntelligentStyleConverter, ConversionResult, ConversionConfig
 
 # TODO: 后续阶段实现的模块
-# from .intelligent_style_converter import IntelligentStyleConverter
 # from .style_similarity_evaluator import StyleSimilarityEvaluator  
 # from .realtime_style_optimizer import RealtimeStyleOptimizer
 
@@ -35,8 +35,12 @@ __all__ = [
     'SceneTemplate',
     'RhetoricalTemplate',
     
-    # 第三阶段和第四阶段（待实现）
-    # 'IntelligentStyleConverter',
+    # 第三阶段：智能文风转换器 ✅ 已实现
+    'IntelligentStyleConverter',
+    'ConversionResult',
+    'ConversionConfig',
+    
+    # 第四阶段（待实现）
     # 'StyleSimilarityEvaluator',
     # 'RealtimeStyleOptimizer'
 ]
@@ -47,4 +51,8 @@ def create_classical_analyzer(hongloumeng_path: str = "data/raw/hongloumeng_80.m
 
 def create_style_template_library(style_data_path: str = "data/processed/style_templates.json"):
     """创建文体风格库实例"""
-    return StyleTemplateLibrary(style_data_path) 
+    return StyleTemplateLibrary(style_data_path)
+
+def create_intelligent_converter(analyzer: ClassicalStyleAnalyzer = None, template_library: StyleTemplateLibrary = None):
+    """创建智能文风转换器实例"""
+    return IntelligentStyleConverter(analyzer, template_library) 

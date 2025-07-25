@@ -26,7 +26,7 @@ from data_processing import HongLouMengDataPipeline
 from knowledge_enhancement import EnhancedPrompter, TaixuProphecyExtractor, FateConsistencyChecker, create_symbolic_imagery_advisor
 from rag_retrieval import RAGPipeline, create_rag_pipeline
 from long_text_management import ChapterPlanner, ChapterInfoTransfer, create_chapter_info_transfer, ProgressTracker, ProjectStatus, ChapterStatus, create_progress_tracker
-from style_imitation import ClassicalStyleAnalyzer, StyleTemplateLibrary, create_classical_analyzer, create_style_template_library
+from style_imitation import ClassicalStyleAnalyzer, StyleTemplateLibrary, IntelligentStyleConverter, ConversionConfig, ConversionResult, create_classical_analyzer, create_style_template_library, create_intelligent_converter
 
 # 初始化控制台
 console = Console()
@@ -2042,6 +2042,198 @@ def style_templates(template_type, keyword, text_type, emotion, save, report):
     except Exception as e:
         console.print(f"[red]模板库操作失败: {e}[/red]")
         logger.error(f"模板库操作失败: {e}")
+
+
+@cli.command()
+@click.option('--text', '-t', type=str, help='要转换的文本内容')
+@click.option('--file', '-f', type=click.Path(exists=True), help='要转换的文本文件路径')
+@click.option('--output', '-o', type=str, help='转换结果保存路径')
+@click.option('--level', '-l', type=click.Choice(['low', 'medium', 'high']), default='high', help='转换强度级别')
+@click.option('--character', '-c', type=str, help='人物身份上下文 (贾宝玉/林黛玉/王熙凤等)')
+@click.option('--scene', '-s', type=str, help='场景上下文 (正式场合/私人对话/诗词场合等)')
+@click.option('--no-rhetoric', is_flag=True, help='不添加修辞手法')
+@click.option('--no-restructure', is_flag=True, help='不重构句式')
+@click.option('--batch', '-b', type=click.Path(exists=True), help='批量转换文件夹路径')
+@click.option('--report', '-r', type=str, help='生成转换报告')
+@click.option('--history', '-h', type=str, help='保存转换历史')
+def style_convert(text, file, output, level, character, scene, no_rhetoric, no_restructure, batch, report, history):
+    """🔄 智能文风转换器 - 将现代文本转换为古典风格"""
+    try:
+        console.print(Panel.fit(
+            "[bold red]🔄 智能文风转换器[/bold red]\n"
+            "[dim]将现代文本转换为红楼梦古典风格[/dim]",
+            border_style="red"
+        ))
+        
+        # 导入转换器
+        from style_imitation import create_intelligent_converter, ConversionConfig
+        
+        # 创建转换器
+        with Progress(
+            SpinnerColumn(),
+            TextColumn("[progress.description]{task.description}"),
+            console=console
+        ) as progress:
+            task = progress.add_task("初始化智能文风转换器...", total=None)
+            converter = create_intelligent_converter()
+            progress.update(task, description="转换器初始化完成！")
+        
+        # 准备转换配置
+        config = ConversionConfig(
+            vocabulary_level=level,
+            sentence_restructure=not no_restructure,
+            add_rhetorical_devices=not no_rhetoric,
+            preserve_meaning=True,
+            character_context=character,
+            scene_context=scene
+        )
+        
+        console.print(f"\n[bold]🔧 转换配置[/bold]")
+        console.print(f"  转换强度: {level}")
+        console.print(f"  句式重构: {'是' if config.sentence_restructure else '否'}")
+        console.print(f"  修辞增强: {'是' if config.add_rhetorical_devices else '否'}")
+        if character:
+            console.print(f"  人物上下文: {character}")
+        if scene:
+            console.print(f"  场景上下文: {scene}")
+        
+        results = []
+        
+        # 批量转换模式
+        if batch:
+            console.print(f"\n[bold]📁 批量转换模式[/bold]")
+            batch_path = Path(batch)
+            text_files = list(batch_path.glob("*.txt")) + list(batch_path.glob("*.md"))
+            
+            if not text_files:
+                console.print("[yellow]警告: 未找到可转换的文本文件[/yellow]")
+                return
+            
+            console.print(f"找到 {len(text_files)} 个文件待转换")
+            
+            with Progress(console=console) as progress:
+                task = progress.add_task("批量转换中...", total=len(text_files))
+                
+                for text_file in text_files:
+                    try:
+                        with open(text_file, 'r', encoding='utf-8') as f:
+                            file_content = f.read()
+                        
+                        result = converter.convert_text(file_content, config)
+                        results.append((str(text_file), result))
+                        
+                        # 保存转换结果
+                        output_file = batch_path / f"converted_{text_file.name}"
+                        with open(output_file, 'w', encoding='utf-8') as f:
+                            f.write(result.converted_text)
+                        
+                        progress.advance(task)
+                        
+                    except Exception as e:
+                        console.print(f"[red]转换文件 {text_file} 失败: {e}[/red]")
+                        progress.advance(task)
+            
+            console.print(f"[green]✅ 批量转换完成! 结果保存在: {batch_path}/converted_*[/green]")
+        
+        # 单文件转换模式
+        else:
+            # 获取要转换的文本
+            if file:
+                with open(file, 'r', encoding='utf-8') as f:
+                    text_content = f.read()
+                console.print(f"[green]从文件加载文本: {file}[/green]")
+            elif text:
+                text_content = text
+            else:
+                console.print("[red]错误: 请提供要转换的文本内容或文件路径[/red]")
+                return
+            
+            # 显示原文预览
+            preview = text_content[:300] + "..." if len(text_content) > 300 else text_content
+            console.print(Panel(
+                f"[bold]原文预览:[/bold]\n{preview}",
+                title="待转换文本",
+                border_style="blue"
+            ))
+            
+            # 执行转换
+            with Progress(
+                SpinnerColumn(),
+                TextColumn("[progress.description]{task.description}"),
+                console=console
+            ) as progress:
+                task = progress.add_task("正在进行古典文风转换...", total=None)
+                result = converter.convert_text(text_content, config)
+                progress.update(task, description="转换完成！")
+            
+            results.append(("single_conversion", result))
+            
+            # 显示转换结果
+            console.print("\n" + "="*80)
+            console.print("[bold green]🎨 文风转换结果[/bold green]")
+            console.print("="*80)
+            
+            # 转换后文本预览
+            converted_preview = result.converted_text[:300] + "..." if len(result.converted_text) > 300 else result.converted_text
+            console.print(Panel(
+                f"[bold]转换后文本:[/bold]\n{converted_preview}",
+                title="古典风格文本",
+                border_style="green"
+            ))
+            
+            # 转换统计
+            console.print(f"\n[bold]📊 转换统计[/bold]")
+            console.print(f"  原文长度: {len(text_content)} 字符")
+            console.print(f"  转换后长度: {len(result.converted_text)} 字符")
+            console.print(f"  长度变化: {(len(result.converted_text) / len(text_content) - 1) * 100:.1f}%")
+            console.print(f"  质量评分: {result.quality_score:.3f}")
+            console.print(f"  置信度: {result.confidence_score:.3f}")
+            console.print(f"  词汇替换: {len(result.vocabulary_changes)} 处")
+            console.print(f"  句式调整: {len(result.sentence_adjustments)} 处")
+            console.print(f"  修辞增强: {len(result.rhetorical_enhancements)} 处")
+            
+            # 详细转换操作
+            if len(result.vocabulary_changes) > 0:
+                console.print(f"\n[bold]📝 主要词汇替换[/bold]")
+                for i, (old_word, new_word) in enumerate(list(result.vocabulary_changes.items())[:5]):
+                    console.print(f"  {old_word} → {new_word}")
+                if len(result.vocabulary_changes) > 5:
+                    console.print(f"  ... 还有 {len(result.vocabulary_changes) - 5} 处替换")
+            
+            # 保存转换结果
+            if output:
+                with open(output, 'w', encoding='utf-8') as f:
+                    f.write(result.converted_text)
+                console.print(f"\n[green]✅ 转换结果已保存到: {output}[/green]")
+        
+        # 生成转换统计
+        if results:
+            total_conversions = len(results)
+            avg_quality = sum(r[1].quality_score for r in results) / total_conversions
+            avg_confidence = sum(r[1].confidence_score for r in results) / total_conversions
+            total_vocab_changes = sum(len(r[1].vocabulary_changes) for r in results)
+            
+            console.print(f"\n[bold]📈 整体转换统计[/bold]")
+            console.print(f"  转换次数: {total_conversions}")
+            console.print(f"  平均质量: {avg_quality:.3f}")
+            console.print(f"  平均置信度: {avg_confidence:.3f}")
+            console.print(f"  总词汇替换: {total_vocab_changes} 处")
+        
+        # 生成转换报告
+        if report:
+            converter.generate_conversion_report(report)
+            console.print(f"\n[green]✅ 转换报告已生成: {report}[/green]")
+        
+        # 保存转换历史
+        if history:
+            converter.save_conversion_history(history)
+            console.print(f"\n[green]✅ 转换历史已保存: {history}[/green]")
+        
+        console.print(f"\n🔄 智能文风转换完成！")
+        
+    except Exception as e:
+        console.print(f"[red]文风转换失败: {e}[/red]")
+        logger.error(f"文风转换失败: {e}")
 
 
 if __name__ == "__main__":
