@@ -353,17 +353,21 @@ graph LR
 - [x] **古典文风分析器**: 四维分析体系（词汇、句式、修辞、称谓）
 - [x] **文体风格模板库**: 16个专业模板（对话、叙述、场景、修辞）
 - [x] **智能文风转换器**: 现代文→古典文智能转换，四层转换算法
-- [x] **风格相似度评估器**: 多维度量化评估，与原著风格对比分析 ✅ **新突破**
+- [x] **风格相似度评估器**: 多维度量化评估，与原著风格对比分析
+- [x] **实时文风优化器**: 基于评估反馈的动态优化系统 ✅ **新突破**
 - [x] **词汇映射引擎**: 314个古典词汇智能替换，上下文感知转换
 - [x] **句式重构系统**: 古典开头词、语气词、助词的智能应用
 - [x] **修辞增强功能**: 比喻、对偶等修辞手法自动添加
 - [x] **人物语言适配**: 根据角色身份调整语言风格特色
 - [x] **批量转换能力**: 支持单文件、批量目录的高效转换
 - [x] **质量评估体系**: 转换质量评分、置信度双重量化指标
-- [x] **相似度评估系统**: 五维度评分（词汇/句式/修辞/称谓/整体风格）✅ **新突破**
+- [x] **相似度评估系统**: 五维度评分（词汇/句式/修辞/称谓/整体风格）
 - [x] **批量评估功能**: 多文本相似度批量计算和统计分析
 - [x] **评估历史追踪**: 完整评估记录、统计分析和趋势报告
-- [x] **CLI工具支持**: style-analyze、style-templates、style-convert、style-evaluate完整命令
+- [x] **迭代优化系统**: 多轮自动优化直到达到目标质量 ✅ **新突破**
+- [x] **实时质量监控**: 动态监控文风质量和自动优化触发
+- [x] **策略效果分析**: 优化策略有效性统计和反馈机制
+- [x] **CLI工具支持**: style-analyze、style-templates、style-convert、style-evaluate、style-optimize完整命令
 - [x] **详细转换记录**: 完整操作日志和质量评估报告
 
 ### 📋 长文本续写能力 (完成度: 95%) 🆕
@@ -407,12 +411,12 @@ graph LR
   - [x] 进度跟踪和状态管理 ✅ 已实现 🆕
   - [ ] 智能断点续写功能
 
-- [x] **🎨 文风仿照引擎** ✅ **阶段三完成** 🆕 **重大突破**
+- [x] **🎨 文风仿照引擎** ✅ **全面完成** 🆕 **重大突破**
   - [x] 古典文风分析器 (红楼梦原著语言特征提取) ✅ 已实现
   - [x] 文体风格库 (分情景写作模板构建) ✅ 已实现
   - [x] 智能文风转换器 (现代文→古典文转换) ✅ 已实现
-  - [x] 风格相似度评估器 (量化评估文风匹配度) ✅ **新完成**
-  - [ ] 实时文风优化器 (根据评估动态调整) 🚨 下一阶段
+  - [x] 风格相似度评估器 (量化评估文风匹配度) ✅ 已实现
+  - [x] 实时文风优化器 (根据评估动态调整) ✅ **新完成**
 
 ### 🔍 中优先级 (P1)
 - [ ] **风格一致性监控器**
@@ -967,6 +971,33 @@ python main.py style-evaluate -t "文本" --history true
 python main.py style-evaluate -t "文本" --save-history data/evaluation_history.json
 ```
 
+### 🔧 实时文风优化 🆕 **核心突破**
+```bash
+# 基础文风优化
+python main.py style-optimize -t "宝玉很着急地说：'黛玉生病了，我们赶紧去看看她吧。'"
+
+# 设定目标评分和迭代次数
+python main.py style-optimize -t "现代文本" --target-score 75 --max-iterations 3
+
+# 从文件优化并保存结果
+python main.py style-optimize -f input.txt -o optimized_output.txt
+
+# 激进模式优化（更强烈的转换）
+python main.py style-optimize -t "文本" --aggressive --target-score 80
+
+# 批量优化文件夹中的所有文本
+python main.py style-optimize -b data/generated --target-score 65
+
+# 实时质量监控模式
+python main.py style-optimize --monitor -t "文本内容" --quality-threshold 60
+
+# 生成优化报告和历史记录
+python main.py style-optimize -t "文本" -r reports/optimization.md --save-history data/opt_history.json
+
+# 查看优化历史统计
+python main.py style-optimize -t "文本" --history true
+```
+
 ### 📋 章节规划 🆕
 ```bash
 # 生成40回完整规划
@@ -1132,6 +1163,32 @@ print(f"评分分布: {batch_result.score_distribution}")
 stats = style_evaluator.get_evaluation_statistics()
 style_evaluator.generate_evaluation_report("reports/evaluation_analysis.md")
 style_evaluator.save_evaluation_history("data/evaluation_history.json")
+
+# 🆕 实时文风优化器 **核心突破**
+
+# 基础文风优化
+text = "宝玉很着急地说：'黛玉生病了，我们赶紧去看看她吧。'"
+config = OptimizationConfig(target_score=70.0, max_iterations=5)
+session = style_optimizer.optimize_text(text, config)
+print(f"优化结果: {session.final_text}")
+print(f"改进幅度: {session.total_improvement:.1f}分")
+print(f"迭代次数: {session.iterations_used}")
+
+# 批量优化
+texts = ["文本1", "文本2", "文本3"]
+batch_result = style_optimizer.batch_optimize(texts, config)
+print(f"成功优化: {batch_result.successful_optimizations}/{batch_result.total_texts}")
+print(f"平均改进: {batch_result.average_improvement:.1f}分")
+
+# 实时质量监控
+monitoring_data = style_optimizer.monitor_quality_realtime(text, quality_threshold=60.0)
+print(f"监控状态: {monitoring_data['final_status']}")
+print(f"告警数量: {len(monitoring_data['alerts'])}")
+
+# 获取优化统计和生成报告
+stats = style_optimizer.get_optimization_statistics()
+style_optimizer.generate_optimization_report("reports/optimization_analysis.md")
+style_optimizer.save_optimization_history("data/optimization_history.json")
 ```
 
 ### 🎯 项目里程碑 🆕
@@ -1146,27 +1203,28 @@ style_evaluator.save_evaluation_history("data/evaluation_history.json")
 - ✅ **技术支撑完备**: RAG检索、知识增强、上下文压缩全套工具
 - ✅ **进度管理系统**: 实时跟踪、智能统计、自动报告、状态备份
 
-**🎉 重大突破完成** (文风仿照引擎第三阶段): 
+**🎉 重大突破完成** (文风仿照引擎全面完成): 
 - **✅ 古典文风分析器**: 已实现四维分析体系，可量化评估文风差异
 - **✅ 文体风格模板库**: 已构建16个专业模板，涵盖对话、叙述、场景、修辞
 - **✅ 智能文风转换器**: 现代文→古典文智能转换，四层算法体系
-- **✅ 风格相似度评估器**: 多维度量化评估系统，与原著风格对比分析 🆕 **核心突破**
-- **📊 评估效果验证**: 五维度评分体系，批量评估能力，评估历史追踪
-- **🛠️ 完整工具链**: style-analyze、style-templates、style-convert、style-evaluate四大CLI命令
+- **✅ 风格相似度评估器**: 多维度量化评估系统，与原著风格对比分析
+- **✅ 实时文风优化器**: 基于评估反馈的动态优化系统 🆕 **核心突破**
+- **📊 优化效果验证**: 迭代优化算法，实时质量监控，策略效果分析
+- **🛠️ 完整工具链**: style-analyze、style-templates、style-convert、style-evaluate、style-optimize五大CLI命令
 
-**🎯 评估器核心能力**: 
-- **📊 五维度评分**: 词汇/句式/修辞/称谓/整体风格全面评估
-- **🔍 原著基准对比**: 与红楼梦原著590k字符基准库智能对比
-- **📈 批量评估统计**: 多文本相似度批量计算和分布分析
-- **📋 详细改进建议**: 智能生成具体的文风优化建议
-- **📝 评估历史追踪**: 完整评估记录、统计分析和趋势报告
-- **🔄 转换器集成**: 与智能文风转换器无缝集成，实时质量反馈
+**🎯 优化器核心能力**: 
+- **🔄 迭代优化循环**: 多轮自动优化直到达到目标质量标准
+- **📊 智能策略选择**: 基于评估结果动态选择最佳优化策略
+- **⚡ 实时质量监控**: 动态监控文风质量并自动触发优化
+- **📈 批量优化处理**: 多文本并行优化和效果统计分析
+- **🎯 策略效果反馈**: 优化策略有效性统计和学习机制
+- **🔗 完整闭环系统**: 分析→转换→评估→优化的完整文风处理流水线
 
 **🚀 下一阶段开发重点**: 
-- **🔧 实时文风优化器**: 根据评估结果动态调整转换策略
-- **🎯 集成应用**: 将评估器集成到续写流水线中
-- **🔍 风格一致性监控**: 文风相似度实时检测和调整
+- **🎯 集成应用**: 将文风优化器集成到续写流水线中
+- **🔍 风格一致性监控**: 长文本续写过程中的风格一致性保障
 - **📊 质量控制流水线**: 自动化文风质量监控和优化
+- **🤖 智能学习机制**: 基于历史数据优化策略选择算法
 
 ---
 
@@ -1191,9 +1249,9 @@ style_evaluator.save_evaluation_history("data/evaluation_history.json")
 ---
 
 *最后更新: 2025-01-24*  
-*项目状态: 🚀 风格相似度评估器重大突破！文风质量量化评估体系全面实现*  
-*完成度: P0级别功能100%达成，文风仿照引擎完整闭环已实现*  
-*技术栈: LangChain + Qwen3 + Claude-4 + 太虚幻境知识库 + 智能章节规划器 + 信息传递机制 + 进度跟踪器 + 🆕文风仿照引擎*  
-*已完成: ✅ 古典文风分析器 | ✅ 文体风格模板库 | ✅ 智能文风转换器 | ✅ 风格相似度评估器*  
+*项目状态: 🚀 实时文风优化器重大突破！文风仿照引擎完整闭环全面实现*  
+*完成度: P0级别功能100%达成，红楼梦续写核心技术栈完全就绪*  
+*技术栈: LangChain + Qwen3 + Claude-4 + 太虚幻境知识库 + 智能章节规划器 + 信息传递机制 + 进度跟踪器 + 🆕完整文风仿照引擎*  
+*已完成: ✅ 古典文风分析器 | ✅ 文体风格模板库 | ✅ 智能文风转换器 | ✅ 风格相似度评估器 | ✅ 实时文风优化器*  
 *架构图优化: 高对比度设计，适配多种显示环境*  
-*核心突破: 🔄 章节信息传递机制 | 📊 状态智能管理 | ✅ 一致性检查 | 🎯 写作指导生成 | 📈 进度跟踪管理 | 🎨 **文风仿照引擎** | 📊 **风格相似度评估***
+*核心突破: 🔄 章节信息传递机制 | 📊 状态智能管理 | ✅ 一致性检查 | 🎯 写作指导生成 | 📈 进度跟踪管理 | 🎨 **文风仿照引擎** | 🔧 **实时文风优化***

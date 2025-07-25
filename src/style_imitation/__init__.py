@@ -15,9 +15,7 @@ from .classical_style_analyzer import ClassicalStyleAnalyzer, StyleFeatures, Voc
 from .style_template_library import StyleTemplateLibrary, DialogueTemplate, NarrativeTemplate, SceneTemplate, RhetoricalTemplate
 from .intelligent_style_converter import IntelligentStyleConverter, ConversionResult, ConversionConfig
 from .style_similarity_evaluator import StyleSimilarityEvaluator, SimilarityScores, EvaluationResult, BatchEvaluationResult
-
-# TODO: 后续阶段实现的模块
-# from .realtime_style_optimizer import RealtimeStyleOptimizer
+from .realtime_style_optimizer import RealtimeStyleOptimizer, OptimizationConfig, OptimizationSession, BatchOptimizationResult, OptimizationResult
 
 __all__ = [
     # 第一阶段：古典文风分析器
@@ -46,8 +44,12 @@ __all__ = [
     'EvaluationResult',
     'BatchEvaluationResult',
     
-    # 第五阶段（待实现）
-    # 'RealtimeStyleOptimizer'
+    # 第五阶段：实时文风优化器 ✅ 已实现
+    'RealtimeStyleOptimizer',
+    'OptimizationConfig',
+    'OptimizationSession',
+    'BatchOptimizationResult',
+    'OptimizationResult'
 ]
 
 def create_classical_analyzer(hongloumeng_path: str = "data/raw/hongloumeng_80.md"):
@@ -64,4 +66,10 @@ def create_intelligent_converter(analyzer: ClassicalStyleAnalyzer = None, templa
 
 def create_style_similarity_evaluator(analyzer: ClassicalStyleAnalyzer = None):
     """创建风格相似度评估器实例"""
-    return StyleSimilarityEvaluator(analyzer) 
+    return StyleSimilarityEvaluator(analyzer)
+
+def create_realtime_style_optimizer(converter: IntelligentStyleConverter = None, 
+                                   evaluator: StyleSimilarityEvaluator = None,
+                                   config: OptimizationConfig = None):
+    """创建实时文风优化器实例"""
+    return RealtimeStyleOptimizer(converter, evaluator, config) 

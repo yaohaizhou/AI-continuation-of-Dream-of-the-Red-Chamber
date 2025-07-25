@@ -26,7 +26,7 @@ from data_processing import HongLouMengDataPipeline
 from knowledge_enhancement import EnhancedPrompter, TaixuProphecyExtractor, FateConsistencyChecker, create_symbolic_imagery_advisor
 from rag_retrieval import RAGPipeline, create_rag_pipeline
 from long_text_management import ChapterPlanner, ChapterInfoTransfer, create_chapter_info_transfer, ProgressTracker, ProjectStatus, ChapterStatus, create_progress_tracker
-from style_imitation import ClassicalStyleAnalyzer, StyleTemplateLibrary, IntelligentStyleConverter, ConversionConfig, ConversionResult, StyleSimilarityEvaluator, SimilarityScores, EvaluationResult, BatchEvaluationResult, create_classical_analyzer, create_style_template_library, create_intelligent_converter, create_style_similarity_evaluator
+from style_imitation import ClassicalStyleAnalyzer, StyleTemplateLibrary, IntelligentStyleConverter, ConversionConfig, ConversionResult, StyleSimilarityEvaluator, SimilarityScores, EvaluationResult, BatchEvaluationResult, RealtimeStyleOptimizer, OptimizationConfig, OptimizationSession, BatchOptimizationResult, OptimizationResult, create_classical_analyzer, create_style_template_library, create_intelligent_converter, create_style_similarity_evaluator, create_realtime_style_optimizer
 
 # 初始化控制台
 console = Console()
@@ -2481,6 +2481,288 @@ def _display_evaluation_result(evaluation, console, threshold):
     
     # 评估耗时
     console.print(f"\n[dim]⏱️ 评估耗时: {evaluation.evaluation_time:.3f}秒[/dim]")
+
+
+@cli.command()
+@click.option('--text', '-t', type=str, help='要优化的文本内容')
+@click.option('--file', '-f', type=click.Path(exists=True), help='要优化的文本文件路径')
+@click.option('--output', '-o', type=str, help='优化结果保存路径')
+@click.option('--target-score', type=float, default=70.0, help='目标评分（默认70分）')
+@click.option('--max-iterations', type=int, default=5, help='最大迭代次数（默认5次）')
+@click.option('--improvement-threshold', type=float, default=2.0, help='改进阈值（默认2分）')
+@click.option('--aggressive', is_flag=True, help='启用激进模式')
+@click.option('--batch', '-b', type=click.Path(exists=True), help='批量优化文件夹路径')
+@click.option('--report', '-r', type=str, help='生成优化报告')
+@click.option('--history', '-h', type=str, help='查看优化历史记录')
+@click.option('--save-history', type=str, help='保存优化历史到指定文件')
+@click.option('--monitor', is_flag=True, help='启用实时质量监控')
+@click.option('--quality-threshold', type=float, default=70.0, help='质量监控阈值')
+def style_optimize(text, file, output, target_score, max_iterations, improvement_threshold, 
+                  aggressive, batch, report, history, save_history, monitor, quality_threshold):
+    """🔧 实时文风优化器 - 基于评估反馈的动态文风优化"""
+    try:
+        console.print(Panel.fit(
+            "[bold red]🔧 实时文风优化器[/bold red]\n"
+            "[dim]基于评估反馈的动态文风优化[/dim]",
+            border_style="red"
+        ))
+        
+        # 导入优化器
+        from style_imitation import create_realtime_style_optimizer, OptimizationConfig
+        
+        # 创建优化器
+        with Progress(
+            SpinnerColumn(),
+            TextColumn("[progress.description]{task.description}"),
+            console=console
+        ) as progress:
+            task = progress.add_task("初始化实时文风优化器...", total=None)
+            optimizer = create_realtime_style_optimizer()
+            progress.update(task, description="优化器初始化完成！")
+        
+        # 创建优化配置
+        config = OptimizationConfig(
+            target_score=target_score,
+            max_iterations=max_iterations,
+            improvement_threshold=improvement_threshold,
+            aggressive_mode=aggressive,
+            preserve_meaning=True,
+            enable_rhetorical_enhancement=True
+        )
+        
+        console.print(f"\n[bold]🔧 优化配置[/bold]")
+        console.print(f"  目标评分: {target_score}")
+        console.print(f"  最大迭代次数: {max_iterations}")
+        console.print(f"  改进阈值: {improvement_threshold}")
+        console.print(f"  激进模式: {'是' if aggressive else '否'}")
+        
+        # 实时质量监控模式
+        if monitor:
+            # 获取要监控的文本
+            if file:
+                with open(file, 'r', encoding='utf-8') as f:
+                    text_content = f.read()
+                console.print(f"[green]从文件加载文本: {file}[/green]")
+            elif text:
+                text_content = text
+            else:
+                console.print("[red]错误: 请提供要监控的文本内容或文件路径[/red]")
+                return
+            
+            console.print(f"\n[bold]📊 实时质量监控模式[/bold]")
+            console.print(f"质量阈值: {quality_threshold}")
+            
+            # 执行实时监控
+            monitoring_data = optimizer.monitor_quality_realtime(
+                text_content, 
+                quality_threshold=quality_threshold
+            )
+            
+            # 显示监控结果
+            console.print(f"\n[bold]📈 监控结果[/bold]")
+            console.print(f"  监控时长: {monitoring_data['total_monitoring_time']:.3f}秒")
+            console.print(f"  最终状态: {monitoring_data['final_status']}")
+            console.print(f"  质量时间线: {len(monitoring_data['quality_timeline'])} 个数据点")
+            console.print(f"  告警数量: {len(monitoring_data['alerts'])}")
+            
+            # 显示告警信息
+            if monitoring_data['alerts']:
+                console.print(f"\n[bold]🚨 告警信息[/bold]")
+                for alert in monitoring_data['alerts']:
+                    severity_color = {
+                        'info': 'blue',
+                        'warning': 'yellow', 
+                        'error': 'red'
+                    }.get(alert['severity'], 'white')
+                    console.print(f"  [{severity_color}]{alert['type']}[/{severity_color}]: {alert['message']}")
+            
+            return
+        
+        # 批量优化模式
+        if batch:
+            console.print(f"\n[bold]📁 批量优化模式[/bold]")
+            batch_path = Path(batch)
+            text_files = list(batch_path.glob("*.txt")) + list(batch_path.glob("*.md"))
+            
+            if not text_files:
+                console.print("[yellow]警告: 未找到可优化的文本文件[/yellow]")
+                return
+            
+            console.print(f"找到 {len(text_files)} 个文件待优化")
+            
+            # 读取所有文本
+            texts = []
+            with Progress(console=console) as progress:
+                task = progress.add_task("读取文件中...", total=len(text_files))
+                
+                for text_file in text_files:
+                    try:
+                        with open(text_file, 'r', encoding='utf-8') as f:
+                            file_content = f.read()
+                        texts.append(file_content)
+                        progress.advance(task)
+                        
+                    except Exception as e:
+                        console.print(f"[red]读取文件 {text_file} 失败: {e}[/red]")
+                        progress.advance(task)
+            
+            # 执行批量优化
+            console.print("\n[yellow]开始批量优化...[/yellow]")
+            batch_result = optimizer.batch_optimize(texts, config)
+            
+            # 显示批量优化结果
+            console.print("\n" + "="*80)
+            console.print("[bold green]🎯 批量优化结果[/bold green]")
+            console.print("="*80)
+            
+            console.print(f"\n[bold]📈 整体统计[/bold]")
+            console.print(f"  处理文本数: {batch_result.total_texts}")
+            console.print(f"  成功优化数: {batch_result.successful_optimizations}")
+            console.print(f"  成功率: {batch_result.processing_statistics['success_rate']:.1%}")
+            console.print(f"  平均改进: {batch_result.average_improvement:.1f}分")
+            console.print(f"  总处理时间: {batch_result.processing_statistics['total_time']:.1f}秒")
+            console.print(f"  平均迭代次数: {batch_result.processing_statistics['average_iterations']:.1f}")
+            
+            # 策略效果排名
+            if batch_result.strategy_effectiveness:
+                console.print(f"\n[bold]📊 策略效果排名[/bold]")
+                for strategy, effectiveness in sorted(batch_result.strategy_effectiveness.items(), key=lambda x: x[1], reverse=True):
+                    console.print(f"  • {strategy.replace('_', ' ').title()}: {effectiveness:.1f}分平均改进")
+            
+            # 保存批量优化结果
+            if output:
+                for i, session in enumerate(batch_result.optimization_sessions):
+                    output_file = Path(output) / f"optimized_{i+1}.txt"
+                    output_file.parent.mkdir(parents=True, exist_ok=True)
+                    with open(output_file, 'w', encoding='utf-8') as f:
+                        f.write(session.final_text)
+                console.print(f"\n[green]✅ 批量优化结果已保存到: {output}[/green]")
+        
+        # 单文本优化模式
+        else:
+            # 获取要优化的文本
+            if file:
+                with open(file, 'r', encoding='utf-8') as f:
+                    text_content = f.read()
+                console.print(f"[green]从文件加载文本: {file}[/green]")
+            elif text:
+                text_content = text
+            else:
+                console.print("[red]错误: 请提供要优化的文本内容或文件路径[/red]")
+                return
+            
+            # 显示原文预览
+            preview = text_content[:300] + "..." if len(text_content) > 300 else text_content
+            console.print(Panel(
+                f"[bold]待优化文本:[/bold]\n{preview}",
+                title="原始文本",
+                border_style="blue"
+            ))
+            
+            # 执行优化
+            with Progress(
+                SpinnerColumn(),
+                TextColumn("[progress.description]{task.description}"),
+                console=console
+            ) as progress:
+                task = progress.add_task("正在进行实时文风优化...", total=None)
+                session = optimizer.optimize_text(text_content, config)
+                progress.update(task, description="优化完成！")
+            
+            console.print("[green]✅ 文风优化完成![/green]")
+            
+            # 显示优化结果
+            console.print("\n" + "="*80)
+            console.print("[bold green]🎨 优化结果[/bold green]")
+            console.print("="*80)
+            
+            # 优化后文本预览
+            optimized_preview = session.final_text[:300] + "..." if len(session.final_text) > 300 else session.final_text
+            console.print(Panel(
+                f"[bold]优化后文本:[/bold]\n{optimized_preview}",
+                title="优化结果",
+                border_style="green"
+            ))
+            
+            # 优化统计
+            console.print(f"\n[bold]📊 优化统计[/bold]")
+            console.print(f"  原文长度: {len(text_content)} 字符")
+            console.print(f"  优化后长度: {len(session.final_text)} 字符")
+            console.print(f"  长度变化: {(len(session.final_text) / len(text_content) - 1) * 100:.1f}%")
+            console.print(f"  初始评分: {session.initial_score:.1f}")
+            console.print(f"  最终评分: {session.final_score:.1f}")
+            console.print(f"  总改进: {session.total_improvement:+.1f}分")
+            console.print(f"  迭代次数: {session.iterations_used}")
+            console.print(f"  优化状态: {session.result_status.value}")
+            console.print(f"  处理时间: {session.total_time:.3f}秒")
+            
+            # 使用的策略
+            if session.strategies_used:
+                console.print(f"\n[bold]🎯 使用的优化策略[/bold]")
+                for strategy in set(session.strategies_used):
+                    console.print(f"  • {strategy.value.replace('_', ' ').title()}")
+            
+            # 优化步骤详情
+            if session.optimization_steps:
+                console.print(f"\n[bold]📝 优化步骤详情[/bold]")
+                for step in session.optimization_steps:
+                    improvement_color = "green" if step.improvement > 0 else "red" if step.improvement < 0 else "yellow"
+                    console.print(
+                        f"  第{step.iteration}轮: {step.strategy.value.replace('_', ' ').title()} - "
+                        f"[{improvement_color}]{step.improvement:+.1f}分[/{improvement_color}] "
+                        f"({step.before_score:.1f} → {step.after_score:.1f})"
+                    )
+            
+            # 保存优化结果
+            if output:
+                with open(output, 'w', encoding='utf-8') as f:
+                    f.write(session.final_text)
+                console.print(f"\n[green]✅ 优化结果已保存到: {output}[/green]")
+        
+        # 生成优化报告
+        if report:
+            if 'batch_result' in locals():
+                optimizer.generate_optimization_report(report, batch_result)
+            else:
+                optimizer.generate_optimization_report(report)
+            console.print(f"\n[green]✅ 优化报告已生成: {report}[/green]")
+        
+        # 查看优化历史
+        if history:
+            stats = optimizer.get_optimization_statistics()
+            if stats:
+                console.print(f"\n[bold]📈 优化历史统计[/bold]")
+                console.print(f"  总优化次数: {stats['total_optimizations']}")
+                console.print(f"  成功优化次数: {stats['successful_optimizations']}")
+                console.print(f"  成功率: {stats['success_rate']:.1%}")
+                console.print(f"  平均改进: {stats['average_improvement']:.1f}")
+                console.print(f"  平均迭代次数: {stats['average_iterations']:.1f}")
+                console.print(f"  平均处理时间: {stats['average_time']:.3f}秒")
+                
+                # 策略统计
+                strategy_stats = stats.get('strategy_statistics', {})
+                if strategy_stats:
+                    console.print(f"\n[bold]📊 策略效果统计[/bold]")
+                    for strategy, stat in sorted(strategy_stats.items(), key=lambda x: x[1]['average_improvement'], reverse=True):
+                        console.print(
+                            f"  • {strategy.replace('_', ' ').title()}: "
+                            f"使用{stat['usage_count']}次, "
+                            f"平均改进{stat['average_improvement']:.1f}分, "
+                            f"成功率{stat['success_rate']:.1%}"
+                        )
+            else:
+                console.print("[yellow]暂无优化历史记录[/yellow]")
+        
+        # 保存优化历史
+        if save_history:
+            optimizer.save_optimization_history(save_history)
+            console.print(f"\n[green]✅ 优化历史已保存: {save_history}[/green]")
+        
+        console.print(f"\n🔧 实时文风优化完成！")
+        
+    except Exception as e:
+        console.print(f"[red]文风优化失败: {e}[/red]")
+        logger.error(f"文风优化失败: {e}")
 
 
 if __name__ == "__main__":
