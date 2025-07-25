@@ -11,6 +11,15 @@ from dataclasses import dataclass
 import json
 import logging
 from pathlib import Path
+import os
+
+# 添加LLM支持
+try:
+    from langchain_openai import ChatOpenAI
+    from langchain.schema import HumanMessage, SystemMessage
+    LLM_AVAILABLE = True
+except ImportError:
+    LLM_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
 
@@ -49,20 +58,67 @@ class ContextCompressor:
     4. 动态调整压缩比例以适应上下文限制
     """
     
-    def __init__(self, max_context_length: int = 8000):
+    def __init__(self, max_context_length: int = 8000, use_llm: bool = True):
         """
         初始化上下文压缩器
         
         Args:
             max_context_length: 最大上下文长度（字符数）
+            use_llm: 是否使用LLM进行智能摘要
         """
         self.max_context_length = max_context_length
+        self.use_llm = use_llm and LLM_AVAILABLE
+        
+        # 初始化LLM（如果可用）
+        self.llm = None
+        if self.use_llm:
+            self._init_llm()
+        
         self.compression_strategies = [
             self._extract_key_events,
             self._extract_character_states_from_text,
             self._extract_plot_developments,
             self._extract_important_dialogues
         ]
+        
+        # 状态文件路径
+        self.state_file = "data/processed/context_compressor_state.json"
+        self._ensure_state_dir()
+    
+    def _init_llm(self) -> None:
+        """初始化LLM"""
+        try:
+            # 尝试从环境变量获取API密钥
+            api_key = os.getenv('OPENAI_API_KEY')
+            base_url = os.getenv('OPENAI_BASE_URL', 'https://api.openai.com/v1')
+            
+            if not api_key:
+                logger.warning("OPENAI_API_KEY未设置，将使用规则方法进行摘要")
+                self.use_llm = False
+                return
+            
+            self.llm = ChatOpenAI(
+                model=self.config.model.model_name,
+                temperature=self.config.model.temperature,
+                max_tokens=self.config.model.max_tokens,
+                openai_api_key=api_key,
+                openai_api_base=base_url
+            )
+            
+            logger.info("LLM初始化成功，将使用智能摘要功能")
+            
+        except Exception as e:
+            logger.warning(f"LLM初始化失败，将使用规则方法: {e}")
+            self.use_llm = False
+    
+    def _ensure_state_dir(self) -> None:
+        """确保状态文件目录存在"""
+        try:
+            state_dir = os.path.dirname(self.state_file)
+            if state_dir and not os.path.exists(state_dir):
+                os.makedirs(state_dir, exist_ok=True)
+        except Exception as e:
+            logger.error(f"创建状态目录失败: {e}")
     
     def compress_chapters(self, chapters: List[str], target_chapter: int) -> CompressedContext:
         """
@@ -119,14 +175,34 @@ class ContextCompressor:
         """
         为单个章节创建摘要
         
-        TODO: 这里需要集成LLM来生成智能摘要
-        目前使用规则方法作为占位符
+        现在集成LLM来生成智能摘要，优先使用AI，回退到规则方法
         """
         # 提取章节标题（假设格式：第X回 标题）
         lines = chapter_text.split('\n')
         title = lines[0] if lines else f"第{chapter_num}回"
         
-        # 分析文本提取关键信息
+        if self.use_llm and self.llm:
+            try:
+                # 使用LLM生成智能摘要
+                summary_data = self._create_llm_summary(chapter_text, chapter_num, title)
+                
+                return ChapterSummary(
+                    chapter_num=chapter_num,
+                    title=title,
+                    key_events=summary_data.get('key_events', []),
+                    character_states=summary_data.get('character_states', {}),
+                    important_dialogues=summary_data.get('important_dialogues', []),
+                    plot_developments=summary_data.get('plot_developments', []),
+                    emotional_tone=summary_data.get('emotional_tone', '平和'),
+                    word_count=len(chapter_text)
+                )
+                
+            except Exception as e:
+                logger.warning(f"LLM摘要生成失败，回退到规则方法: {e}")
+                # 回退到规则方法
+                pass
+        
+        # 规则方法（作为备用）
         key_events = self._extract_key_events(chapter_text)
         character_states = self._extract_character_states_from_text(chapter_text)
         important_dialogues = self._extract_important_dialogues(chapter_text)
@@ -143,6 +219,82 @@ class ContextCompressor:
             emotional_tone=emotional_tone,
             word_count=len(chapter_text)
         )
+    
+    def _create_llm_summary(self, chapter_text: str, chapter_num: int, title: str) -> Dict[str, Any]:
+        """使用LLM创建智能章节摘要"""
+        
+        # 如果章节文本太长，先进行截取
+        max_text_length = 3000
+        if len(chapter_text) > max_text_length:
+            # 取开头和结尾部分
+            half_length = max_text_length // 2
+            truncated_text = chapter_text[:half_length] + "\n...(中间部分省略)...\n" + chapter_text[-half_length:]
+        else:
+            truncated_text = chapter_text
+        
+        # 构建LLM提示词
+        system_prompt = """你是红楼梦文学分析专家，请对给定的章节文本进行智能摘要分析。
+
+请按照以下JSON格式返回分析结果：
+{
+    "key_events": ["事件1", "事件2", "事件3"],
+    "character_states": {"人物名": "状态描述"},
+    "important_dialogues": ["重要对话1", "重要对话2"],
+    "plot_developments": ["情节发展1", "情节发展2"],
+    "emotional_tone": "情感基调"
+}
+
+要求：
+1. key_events: 提取3-5个最重要的事件，简洁描述
+2. character_states: 识别主要人物及其当前状态/情感
+3. important_dialogues: 提取2-3个关键对话，保持原文风格
+4. plot_developments: 识别2-3个重要的情节推进
+5. emotional_tone: 用一个词概括章节的主要情感基调（如：欢乐、悲伤、紧张、平和等）"""
+        
+        human_prompt = f"""请分析以下红楼梦章节内容：
+
+章节信息：{title}
+
+章节内容：
+{truncated_text}
+
+请严格按照JSON格式返回分析结果。"""
+        
+        try:
+            messages = [
+                SystemMessage(content=system_prompt),
+                HumanMessage(content=human_prompt)
+            ]
+            
+            response = self.llm.invoke(messages)
+            response_text = response.content.strip()
+            
+            # 尝试解析JSON响应
+            if response_text.startswith('```json'):
+                response_text = response_text[7:-3].strip()
+            elif response_text.startswith('```'):
+                response_text = response_text[3:-3].strip()
+            
+            summary_data = json.loads(response_text)
+            
+            # 验证和清理数据
+            cleaned_data = {
+                'key_events': summary_data.get('key_events', [])[:5],  # 最多5个事件
+                'character_states': summary_data.get('character_states', {}),
+                'important_dialogues': summary_data.get('important_dialogues', [])[:3],  # 最多3个对话
+                'plot_developments': summary_data.get('plot_developments', [])[:3],  # 最多3个发展
+                'emotional_tone': summary_data.get('emotional_tone', '平和')
+            }
+            
+            logger.info(f"LLM成功生成第{chapter_num}回摘要")
+            return cleaned_data
+            
+        except json.JSONDecodeError as e:
+            logger.error(f"LLM响应JSON解析失败: {e}, 响应内容: {response_text[:200]}")
+            raise
+        except Exception as e:
+            logger.error(f"LLM摘要生成异常: {e}")
+            raise
     
     def _extract_key_events(self, text: str) -> List[str]:
         """提取关键事件 - TODO: 需要智能化"""
