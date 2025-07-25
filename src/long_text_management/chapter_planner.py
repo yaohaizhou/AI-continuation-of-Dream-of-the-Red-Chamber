@@ -444,18 +444,99 @@ class ChapterPlanner:
                     return f"第{chapter_num}回 凤凰涅槃冰山倒 机关算尽反丧身"
                 elif main_char == "贾探春":
                     return f"第{chapter_num}回 风筝飞向远山外 探春远嫁他乡泪"
+                elif main_char == "贾迎春":
+                    return f"第{chapter_num}回 二木头误终身 迎春泪洒梨花白"
+                elif main_char == "贾元春":
+                    return f"第{chapter_num}回 荣华富贵难久长 元春宫中叹凄凉"
+                elif main_char == "史湘云":
+                    return f"第{chapter_num}回 湘江水逝楚云飞 史侯门第散如烟"
+                elif main_char == "妙玉":
+                    return f"第{chapter_num}回 欲洁何曾洁 妙玉红尘劫难逃"
+                elif main_char == "贾巧姐":
+                    return f"第{chapter_num}回 遇恩人巧姐得救 逢善缘桃花渡劫"
+                elif main_char == "李纨":
+                    return f"第{chapter_num}回 竹篱茅舍自甘心 李纨守志终见荣"
+                elif main_char == "贾惜春":
+                    return f"第{chapter_num}回 勘破三春景不长 惜春遁入空门去"
+                elif main_char == "香菱":
+                    return f"第{chapter_num}回 莲花出淤泥不染 香菱苦尽甘自来"
                 else:
                     return f"第{chapter_num}回 {symbol}寓命运 {main_char}应谶归"
             else:
                 return f"第{chapter_num}回 {main_char}应谶记 天命难违尘缘了"
         else:
-            # 无特定角色命运的章节
+            # 无特定角色命运的章节，根据章节号生成不同标题
             if theme == ChapterTheme.FAMILY_COLLAPSE:
-                return f"第{chapter_num}回 贾府衰败势如流 往昔繁华化虚无"
+                titles = [
+                    "贾府衰败势如流 往昔繁华化虚无",
+                    "朱门酒肉成追忆 白骨露于野间哀", 
+                    "家道中落人心散 昔日主仆各奔东",
+                    "豪门深院起秋风 落叶满地无人扫",
+                    "高墙深院冷如霜 往日温情俱成空",
+                    "大厦将倾无力挽 众人各自谋前程",
+                    "金银散尽人情薄 世态炎凉见人心",
+                    "门第衰微风雨来 故友渐疏新愁生",
+                    "府第萧条客渐稀 冷暖人间见真情",
+                    "昔年车马今安在 空余残壁话当年"
+                ]
+                index = (chapter_num - 81) % len(titles)
+                return f"第{chapter_num}回 {titles[index]}"
             elif theme == ChapterTheme.CHARACTER_DECLINE:
-                return f"第{chapter_num}回 昔日风光今何在 人生如梦总成空"
+                titles = [
+                    "昔日风光今何在 人生如梦总成空",
+                    "繁华落尽见真淳 浮生若梦苦相思",
+                    "美人迟暮花凋零 英雄末路泪如泉",
+                    "朱颜改尽白发生 往昔恩情付东流",
+                    "青春不再鬓如霜 回首往事尽凄凉",
+                    "红颜薄命叹飘零 君子道尽小人心",
+                    "镜花水月皆成空 人事变迁叹无常",
+                    "春去秋来人易老 功名富贵转头空",
+                    "世事如棋局局新 人情冷暖见分明",
+                    "浮云蔽日终有时 英雄末路独徘徊"
+                ]
+                index = (chapter_num - 81) % len(titles)
+                return f"第{chapter_num}回 {titles[index]}"
+            elif theme == ChapterTheme.LOVE_TRAGEDY:
+                titles = [
+                    "红楼一梦话沧桑 世事无常叹浮生",
+                    "情深不寿花易谢 相思无用枉断肠",
+                    "痴情女子负心汉 有情人终成眷属",
+                    "月满西楼人已去 空余幽恨在人间",
+                    "花开花落花满天 红消香断有谁怜",
+                    "春恨秋愁皆自惹 花容月貌为谁妍",
+                    "情不知所起一往深 恨不知所终黯然销",
+                    "桃花扇底话离别 杨柳岸边诉衷肠",
+                    "相见时难别亦难 东风无力百花残",
+                    "此情可待成追忆 只是当时已惘然"
+                ]
+                index = (chapter_num - 81) % len(titles)
+                return f"第{chapter_num}回 {titles[index]}"
+            elif theme == ChapterTheme.REDEMPTION:
+                titles = [
+                    "善恶终有报应时 因果循环不虚假",
+                    "行善积德见真情 助人为乐获新生",
+                    "恩义深重如山海 知恩图报见人心",
+                    "好人终有好报偿 恶人自有恶人磨",
+                    "济贫救困见真心 雪中送炭暖人间",
+                    "困境逢生见贵人 柳暗花明又一村",
+                    "滴水之恩涌泉报 患难见真情深浅",
+                    "仁心仁术济苍生 德高望重众人敬"
+                ]
+                index = (chapter_num - 81) % len(titles)
+                return f"第{chapter_num}回 {titles[index]}"
             else:
-                return f"第{chapter_num}回 红楼一梦话沧桑 世事无常叹浮生"
+                titles = [
+                    "红楼一梦话沧桑 世事无常叹浮生",
+                    "人生如戏戏如人 悲欢离合总关情",
+                    "看破浮生三千事 淡泊明志见性真",
+                    "世间万象皆如梦 唯有真情永不磨",
+                    "功名利禄转头空 人间正道是沧桑",
+                    "花开花落春复春 人生代代无穷已",
+                    "古今多少事 都付笑谈中",
+                    "滚滚长江东逝水 浪花淘尽英雄泪"
+                ]
+                index = (chapter_num - 81) % len(titles)
+                return f"第{chapter_num}回 {titles[index]}"
     
     def _assign_chapter_characters(self, chapter_num: int, 
                                   chapter_fates: Dict[str, int]) -> Tuple[List[str], List[str]]:
@@ -568,13 +649,55 @@ class ChapterPlanner:
         """生成情节梗概"""
         
         if not key_events:
-            # 无特定命运事件的章节
+            # 无特定命运事件的章节 - 根据章节号生成不同内容
+            plots = []
             if theme == ChapterTheme.FAMILY_COLLAPSE:
-                return f"贾府继续衰败，家族成员各有心事，昔日繁华已成过往云烟。"
+                plots = [
+                    "贾府继续衰败，家族成员各有心事，昔日繁华已成过往云烟。",
+                    "府中开始变卖家产以维持生计，主仆关系逐渐松动，人心浮动。",
+                    "债主催债愈加急迫，贾政忙于应付，宝玉目睹家道中落心情沉重。",
+                    "下人们纷纷另寻出路，大观园人去楼空，园中景色日渐荒凉。",
+                    "贾母年迈多病，见家族衰落忧心如焚，但已无力回天。",
+                    "亲友们渐渐疏远，昔日的门第显赫不复存在，世态炎凉显露。",
+                    "家中典当之物越来越多，连祖传宝物也难以保全。",
+                    "府第日渐冷清，来往宾客寥寥，门前车马稀少。"
+                ]
             elif theme == ChapterTheme.CHARACTER_DECLINE:
-                return f"众人感受到命运的无常，各自在生活的变故中挣扎求存。"
+                plots = [
+                    "众人感受到命运的无常，各自在生活的变故中挣扎求存。",
+                    "一些人因适应不了变故而神情恍惚，整日借酒消愁。",
+                    "年轻女子们开始担心自己的婚姻前程，夜不能寐。",
+                    "读书人放弃功名理想，考虑学习手艺或经商谋生。",
+                    "年老者回忆往昔辉煌，对比现状更感凄凉无奈。",
+                    "身体孱弱者因心事重重而病情加重，需要悉心照料。",
+                    "性格要强者难以接受现实，常常暗自垂泪。",
+                    "一些人开始重新认识人生价值，思考存在的意义。"
+                ]
+            elif theme == ChapterTheme.LOVE_TRAGEDY:
+                plots = [
+                    "爱情在现实面前显得苍白无力，有情人难成眷属的悲剧继续上演。",
+                    "门第观念阻碍了真挚感情，使得恋人们只能暗自神伤。",
+                    "年轻男女在家族安排的婚姻中寻找内心的平衡。",
+                    "痴情女子为情所困，日渐憔悴，令人怜惜。",
+                    "夫妻间因误解而产生隔阂，需要时间来化解。",
+                    "有情人在分离中互相思念，通过诗词表达衷肠。",
+                    "新的感情在困境中萌芽，给人们带来一丝希望。",
+                    "旧情人重逢，却发现物是人非，徒增伤感。"
+                ]
             else:
-                return f"故事继续推进，人物命运渐趋明朗，悲剧色彩愈加浓重。"
+                plots = [
+                    "故事继续推进，人物命运渐趋明朗，悲剧色彩愈加浓重。",
+                    "新的人物出现，为故事情节增添了新的变数。",
+                    "过往的恩怨在此时得到解决，人心得到安慰。",
+                    "智者在困境中展现智慧，为众人指点迷津。",
+                    "意外的消息传来，改变了众人的命运走向。",
+                    "善恶有报在此得到体现，给人以警示。",
+                    "新的希望在绝望中出现，人们重新燃起斗志。",
+                    "古老的预言开始应验，让人感叹命运的奇妙。"
+                ]
+            
+            index = (chapter_num - 81) % len(plots)
+            return plots[index]
         
         # 有具体命运事件的章节
         main_event = key_events[0]

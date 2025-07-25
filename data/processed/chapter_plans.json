@@ -15,17 +15,17 @@
       "emotional_tone": "悲凉",
       "symbolic_imagery": [
         "雌凤",
-        "冰山",
-        "秋风",
         "颓墙",
+        "秋风",
+        "冰山",
         "落叶"
       ],
       "literary_devices": [
-        "烘托",
-        "渲染",
-        "暗示",
+        "象征",
         "对比",
-        "象征"
+        "暗示",
+        "烘托",
+        "渲染"
       ],
       "cross_references": [
         "第80回前文",
@@ -41,7 +41,7 @@
     },
     {
       "chapter_num": 82,
-      "title": "第82回 贾府衰败势如流 往昔繁华化虚无",
+      "title": "第82回 朱门酒肉成追忆 白骨露于野间哀",
       "theme": "family_collapse",
       "priority": "supporting",
       "main_characters": [
@@ -50,21 +50,21 @@
       ],
       "supporting_characters": [],
       "key_events": [],
-      "plot_summary": "贾府继续衰败，家族成员各有心事，昔日繁华已成过往云烟。",
+      "plot_summary": "府中开始变卖家产以维持生计，主仆关系逐渐松动，人心浮动。",
       "emotional_tone": "悲凉",
       "symbolic_imagery": [
         "雌凤",
-        "冰山",
-        "秋风",
         "颓墙",
+        "秋风",
+        "冰山",
         "落叶"
       ],
       "literary_devices": [
-        "烘托",
-        "渲染",
-        "暗示",
+        "象征",
         "对比",
-        "象征"
+        "暗示",
+        "烘托",
+        "渲染"
       ],
       "cross_references": [
         "第八十回前文总结",
@@ -82,7 +82,7 @@
     },
     {
       "chapter_num": 83,
-      "title": "第83回 贾府衰败势如流 往昔繁华化虚无",
+      "title": "第83回 家道中落人心散 昔日主仆各奔东",
       "theme": "family_collapse",
       "priority": "supporting",
       "main_characters": [
@@ -91,25 +91,25 @@
       ],
       "supporting_characters": [],
       "key_events": [],
-      "plot_summary": "贾府继续衰败，家族成员各有心事，昔日繁华已成过往云烟。",
+      "plot_summary": "债主催债愈加急迫，贾政忙于应付，宝玉目睹家道中落心情沉重。",
       "emotional_tone": "悲凉",
       "symbolic_imagery": [
         "雌凤",
-        "冰山",
-        "秋风",
         "颓墙",
+        "秋风",
+        "冰山",
         "落叶"
       ],
       "literary_devices": [
-        "烘托",
-        "渲染",
-        "暗示",
+        "象征",
         "对比",
-        "象征"
+        "暗示",
+        "烘托",
+        "渲染"
       ],
       "cross_references": [
-        "第八十回前文总结",
-        "第82回前文"
+        "第82回前文",
+        "第八十回前文总结"
       ],
       "estimated_length": 10000,
       "difficulty_level": "中等",
@@ -123,7 +123,7 @@
     },
     {
       "chapter_num": 84,
-      "title": "第84回 贾府衰败势如流 往昔繁华化虚无",
+      "title": "第84回 豪门深院起秋风 落叶满地无人扫",
       "theme": "family_collapse",
       "priority": "supporting",
       "main_characters": [
@@ -132,21 +132,21 @@
       ],
       "supporting_characters": [],
       "key_events": [],
-      "plot_summary": "贾府继续衰败，家族成员各有心事，昔日繁华已成过往云烟。",
+      "plot_summary": "下人们纷纷另寻出路，大观园人去楼空，园中景色日渐荒凉。",
       "emotional_tone": "悲凉",
       "symbolic_imagery": [
         "雌凤",
-        "冰山",
-        "秋风",
         "颓墙",
+        "秋风",
+        "冰山",
         "落叶"
       ],
       "literary_devices": [
-        "烘托",
-        "渲染",
-        "暗示",
+        "象征",
         "对比",
-        "象征"
+        "暗示",
+        "烘托",
+        "渲染"
       ],
       "cross_references": [
         "第八十回前文总结",
@@ -164,7 +164,7 @@
     },
     {
       "chapter_num": 85,
-      "title": "第85回 恶狼寓命运 贾迎春应谶归",
+      "title": "第85回 二木头误终身 迎春泪洒梨花白",
       "theme": "fate_fulfillment",
       "priority": "important",
       "main_characters": [
@@ -187,18 +187,18 @@
       "plot_summary": "话说贾迎春近日来，贾迎春的命运按照判词预言得到应验：嫁给恶人，一年后死亡，此事在府中引起波澜，众人各有感慨，正应了当年太虚幻境的判词预言。",
       "emotional_tone": "愤慨",
       "symbolic_imagery": [
+        "应谶",
         "天数",
         "美女",
         "恶狼",
-        "宿命",
-        "应谶"
+        "宿命"
       ],
       "literary_devices": [
-        "伏笔",
-        "暗示",
+        "象征",
         "对比",
+        "暗示",
         "照应",
-        "象征"
+        "伏笔"
       ],
       "cross_references": [
         "第八十回前文总结",
@@ -216,7 +216,7 @@
     },
     {
       "chapter_num": 86,
-      "title": "第86回 贾府衰败势如流 往昔繁华化虚无",
+      "title": "第86回 大厦将倾无力挽 众人各自谋前程",
       "theme": "family_collapse",
       "priority": "supporting",
       "main_characters": [
@@ -225,25 +225,25 @@
       ],
       "supporting_characters": [],
       "key_events": [],
-      "plot_summary": "贾府继续衰败，家族成员各有心事，昔日繁华已成过往云烟。",
+      "plot_summary": "亲友们渐渐疏远，昔日的门第显赫不复存在，世态炎凉显露。",
       "emotional_tone": "悲凉",
       "symbolic_imagery": [
         "雌凤",
-        "冰山",
-        "秋风",
         "颓墙",
+        "秋风",
+        "冰山",
         "落叶"
       ],
       "literary_devices": [
-        "烘托",
-        "渲染",
-        "暗示",
+        "象征",
         "对比",
-        "象征"
+        "暗示",
+        "烘托",
+        "渲染"
       ],
       "cross_references": [
-        "第85回前文",
-        "第八十回前文总结"
+        "第八十回前文总结",
+        "第85回前文"
       ],
       "estimated_length": 10000,
       "difficulty_level": "中等",
@@ -257,7 +257,7 @@
     },
     {
       "chapter_num": 87,
-      "title": "第87回 贾府衰败势如流 往昔繁华化虚无",
+      "title": "第87回 金银散尽人情薄 世态炎凉见人心",
       "theme": "family_collapse",
       "priority": "supporting",
       "main_characters": [
@@ -266,21 +266,21 @@
       ],
       "supporting_characters": [],
       "key_events": [],
-      "plot_summary": "贾府继续衰败，家族成员各有心事，昔日繁华已成过往云烟。",
+      "plot_summary": "家中典当之物越来越多，连祖传宝物也难以保全。",
       "emotional_tone": "悲凉",
       "symbolic_imagery": [
         "雌凤",
-        "冰山",
-        "秋风",
         "颓墙",
+        "秋风",
+        "冰山",
         "落叶"
       ],
       "literary_devices": [
-        "烘托",
-        "渲染",
-        "暗示",
+        "象征",
         "对比",
-        "象征"
+        "暗示",
+        "烘托",
+        "渲染"
       ],
       "cross_references": [
         "第八十回前文总结",
@@ -298,7 +298,7 @@
     },
     {
       "chapter_num": 88,
-      "title": "第88回 弓寓命运 贾元春应谶归",
+      "title": "第88回 荣华富贵难久长 元春宫中叹凄凉",
       "theme": "fate_fulfillment",
       "priority": "important",
       "main_characters": [
@@ -321,18 +321,18 @@
       "plot_summary": "话说贾元春近日来，贾元春的命运按照判词预言得到应验：贵妃身份短暂，在虎兔年间去世，此事在府中引起波澜，众人各有感慨，正应了当年太虚幻境的判词预言。",
       "emotional_tone": "哀叹",
       "symbolic_imagery": [
+        "应谶",
         "天数",
         "香橼",
-        "宿命",
-        "应谶",
-        "弓"
+        "弓",
+        "宿命"
       ],
       "literary_devices": [
-        "伏笔",
-        "暗示",
+        "象征",
         "对比",
+        "暗示",
         "照应",
-        "象征"
+        "伏笔"
       ],
       "cross_references": [
         "第八十回前文总结",
@@ -350,7 +350,7 @@
     },
     {
       "chapter_num": 89,
-      "title": "第89回 贾府衰败势如流 往昔繁华化虚无",
+      "title": "第89回 府第萧条客渐稀 冷暖人间见真情",
       "theme": "family_collapse",
       "priority": "supporting",
       "main_characters": [
@@ -363,21 +363,21 @@
       "emotional_tone": "悲凉",
       "symbolic_imagery": [
         "雌凤",
-        "冰山",
-        "秋风",
         "颓墙",
+        "秋风",
+        "冰山",
         "落叶"
       ],
       "literary_devices": [
-        "烘托",
-        "渲染",
-        "暗示",
+        "象征",
         "对比",
-        "象征"
+        "暗示",
+        "烘托",
+        "渲染"
       ],
       "cross_references": [
-        "第88回前文",
-        "第八十回前文总结"
+        "第八十回前文总结",
+        "第88回前文"
       ],
       "estimated_length": 10000,
       "difficulty_level": "中等",
@@ -391,7 +391,7 @@
     },
     {
       "chapter_num": 90,
-      "title": "第90回 贾府衰败势如流 往昔繁华化虚无",
+      "title": "第90回 昔年车马今安在 空余残壁话当年",
       "theme": "family_collapse",
       "priority": "critical",
       "main_characters": [
@@ -400,21 +400,21 @@
       ],
       "supporting_characters": [],
       "key_events": [],
-      "plot_summary": "贾府继续衰败，家族成员各有心事，昔日繁华已成过往云烟。",
+      "plot_summary": "府中开始变卖家产以维持生计，主仆关系逐渐松动，人心浮动。",
       "emotional_tone": "悲凉",
       "symbolic_imagery": [
         "雌凤",
-        "冰山",
-        "秋风",
         "颓墙",
+        "秋风",
+        "冰山",
         "落叶"
       ],
       "literary_devices": [
-        "烘托",
-        "渲染",
-        "暗示",
+        "象征",
         "对比",
-        "象征"
+        "暗示",
+        "烘托",
+        "渲染"
       ],
       "cross_references": [
         "第八十回前文总结",
@@ -441,24 +441,24 @@
       ],
       "supporting_characters": [],
       "key_events": [],
-      "plot_summary": "众人感受到命运的无常，各自在生活的变故中挣扎求存。",
+      "plot_summary": "年轻女子们开始担心自己的婚姻前程，夜不能寐。",
       "emotional_tone": "沉重",
       "symbolic_imagery": [
+        "寒雨",
+        "枯枝",
         "枯木",
         "暮云",
-        "寒雨",
-        "玉带",
-        "枯枝"
+        "玉带"
       ],
       "literary_devices": [
-        "暗示",
         "象征",
-        "对比"
+        "对比",
+        "暗示"
       ],
       "cross_references": [
-        "第90回前文",
+        "第二十八回宝钗捉蝶",
         "第五回金陵十二钗",
-        "第二十八回宝钗捉蝶"
+        "第90回前文"
       ],
       "estimated_length": 10000,
       "difficulty_level": "中等",
@@ -472,7 +472,7 @@
     },
     {
       "chapter_num": 92,
-      "title": "第92回 昔日风光今何在 人生如梦总成空",
+      "title": "第92回 繁华落尽见真淳 浮生若梦苦相思",
       "theme": "character_decline",
       "priority": "supporting",
       "main_characters": [
@@ -481,24 +481,24 @@
       ],
       "supporting_characters": [],
       "key_events": [],
-      "plot_summary": "众人感受到命运的无常，各自在生活的变故中挣扎求存。",
+      "plot_summary": "读书人放弃功名理想，考虑学习手艺或经商谋生。",
       "emotional_tone": "沉重",
       "symbolic_imagery": [
+        "寒雨",
+        "枯枝",
         "枯木",
         "暮云",
-        "寒雨",
-        "玉带",
-        "枯枝"
+        "玉带"
       ],
       "literary_devices": [
-        "暗示",
         "象征",
-        "对比"
+        "对比",
+        "暗示"
       ],
       "cross_references": [
-        "第91回前文",
+        "第二十八回宝钗捉蝶",
         "第五回金陵十二钗",
-        "第二十八回宝钗捉蝶"
+        "第91回前文"
       ],
       "estimated_length": 10000,
       "difficulty_level": "中等",
@@ -512,7 +512,7 @@
     },
     {
       "chapter_num": 93,
-      "title": "第93回 昔日风光今何在 人生如梦总成空",
+      "title": "第93回 美人迟暮花凋零 英雄末路泪如泉",
       "theme": "character_decline",
       "priority": "supporting",
       "main_characters": [
@@ -521,24 +521,24 @@
       ],
       "supporting_characters": [],
       "key_events": [],
-      "plot_summary": "众人感受到命运的无常，各自在生活的变故中挣扎求存。",
+      "plot_summary": "年老者回忆往昔辉煌，对比现状更感凄凉无奈。",
       "emotional_tone": "沉重",
       "symbolic_imagery": [
+        "寒雨",
+        "枯枝",
         "枯木",
         "暮云",
-        "寒雨",
-        "玉带",
-        "枯枝"
+        "玉带"
       ],
       "literary_devices": [
-        "暗示",
         "象征",
-        "对比"
+        "对比",
+        "暗示"
       ],
       "cross_references": [
-        "第92回前文",
+        "第二十八回宝钗捉蝶",
         "第五回金陵十二钗",
-        "第二十八回宝钗捉蝶"
+        "第92回前文"
       ],
       "estimated_length": 10000,
       "difficulty_level": "中等",
@@ -552,7 +552,7 @@
     },
     {
       "chapter_num": 94,
-      "title": "第94回 昔日风光今何在 人生如梦总成空",
+      "title": "第94回 朱颜改尽白发生 往昔恩情付东流",
       "theme": "character_decline",
       "priority": "supporting",
       "main_characters": [
@@ -561,24 +561,24 @@
       ],
       "supporting_characters": [],
       "key_events": [],
-      "plot_summary": "众人感受到命运的无常，各自在生活的变故中挣扎求存。",
+      "plot_summary": "身体孱弱者因心事重重而病情加重，需要悉心照料。",
       "emotional_tone": "沉重",
       "symbolic_imagery": [
+        "寒雨",
+        "枯枝",
         "枯木",
         "暮云",
-        "寒雨",
-        "玉带",
-        "枯枝"
+        "玉带"
       ],
       "literary_devices": [
-        "暗示",
         "象征",
-        "对比"
+        "对比",
+        "暗示"
       ],
       "cross_references": [
-        "第93回前文",
+        "第二十八回宝钗捉蝶",
         "第五回金陵十二钗",
-        "第二十八回宝钗捉蝶"
+        "第93回前文"
       ],
       "estimated_length": 10000,
       "difficulty_level": "中等",
@@ -592,7 +592,7 @@
     },
     {
       "chapter_num": 95,
-      "title": "第95回 昔日风光今何在 人生如梦总成空",
+      "title": "第95回 青春不再鬓如霜 回首往事尽凄凉",
       "theme": "character_decline",
       "priority": "supporting",
       "main_characters": [
@@ -601,24 +601,24 @@
       ],
       "supporting_characters": [],
       "key_events": [],
-      "plot_summary": "众人感受到命运的无常，各自在生活的变故中挣扎求存。",
+      "plot_summary": "性格要强者难以接受现实，常常暗自垂泪。",
       "emotional_tone": "沉重",
       "symbolic_imagery": [
+        "寒雨",
+        "枯枝",
         "枯木",
         "暮云",
-        "寒雨",
-        "玉带",
-        "枯枝"
+        "玉带"
       ],
       "literary_devices": [
-        "暗示",
         "象征",
-        "对比"
+        "对比",
+        "暗示"
       ],
       "cross_references": [
-        "第94回前文",
+        "第二十八回宝钗捉蝶",
         "第五回金陵十二钗",
-        "第二十八回宝钗捉蝶"
+        "第94回前文"
       ],
       "estimated_length": 10000,
       "difficulty_level": "中等",
@@ -632,7 +632,7 @@
     },
     {
       "chapter_num": 96,
-      "title": "第96回 昔日风光今何在 人生如梦总成空",
+      "title": "第96回 红颜薄命叹飘零 君子道尽小人心",
       "theme": "character_decline",
       "priority": "supporting",
       "main_characters": [
@@ -641,24 +641,24 @@
       ],
       "supporting_characters": [],
       "key_events": [],
-      "plot_summary": "众人感受到命运的无常，各自在生活的变故中挣扎求存。",
+      "plot_summary": "一些人开始重新认识人生价值，思考存在的意义。",
       "emotional_tone": "沉重",
       "symbolic_imagery": [
+        "寒雨",
+        "枯枝",
         "枯木",
         "暮云",
-        "寒雨",
-        "玉带",
-        "枯枝"
+        "玉带"
       ],
       "literary_devices": [
-        "暗示",
         "象征",
-        "对比"
+        "对比",
+        "暗示"
       ],
       "cross_references": [
-        "第95回前文",
+        "第二十八回宝钗捉蝶",
         "第五回金陵十二钗",
-        "第二十八回宝钗捉蝶"
+        "第95回前文"
       ],
       "estimated_length": 10000,
       "difficulty_level": "中等",
@@ -679,9 +679,9 @@
         "林黛玉"
       ],
       "supporting_characters": [
-        "紫鹃",
         "贾母",
-        "贾宝玉"
+        "贾宝玉",
+        "紫鹃"
       ],
       "key_events": [
         {
@@ -701,22 +701,22 @@
       "emotional_tone": "悲叹",
       "symbolic_imagery": [
         "枯木",
-        "空房",
         "残花",
-        "冷月",
-        "玉带"
+        "空房",
+        "玉带",
+        "冷月"
       ],
       "literary_devices": [
         "直抒胸臆",
-        "情景交融",
-        "暗示",
+        "象征",
         "对比",
-        "象征"
+        "暗示",
+        "情景交融"
       ],
       "cross_references": [
         "第五回太虚幻境判词",
-        "第二十三回黛玉葬花",
-        "第96回前文"
+        "第96回前文",
+        "第二十三回黛玉葬花"
       ],
       "estimated_length": 17000,
       "difficulty_level": "困难",
@@ -738,9 +738,9 @@
         "薛宝钗"
       ],
       "supporting_characters": [
-        "莺儿",
         "薛姨妈",
-        "贾宝玉"
+        "贾宝玉",
+        "莺儿"
       ],
       "key_events": [
         {
@@ -760,22 +760,22 @@
       "emotional_tone": "悲叹",
       "symbolic_imagery": [
         "枯木",
-        "空房",
         "残花",
-        "冷月",
-        "玉带"
+        "空房",
+        "玉带",
+        "冷月"
       ],
       "literary_devices": [
         "直抒胸臆",
-        "情景交融",
-        "暗示",
+        "象征",
         "对比",
-        "象征"
+        "暗示",
+        "情景交融"
       ],
       "cross_references": [
-        "第97回前文",
+        "第二十八回宝钗捉蝶",
         "第五回金陵十二钗",
-        "第二十八回宝钗捉蝶"
+        "第97回前文"
       ],
       "estimated_length": 17000,
       "difficulty_level": "困难",
@@ -789,7 +789,7 @@
     },
     {
       "chapter_num": 99,
-      "title": "第99回 昔日风光今何在 人生如梦总成空",
+      "title": "第99回 世事如棋局局新 人情冷暖见分明",
       "theme": "character_decline",
       "priority": "supporting",
       "main_characters": [
@@ -798,24 +798,24 @@
       ],
       "supporting_characters": [],
       "key_events": [],
-      "plot_summary": "众人感受到命运的无常，各自在生活的变故中挣扎求存。",
+      "plot_summary": "年轻女子们开始担心自己的婚姻前程，夜不能寐。",
       "emotional_tone": "沉重",
       "symbolic_imagery": [
+        "寒雨",
+        "枯枝",
         "枯木",
         "暮云",
-        "寒雨",
-        "玉带",
-        "枯枝"
+        "玉带"
       ],
       "literary_devices": [
-        "暗示",
         "象征",
-        "对比"
+        "对比",
+        "暗示"
       ],
       "cross_references": [
-        "第98回前文",
+        "第二十八回宝钗捉蝶",
         "第五回金陵十二钗",
-        "第二十八回宝钗捉蝶"
+        "第98回前文"
       ],
       "estimated_length": 10000,
       "difficulty_level": "中等",
@@ -852,16 +852,16 @@
       "plot_summary": "话说袭人近日来，袭人的命运按照判词预言得到应验：温柔和顺但最终与宝玉无缘，此事在府中引起波澜，众人各有感慨，正应了当年太虚幻境的判词预言。",
       "emotional_tone": "惋惜同情",
       "symbolic_imagery": [
-        "暮云",
         "寒雨",
+        "枯枝",
         "鲜花",
         "破席",
-        "枯枝"
+        "暮云"
       ],
       "literary_devices": [
-        "暗示",
         "象征",
-        "对比"
+        "对比",
+        "暗示"
       ],
       "cross_references": [
         "第99回前文"
@@ -887,24 +887,24 @@
       ],
       "supporting_characters": [],
       "key_events": [],
-      "plot_summary": "众人感受到命运的无常，各自在生活的变故中挣扎求存。",
+      "plot_summary": "年老者回忆往昔辉煌，对比现状更感凄凉无奈。",
       "emotional_tone": "沉重",
       "symbolic_imagery": [
+        "寒雨",
+        "枯枝",
         "枯木",
         "暮云",
-        "寒雨",
-        "玉带",
-        "枯枝"
+        "玉带"
       ],
       "literary_devices": [
-        "暗示",
         "象征",
-        "对比"
+        "对比",
+        "暗示"
       ],
       "cross_references": [
+        "第二十八回宝钗捉蝶",
         "第五回金陵十二钗",
-        "第100回前文",
-        "第二十八回宝钗捉蝶"
+        "第100回前文"
       ],
       "estimated_length": 10000,
       "difficulty_level": "中等",
@@ -925,9 +925,9 @@
         "王熙凤"
       ],
       "supporting_characters": [
-        "贾巧姐",
+        "平儿",
         "贾琏",
-        "平儿"
+        "贾巧姐"
       ],
       "key_events": [
         {
@@ -946,16 +946,16 @@
       "plot_summary": "话说王熙凤近日来，权势不稳，王熙凤的权势彻底崩塌，机关算尽反误了性命，此事在府中引起波澜，众人各有感慨，正应了当年太虚幻境的判词预言。",
       "emotional_tone": "悲愤",
       "symbolic_imagery": [
-        "雌凤",
-        "暮云",
         "寒雨",
+        "雌凤",
+        "枯枝",
         "冰山",
-        "枯枝"
+        "暮云"
       ],
       "literary_devices": [
-        "暗示",
         "象征",
-        "对比"
+        "对比",
+        "暗示"
       ],
       "cross_references": [
         "第101回前文"
@@ -972,7 +972,7 @@
     },
     {
       "chapter_num": 103,
-      "title": "第103回 昔日风光今何在 人生如梦总成空",
+      "title": "第103回 美人迟暮花凋零 英雄末路泪如泉",
       "theme": "character_decline",
       "priority": "supporting",
       "main_characters": [
@@ -981,24 +981,24 @@
       ],
       "supporting_characters": [],
       "key_events": [],
-      "plot_summary": "众人感受到命运的无常，各自在生活的变故中挣扎求存。",
+      "plot_summary": "性格要强者难以接受现实，常常暗自垂泪。",
       "emotional_tone": "沉重",
       "symbolic_imagery": [
+        "寒雨",
+        "枯枝",
         "枯木",
         "暮云",
-        "寒雨",
-        "玉带",
-        "枯枝"
+        "玉带"
       ],
       "literary_devices": [
-        "暗示",
         "象征",
-        "对比"
+        "对比",
+        "暗示"
       ],
       "cross_references": [
-        "第102回前文",
+        "第二十八回宝钗捉蝶",
         "第五回金陵十二钗",
-        "第二十八回宝钗捉蝶"
+        "第102回前文"
       ],
       "estimated_length": 10000,
       "difficulty_level": "中等",
@@ -1012,7 +1012,7 @@
     },
     {
       "chapter_num": 104,
-      "title": "第104回 昔日风光今何在 人生如梦总成空",
+      "title": "第104回 朱颜改尽白发生 往昔恩情付东流",
       "theme": "character_decline",
       "priority": "supporting",
       "main_characters": [
@@ -1021,24 +1021,24 @@
       ],
       "supporting_characters": [],
       "key_events": [],
-      "plot_summary": "众人感受到命运的无常，各自在生活的变故中挣扎求存。",
+      "plot_summary": "一些人开始重新认识人生价值，思考存在的意义。",
       "emotional_tone": "沉重",
       "symbolic_imagery": [
+        "寒雨",
+        "枯枝",
         "枯木",
         "暮云",
-        "寒雨",
-        "玉带",
-        "枯枝"
+        "玉带"
       ],
       "literary_devices": [
-        "暗示",
         "象征",
-        "对比"
+        "对比",
+        "暗示"
       ],
       "cross_references": [
+        "第二十八回宝钗捉蝶",
         "第五回金陵十二钗",
-        "第103回前文",
-        "第二十八回宝钗捉蝶"
+        "第103回前文"
       ],
       "estimated_length": 10000,
       "difficulty_level": "中等",
@@ -1060,8 +1060,8 @@
       ],
       "supporting_characters": [
         "侍书",
-        "赵姨娘",
-        "贾政"
+        "贾政",
+        "赵姨娘"
       ],
       "key_events": [
         {
@@ -1080,16 +1080,16 @@
       "plot_summary": "话说贾探春近日来，接到远嫁消息，贾探春为了家族远嫁他乡，临别时涕泣不已，此事在府中引起波澜，众人各有感慨，正应了当年太虚幻境的判词预言。",
       "emotional_tone": "悲壮",
       "symbolic_imagery": [
-        "暮云",
         "寒雨",
         "枯枝",
-        "大海",
-        "风筝"
+        "风筝",
+        "暮云",
+        "大海"
       ],
       "literary_devices": [
-        "暗示",
         "象征",
-        "对比"
+        "对比",
+        "暗示"
       ],
       "cross_references": [
         "第104回前文"
@@ -1106,7 +1106,7 @@
     },
     {
       "chapter_num": 106,
-      "title": "第106回 红楼一梦话沧桑 世事无常叹浮生",
+      "title": "第106回 人生如戏戏如人 悲欢离合总关情",
       "theme": "fate_fulfillment",
       "priority": "supporting",
       "main_characters": [
@@ -1115,21 +1115,21 @@
       ],
       "supporting_characters": [],
       "key_events": [],
-      "plot_summary": "故事继续推进，人物命运渐趋明朗，悲剧色彩愈加浓重。",
+      "plot_summary": "新的人物出现，为故事情节增添了新的变数。",
       "emotional_tone": "悲壮",
       "symbolic_imagery": [
+        "应谶",
         "美人看经",
         "天数",
-        "宿命",
-        "应谶",
-        "古庙"
+        "古庙",
+        "宿命"
       ],
       "literary_devices": [
-        "伏笔",
-        "暗示",
+        "象征",
         "对比",
+        "暗示",
         "照应",
-        "象征"
+        "伏笔"
       ],
       "cross_references": [
         "第105回前文"
@@ -1146,7 +1146,7 @@
     },
     {
       "chapter_num": 107,
-      "title": "第107回 红楼一梦话沧桑 世事无常叹浮生",
+      "title": "第107回 看破浮生三千事 淡泊明志见性真",
       "theme": "fate_fulfillment",
       "priority": "supporting",
       "main_characters": [
@@ -1155,21 +1155,21 @@
       ],
       "supporting_characters": [],
       "key_events": [],
-      "plot_summary": "故事继续推进，人物命运渐趋明朗，悲剧色彩愈加浓重。",
+      "plot_summary": "过往的恩怨在此时得到解决，人心得到安慰。",
       "emotional_tone": "悲壮",
       "symbolic_imagery": [
+        "应谶",
         "美人看经",
         "天数",
-        "宿命",
-        "应谶",
-        "古庙"
+        "古庙",
+        "宿命"
       ],
       "literary_devices": [
-        "伏笔",
-        "暗示",
+        "象征",
         "对比",
+        "暗示",
         "照应",
-        "象征"
+        "伏笔"
       ],
       "cross_references": [
         "第106回前文"
@@ -1186,7 +1186,7 @@
     },
     {
       "chapter_num": 108,
-      "title": "第108回 桂花寓命运 香菱应谶归",
+      "title": "第108回 莲花出淤泥不染 香菱苦尽甘自来",
       "theme": "fate_fulfillment",
       "priority": "important",
       "main_characters": [
@@ -1210,18 +1210,18 @@
       "plot_summary": "话说香菱近日来，香菱的命运按照判词预言得到应验：被拐卖后遭遇坎坷，最终香消玉殒，此事在府中引起波澜，众人各有感慨，正应了当年太虚幻境的判词预言。",
       "emotional_tone": "悲叹同情",
       "symbolic_imagery": [
+        "应谶",
         "池沼",
         "天数",
-        "桂花",
         "宿命",
-        "应谶"
+        "桂花"
       ],
       "literary_devices": [
-        "伏笔",
-        "暗示",
+        "象征",
         "对比",
+        "暗示",
         "照应",
-        "象征"
+        "伏笔"
       ],
       "cross_references": [
         "第107回前文"
@@ -1238,7 +1238,7 @@
     },
     {
       "chapter_num": 109,
-      "title": "第109回 红楼一梦话沧桑 世事无常叹浮生",
+      "title": "第109回 功名利禄转头空 人间正道是沧桑",
       "theme": "fate_fulfillment",
       "priority": "supporting",
       "main_characters": [
@@ -1247,21 +1247,21 @@
       ],
       "supporting_characters": [],
       "key_events": [],
-      "plot_summary": "故事继续推进，人物命运渐趋明朗，悲剧色彩愈加浓重。",
+      "plot_summary": "意外的消息传来，改变了众人的命运走向。",
       "emotional_tone": "悲壮",
       "symbolic_imagery": [
+        "应谶",
         "美人看经",
         "天数",
-        "宿命",
-        "应谶",
-        "古庙"
+        "古庙",
+        "宿命"
       ],
       "literary_devices": [
-        "伏笔",
-        "暗示",
+        "象征",
         "对比",
+        "暗示",
         "照应",
-        "象征"
+        "伏笔"
       ],
       "cross_references": [
         "第108回前文"
@@ -1278,7 +1278,7 @@
     },
     {
       "chapter_num": 110,
-      "title": "第110回 美玉寓命运 妙玉应谶归",
+      "title": "第110回 欲洁何曾洁 妙玉红尘劫难逃",
       "theme": "fate_fulfillment",
       "priority": "critical",
       "main_characters": [
@@ -1301,18 +1301,18 @@
       "plot_summary": "话说妙玉近日来，妙玉的命运按照判词预言得到应验：追求纯洁却无法避免世俗污染，最终堕落，此事在府中引起波澜，众人各有感慨，正应了当年太虚幻境的判词预言。",
       "emotional_tone": "讽刺悲悯",
       "symbolic_imagery": [
+        "应谶",
         "美玉",
         "天数",
         "泥污",
-        "宿命",
-        "应谶"
+        "宿命"
       ],
       "literary_devices": [
-        "伏笔",
-        "暗示",
+        "象征",
         "对比",
+        "暗示",
         "照应",
-        "象征"
+        "伏笔"
       ],
       "cross_references": [
         "第109回前文"
@@ -1329,7 +1329,7 @@
     },
     {
       "chapter_num": 111,
-      "title": "第111回 红楼一梦话沧桑 世事无常叹浮生",
+      "title": "第111回 古今多少事 都付笑谈中",
       "theme": "fate_fulfillment",
       "priority": "supporting",
       "main_characters": [
@@ -1338,21 +1338,21 @@
       ],
       "supporting_characters": [],
       "key_events": [],
-      "plot_summary": "故事继续推进，人物命运渐趋明朗，悲剧色彩愈加浓重。",
+      "plot_summary": "新的希望在绝望中出现，人们重新燃起斗志。",
       "emotional_tone": "悲壮",
       "symbolic_imagery": [
+        "应谶",
         "美人看经",
         "天数",
-        "宿命",
-        "应谶",
-        "古庙"
+        "古庙",
+        "宿命"
       ],
       "literary_devices": [
-        "伏笔",
-        "暗示",
+        "象征",
         "对比",
+        "暗示",
         "照应",
-        "象征"
+        "伏笔"
       ],
       "cross_references": [
         "第110回前文"
@@ -1369,7 +1369,7 @@
     },
     {
       "chapter_num": 112,
-      "title": "第112回 荒村野店寓命运 贾巧姐应谶归",
+      "title": "第112回 遇恩人巧姐得救 逢善缘桃花渡劫",
       "theme": "redemption",
       "priority": "important",
       "main_characters": [
@@ -1392,16 +1392,16 @@
       "plot_summary": "话说贾巧姐近日来，贾巧姐的命运按照判词预言得到应验：家败后沦落乡野，幸得恩人相助，此事在府中引起波澜，众人各有感慨，正应了当年太虚幻境的判词预言。",
       "emotional_tone": "先悲后喜",
       "symbolic_imagery": [
-        "温暖",
-        "重生",
         "纺绩",
+        "温暖",
         "希望",
-        "荒村野店"
+        "荒村野店",
+        "重生"
       ],
       "literary_devices": [
-        "暗示",
         "象征",
-        "对比"
+        "对比",
+        "暗示"
       ],
       "cross_references": [
         "第111回前文"
@@ -1430,18 +1430,18 @@
       "plot_summary": "故事继续推进，人物命运渐趋明朗，悲剧色彩愈加浓重。",
       "emotional_tone": "悲壮",
       "symbolic_imagery": [
+        "应谶",
         "美人看经",
         "天数",
-        "宿命",
-        "应谶",
-        "古庙"
+        "古庙",
+        "宿命"
       ],
       "literary_devices": [
-        "伏笔",
-        "暗示",
+        "象征",
         "对比",
+        "暗示",
         "照应",
-        "象征"
+        "伏笔"
       ],
       "cross_references": [
         "第112回前文"
@@ -1458,7 +1458,7 @@
     },
     {
       "chapter_num": 114,
-      "title": "第114回 红楼一梦话沧桑 世事无常叹浮生",
+      "title": "第114回 人生如戏戏如人 悲欢离合总关情",
       "theme": "fate_fulfillment",
       "priority": "supporting",
       "main_characters": [
@@ -1467,21 +1467,21 @@
       ],
       "supporting_characters": [],
       "key_events": [],
-      "plot_summary": "故事继续推进，人物命运渐趋明朗，悲剧色彩愈加浓重。",
+      "plot_summary": "新的人物出现，为故事情节增添了新的变数。",
       "emotional_tone": "悲壮",
       "symbolic_imagery": [
+        "应谶",
         "美人看经",
         "天数",
-        "宿命",
-        "应谶",
-        "古庙"
+        "古庙",
+        "宿命"
       ],
       "literary_devices": [
-        "伏笔",
-        "暗示",
+        "象征",
         "对比",
+        "暗示",
         "照应",
-        "象征"
+        "伏笔"
       ],
       "cross_references": [
         "第113回前文"
@@ -1498,7 +1498,7 @@
     },
     {
       "chapter_num": 115,
-      "title": "第115回 飞云寓命运 史湘云应谶归",
+      "title": "第115回 湘江水逝楚云飞 史侯门第散如烟",
       "theme": "fate_fulfillment",
       "priority": "important",
       "main_characters": [
@@ -1521,18 +1521,18 @@
       "plot_summary": "话说史湘云近日来，史湘云的命运按照判词预言得到应验：幼年失亲，虽得富贵但终归飘零，此事在府中引起波澜，众人各有感慨，正应了当年太虚幻境的判词预言。",
       "emotional_tone": "旷达中带悲凉",
       "symbolic_imagery": [
-        "逝水",
-        "天数",
-        "宿命",
+        "应谶",
         "飞云",
-        "应谶"
+        "天数",
+        "逝水",
+        "宿命"
       ],
       "literary_devices": [
-        "伏笔",
-        "暗示",
+        "象征",
         "对比",
+        "暗示",
         "照应",
-        "象征"
+        "伏笔"
       ],
       "cross_references": [
         "第114回前文"
@@ -1549,7 +1549,7 @@
     },
     {
       "chapter_num": 116,
-      "title": "第116回 红楼一梦话沧桑 世事无常叹浮生",
+      "title": "第116回 世间万象皆如梦 唯有真情永不磨",
       "theme": "fate_fulfillment",
       "priority": "supporting",
       "main_characters": [
@@ -1558,21 +1558,21 @@
       ],
       "supporting_characters": [],
       "key_events": [],
-      "plot_summary": "故事继续推进，人物命运渐趋明朗，悲剧色彩愈加浓重。",
+      "plot_summary": "智者在困境中展现智慧，为众人指点迷津。",
       "emotional_tone": "悲壮",
       "symbolic_imagery": [
+        "应谶",
         "美人看经",
         "天数",
-        "宿命",
-        "应谶",
-        "古庙"
+        "古庙",
+        "宿命"
       ],
       "literary_devices": [
-        "伏笔",
-        "暗示",
+        "象征",
         "对比",
+        "暗示",
         "照应",
-        "象征"
+        "伏笔"
       ],
       "cross_references": [
         "第115回前文"
@@ -1589,7 +1589,7 @@
     },
     {
       "chapter_num": 117,
-      "title": "第117回 红楼一梦话沧桑 世事无常叹浮生",
+      "title": "第117回 功名利禄转头空 人间正道是沧桑",
       "theme": "fate_fulfillment",
       "priority": "supporting",
       "main_characters": [
@@ -1598,21 +1598,21 @@
       ],
       "supporting_characters": [],
       "key_events": [],
-      "plot_summary": "故事继续推进，人物命运渐趋明朗，悲剧色彩愈加浓重。",
+      "plot_summary": "意外的消息传来，改变了众人的命运走向。",
       "emotional_tone": "悲壮",
       "symbolic_imagery": [
+        "应谶",
         "美人看经",
         "天数",
-        "宿命",
-        "应谶",
-        "古庙"
+        "古庙",
+        "宿命"
       ],
       "literary_devices": [
-        "伏笔",
-        "暗示",
+        "象征",
         "对比",
+        "暗示",
         "照应",
-        "象征"
+        "伏笔"
       ],
       "cross_references": [
         "第116回前文"
@@ -1629,7 +1629,7 @@
     },
     {
       "chapter_num": 118,
-      "title": "第118回 古庙寓命运 贾惜春应谶归",
+      "title": "第118回 勘破三春景不长 惜春遁入空门去",
       "theme": "fate_fulfillment",
       "priority": "important",
       "main_characters": [
@@ -1652,18 +1652,18 @@
       "plot_summary": "话说贾惜春近日来，贾惜春的命运按照判词预言得到应验：看破红尘，出家为尼，此事在府中引起波澜，众人各有感慨，正应了当年太虚幻境的判词预言。",
       "emotional_tone": "悲凉",
       "symbolic_imagery": [
+        "应谶",
         "美人看经",
         "天数",
-        "宿命",
-        "应谶",
-        "古庙"
+        "古庙",
+        "宿命"
       ],
       "literary_devices": [
-        "伏笔",
-        "暗示",
+        "象征",
         "对比",
+        "暗示",
         "照应",
-        "象征"
+        "伏笔"
       ],
       "cross_references": [
         "第117回前文"
@@ -1680,7 +1680,7 @@
     },
     {
       "chapter_num": 119,
-      "title": "第119回 茂兰寓命运 李纨应谶归",
+      "title": "第119回 竹篱茅舍自甘心 李纨守志终见荣",
       "theme": "fate_fulfillment",
       "priority": "important",
       "main_characters": [
@@ -1703,18 +1703,18 @@
       "plot_summary": "话说李纨近日来，李纨的命运按照判词预言得到应验：守寡教子，晚年富贵却成空，此事在府中引起波澜，众人各有感慨，正应了当年太虚幻境的判词预言。",
       "emotional_tone": "哀叹",
       "symbolic_imagery": [
+        "应谶",
         "凤冠霞帔",
         "天数",
-        "宿命",
-        "应谶",
-        "茂兰"
+        "茂兰",
+        "宿命"
       ],
       "literary_devices": [
-        "伏笔",
-        "暗示",
+        "象征",
         "对比",
+        "暗示",
         "照应",
-        "象征"
+        "伏笔"
       ],
       "cross_references": [
         "第118回前文"
@@ -1731,7 +1731,7 @@
     },
     {
       "chapter_num": 120,
-      "title": "第120回 红楼一梦话沧桑 世事无常叹浮生",
+      "title": "第120回 滚滚长江东逝水 浪花淘尽英雄泪",
       "theme": "final_resolution",
       "priority": "critical",
       "main_characters": [
@@ -1740,19 +1740,19 @@
       ],
       "supporting_characters": [],
       "key_events": [],
-      "plot_summary": "故事继续推进，人物命运渐趋明朗，悲剧色彩愈加浓重。",
+      "plot_summary": "古老的预言开始应验，让人感叹命运的奇妙。",
       "emotional_tone": "悲壮",
       "symbolic_imagery": [
-        "终结",
         "美人看经",
-        "归宿",
         "安息",
-        "古庙"
+        "归宿",
+        "古庙",
+        "终结"
       ],
       "literary_devices": [
-        "暗示",
         "象征",
-        "对比"
+        "对比",
+        "暗示"
       ],
       "cross_references": [
         "第119回前文"
@@ -1831,30 +1831,30 @@
     "林黛玉": [
       97
     ],
-    "紫鹃": [
-      97
-    ],
     "贾母": [
       97
     ],
-    "莺儿": [
-      98
+    "紫鹃": [
+      97
     ],
     "薛姨妈": [
+      98
+    ],
+    "莺儿": [
       98
     ],
     "袭人": [
       100
     ],
-    "贾巧姐": [
-      102,
-      112
+    "平儿": [
+      102
     ],
     "贾琏": [
       102
     ],
-    "平儿": [
-      102
+    "贾巧姐": [
+      102,
+      112
     ],
     "贾探春": [
       105
@@ -1862,10 +1862,10 @@
     "侍书": [
       105
     ],
-    "赵姨娘": [
+    "贾政": [
       105
     ],
-    "贾政": [
+    "赵姨娘": [
       105
     ],
     "贾惜春": [
@@ -1990,7 +1990,7 @@
     "香菱": true,
     "袭人": true
   },
-  "creation_date": "2025-07-24",
-  "last_updated": "2025-07-24 10:55:11",
+  "creation_date": "2025-07-25",
+  "last_updated": "2025-07-25 19:30:09",
   "version": "1.0"
 }
